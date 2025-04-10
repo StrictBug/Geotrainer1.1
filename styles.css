@@ -204,6 +204,18 @@ button {
     width: 100%;
 }
 
+#round-timer {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between round and timer */
+    margin-bottom: 10px;
+}
+
+#round, #timer {
+    font-size: 16px;
+    margin: 0; /* Remove default margins for inline alignment */
+}
+
 #map {
     height: 60vh;
     width: 68vw;
@@ -212,9 +224,9 @@ button {
 }
 
 #result {
-    font-size: 16px; /* Changed from 18px to match #round (inherited from body) */
+    font-size: 16px;
     margin-top: 10px;
-    margin-bottom: 20px; /* Added to match the gap above */
+    margin-bottom: 20px;
     color: #333;
 }
 

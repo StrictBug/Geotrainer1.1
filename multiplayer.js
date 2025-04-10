@@ -2,7 +2,7 @@ const socket = io();
 console.log('Connected to server');
 let map;
 let marker;
-let score = 0;
+let score = 0; // Keep variable for internal tracking, but no longer displayed
 let timeLeft = 15;
 let round = 1;
 let maxRounds;
@@ -299,7 +299,7 @@ socket.on('roundResults', ({ round, location, results }) => {
     map.setCenter(actual);
     map.setZoom(8);
 
-    let resultText = ''; // Changed from "Round ${round} Results:\n"
+    let resultText = ''; // No prefix
     results.forEach(r => {
         resultText += `${r.name}: ${r.distance ? r.distance.toFixed(1) + ' km' : 'No guess'} - ${r.points} pts (Total: ${r.totalScore})\n`;
         if (r.guess) {
@@ -316,7 +316,7 @@ socket.on('roundResults', ({ round, location, results }) => {
         }
     });
     document.getElementById("result").textContent = resultText;
-    document.getElementById("score").textContent = `Your Score: ${score}`;
+    // Removed document.getElementById("score").textContent update
     document.getElementById("newRound").disabled = false;
     document.getElementById("guess").disabled = true;
 });
@@ -377,7 +377,7 @@ socket.on('gameRestarted', ({ rounds, area, players }) => {
     selectedArea = area;
     score = 0;
     lastProcessedRound = 0;
-    document.getElementById("score").textContent = "Your Score: 0";
+    // Removed score display update
     document.getElementById("gameOver").classList.add("hidden");
     clearMarkers();
     document.getElementById("guess").style.display = "inline";
