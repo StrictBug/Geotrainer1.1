@@ -212,7 +212,7 @@ button {
 }
 
 #result {
-    font-size: 18px;
+    font-size: 16px; /* Changed from 18px to match #round (inherited from body) */
     margin-top: 10px;
     margin-bottom: 20px; /* Added to match the gap above */
     color: #333;

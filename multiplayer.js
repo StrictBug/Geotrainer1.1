@@ -299,7 +299,7 @@ socket.on('roundResults', ({ round, location, results }) => {
     map.setCenter(actual);
     map.setZoom(8);
 
-    let resultText = `Round ${round} Results:\n`;
+    let resultText = ''; // Changed from "Round ${round} Results:\n"
     results.forEach(r => {
         resultText += `${r.name}: ${r.distance ? r.distance.toFixed(1) + ' km' : 'No guess'} - ${r.points} pts (Total: ${r.totalScore})\n`;
         if (r.guess) {
