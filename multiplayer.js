@@ -2,7 +2,7 @@ const socket = io();
 console.log('Connected to server');
 let map;
 let marker;
-let score = 0; // Keep variable for internal tracking, but no longer displayed
+let score = 0; // Kept for internal tracking
 let timeLeft = 15;
 let round = 1;
 let maxRounds;
@@ -60,6 +60,7 @@ function showHostForm() {
 function showJoinForm() {
     document.getElementById('joinForm').classList.remove('hidden');
     document.getElementById('hostForm').classList.add('hidden');
+    document.getElementById('joinError').classList.add('hidden'); // Reset error when showing form
 }
 
 function hostMultiplayer() {
@@ -85,9 +86,9 @@ function joinMultiplayer() {
     if (gameCodeInput && playerName) {
         localPlayerName = playerName;
         isHost = false;
-        socket.emit('joinGame', { gameCode: gameCodeInput, playerName });
         gameCode = gameCodeInput;
-        showLobby();
+        socket.emit('joinGame', { gameCode: gameCodeInput, playerName });
+        // Wait for server response instead of calling showLobby() here
     }
 }
 
@@ -129,6 +130,8 @@ socket.on('playerList', (players) => {
     });
     if (!isHost && gameCode) {
         updateGameCodeDisplay(gameCode);
+        showLobby(); // Show lobby only on successful join
+        document.getElementById('joinError').classList.add('hidden'); // Clear error
     }
 });
 
@@ -145,8 +148,15 @@ socket.on('updateGameCode', (code) => {
 });
 
 socket.on('error', (message) => {
-    document.getElementById('errorMsg').textContent = message;
-    document.getElementById('errorMsg').classList.remove('hidden');
+    if (!document.getElementById('joinForm').classList.contains('hidden')) {
+        // Still on join form
+        document.getElementById('joinError').textContent = message;
+        document.getElementById('joinError').classList.remove('hidden');
+    } else {
+        // In lobby or elsewhere
+        document.getElementById('errorMsg').textContent = message;
+        document.getElementById('errorMsg').classList.remove('hidden');
+    }
 });
 
 function startMultiplayerGame() {
@@ -301,7 +311,7 @@ socket.on('roundResults', ({ round, location, results }) => {
 
     let resultText = ''; // No prefix
     results.forEach(r => {
-        resultText += `${r.name}: ${r.distance ? r.distance.toFixed(1) + ' km' : 'No guess'} - ${r.points} pts (Total: ${r.totalScore})\n`;
+        resultText += `<p class="score-line">${r.name}: ${r.distance ? r.distance.toFixed(1) + ' km' : 'No guess'} - ${r.points} pts (Total: ${r.totalScore})</p>`;
         if (r.guess) {
             const playerMarker = new google.maps.Marker({
                 position: { lat: r.guess.lat, lng: r.guess.lng },
@@ -315,8 +325,7 @@ socket.on('roundResults', ({ round, location, results }) => {
             score = r.totalScore;
         }
     });
-    document.getElementById("result").textContent = resultText;
-    // Removed document.getElementById("score").textContent update
+    document.getElementById("result").innerHTML = resultText;
     document.getElementById("newRound").disabled = false;
     document.getElementById("guess").disabled = true;
 });
@@ -377,7 +386,6 @@ socket.on('gameRestarted', ({ rounds, area, players }) => {
     selectedArea = area;
     score = 0;
     lastProcessedRound = 0;
-    // Removed score display update
     document.getElementById("gameOver").classList.add("hidden");
     clearMarkers();
     document.getElementById("guess").style.display = "inline";
