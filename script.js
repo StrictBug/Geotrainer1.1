@@ -1,7 +1,6 @@
 let map;
 let marker;
 let actualMarkers = [];
-let score = 0;
 let timeLeft = 15;
 let timer;
 let locations = [];
@@ -27,6 +26,8 @@ function getInitialMapSettings(area) {
         case 'QLD-N': return { center: { lat: -18.59, lng: 143.38 }, zoom: 5 };
         case 'QLD-S': return { center: { lat: -26.05, lng: 146.39 }, zoom: 6 };
         case 'NT': return { center: { lat: -19.35, lng: 133.70 }, zoom: 5 };
+        case 'MAFC': return { center: { lat: -32.2, lng: 137.1 }, zoom: 4 };
+        case 'BAFC': return { center: { lat: -24.2, lng: 137.1 }, zoom: 4 };
         case 'All regions':
         default: return { center: { lat: -25.2744, lng: 133.7751 }, zoom: 4 };
     }
@@ -62,7 +63,17 @@ function loadLocations() {
                 };
             });
             if (selectedArea !== 'All regions') {
-                locations = locations.filter(loc => loc.area === selectedArea);
+                if (selectedArea === 'MAFC') {
+                    locations = locations.filter(loc => 
+                        ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'].includes(loc.area)
+                    );
+                } else if (selectedArea === 'BAFC') {
+                    locations = locations.filter(loc => 
+                        ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'].includes(loc.area)
+                    );
+                } else {
+                    locations = locations.filter(loc => loc.area === selectedArea);
+                }
             }
             if (locations.length === 0) {
                 alert('No locations found for this area!');
@@ -158,16 +169,14 @@ function distanceToSegment(point, v1, v2) {
         v2: v2 ? { lat: v2.lat(), lng: v2.lng() } : null
     });
 
-    // Validate inputs
     if (!point || !v1 || !v2 || 
         isNaN(point.lat()) || isNaN(point.lng()) ||
         isNaN(v1.lat()) || isNaN(v1.lng()) || 
         isNaN(v2.lat()) || isNaN(v2.lng())) {
         console.warn('Invalid coordinates in distanceToSegment, returning fallback');
-        return 95; // Match endRound fallback
+        return 95;
     }
 
-    // Check for degenerate segment
     if (v1.lat() === v2.lat() && v1.lng() === v2.lng()) {
         console.log('Degenerate segment, computing point-to-point distance');
         const dist = google.maps.geometry.spherical.computeDistanceBetween(point, v1) / 1000;
@@ -175,7 +184,6 @@ function distanceToSegment(point, v1, v2) {
         return dist;
     }
 
-    // Compute projection
     const A = point.lat() - v1.lat();
     const B = point.lng() - v1.lng();
     const C = v2.lat() - v1.lat();
@@ -206,7 +214,6 @@ function distanceToSegment(point, v1, v2) {
 
     console.log('Closest point:', { xx, yy });
 
-    // Validate closest point
     if (isNaN(xx) || isNaN(yy)) {
         console.warn('Invalid closest point coordinates, returning fallback:', { xx, yy });
         return 95;
@@ -226,14 +233,13 @@ function distanceToSegment(point, v1, v2) {
 }
 
 function endRound() {
-    let distance = 0;
-    let points = 0;
+    let distance = null;
 
     roundActive = false;
 
     if (!marker) {
-        roundHistory.push({ location: actualLocation.name, distance: '-', points: 0 });
-        document.getElementById("result").textContent = "Time's up! You didn’t guess. Score: 0 for this round.";
+        roundHistory.push({ location: actualLocation.name, distance: null });
+        document.getElementById("result").textContent = "Time's up! You didn’t guess.";
         round++;
         document.getElementById("newGame").disabled = false;
         if (round > maxRounds) {
@@ -246,14 +252,11 @@ function endRound() {
     console.log('Guess coordinates:', { lat: guess.lat(), lng: guess.lng() });
 
     if (actualLocation.point) {
-        // Point location
         const actual = new google.maps.LatLng(actualLocation.lat1, actualLocation.long1);
         distance = google.maps.geometry.spherical.computeDistanceBetween(guess, actual) / 1000;
-        points = distance <= 5 ? 1000 : distance >= 100 ? 0 : Math.floor(1000 - ((distance - 5) * (1000 / 95)));
 
         console.log('Point location distance:', distance);
 
-        // Draw marker
         const actualMarker = new google.maps.Marker({
             position: actual,
             map: map,
@@ -262,7 +265,6 @@ function endRound() {
         actualMarkers.push(actualMarker);
         map.setCenter(actual);
     } else {
-        // Area location
         const vertices = [
             { lat: actualLocation.lat1, lng: actualLocation.long1 },
             { lat: actualLocation.lat2, lng: actualLocation.long2 },
@@ -274,14 +276,12 @@ function endRound() {
 
         console.log('Raw vertices:', vertices);
 
-        // Validate vertices
         const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
         console.log('Valid vertices:', validVertices);
 
         if (validVertices.length < 3) {
             console.error('Insufficient valid vertices for polygon:', validVertices);
             distance = 95;
-            points = 0;
         } else {
             const polygon = new google.maps.Polygon({
                 paths: validVertices,
@@ -296,10 +296,8 @@ function endRound() {
 
             if (google.maps.geometry.poly.containsLocation(guess, polygon)) {
                 distance = 0;
-                points = 1000;
                 console.log('Guess inside polygon, distance: 0');
             } else {
-                // Calculate shortest distance to any edge
                 const v = validVertices.map(v => new google.maps.LatLng(v.lat, v.lng));
                 console.log('LatLng vertices:', v.map(vv => ({ lat: vv.lat(), lng: vv.lng() })));
                 const distances = [];
@@ -325,22 +323,16 @@ function endRound() {
                     distance = Math.min(...distances);
                 }
                 console.log('Selected distance:', distance);
-
-                points = distance >= 95 ? 0 : Math.floor(1000 - (distance * (1000 / 95)));
-                console.log('Points calculated:', points);
             }
         }
 
-        // Center map on first vertex
         map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
     }
 
     map.setZoom(8);
-    score += points;
-    roundHistory.push({ location: actualLocation.name, distance: distance === 0 ? '0' : distance.toFixed(1), points });
+    roundHistory.push({ location: actualLocation.name, distance });
 
-    document.getElementById("score").textContent = `Score: ${score}`;
-    document.getElementById("result").textContent = `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km | Points this round: ${points}`;
+    document.getElementById("result").textContent = distance === null ? "No guess made." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
     document.getElementById("guess").disabled = true;
     document.getElementById("newGame").disabled = false;
     round++;
@@ -360,15 +352,16 @@ function showGameOver() {
 
     const summaryDiv = document.getElementById("roundSummary");
     let html = '<h2>Game Over!</h2>';
-    html += '<table><tr><th>Round</th><th>Location</th><th>Distance (km)</th><th>Points</th></tr>';
+    html += '<table><tr><th>Round</th><th>Location</th><th>Distance (km)</th></tr>';
     
     roundHistory.forEach((roundData, index) => {
-        html += `<tr><td>${index + 1}</td><td>${roundData.location}</td><td>${roundData.distance}</td><td>${roundData.points}</td></tr>`;
+        const distanceText = roundData.distance === null ? '-' : roundData.distance === 0 ? '0' : roundData.distance.toFixed(1);
+        html += `<tr><td>${index + 1}</td><td>${roundData.location}</td><td>${distanceText}</td></tr>`;
     });
 
-    const totalDistance = roundHistory.reduce((sum, round) => sum + (round.distance === '-' ? 0 : parseFloat(round.distance)), 0).toFixed(1);
-    const totalPoints = roundHistory.reduce((sum, round) => sum + round.points, 0);
-    html += `<tr class="total-row"><td colspan="2">Total</td><td>${totalDistance}</td><td>${totalPoints}</td></tr>`;
+    const validDistances = roundHistory.filter(r => r.distance !== null).map(r => r.distance);
+    const averageDistance = validDistances.length > 0 ? (validDistances.reduce((sum, d) => sum + d, 0) / validDistances.length).toFixed(1) : '-';
+    html += `<tr class="total-row"><td colspan="2">Average</td><td>${averageDistance}</td></tr>`;
     html += '</table>';
     
     html += `
@@ -381,7 +374,6 @@ function showGameOver() {
     summaryDiv.innerHTML = html;
 
     document.getElementById("playAgain").addEventListener("click", () => {
-        score = 0;
         round = 1;
         usedLocations = [];
         roundHistory = [];
@@ -390,7 +382,6 @@ function showGameOver() {
             if (m.setPaths) m.setMap(null);
         });
         actualMarkers = [];
-        document.getElementById("score").textContent = `Score: ${score}`;
         document.getElementById("gameOver").classList.add("hidden");
         startNewRound();
     });

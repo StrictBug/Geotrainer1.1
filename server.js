@@ -57,12 +57,36 @@ function startRound(gameCode) {
 
     game.round = (game.round || 0) + 1;
     const area = game.settings.area;
-    let availableLocations = locations.filter(loc => 
-        !game.usedLocations?.includes(loc) && (area === 'All regions' || loc.area === area)
-    );
+    let availableLocations = locations.filter(loc => !game.usedLocations?.includes(loc));
+    if (area !== 'All regions') {
+        if (area === 'MAFC') {
+            availableLocations = availableLocations.filter(loc => 
+                ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'].includes(loc.area)
+            );
+        } else if (area === 'BAFC') {
+            availableLocations = availableLocations.filter(loc => 
+                ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'].includes(loc.area)
+            );
+        } else {
+            availableLocations = availableLocations.filter(loc => loc.area === area);
+        }
+    }
     if (availableLocations.length === 0) {
         game.usedLocations = [];
-        availableLocations = locations.filter(loc => area === 'All regions' || loc.area === area);
+        availableLocations = locations;
+        if (area !== 'All regions') {
+            if (area === 'MAFC') {
+                availableLocations = availableLocations.filter(loc => 
+                    ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'].includes(loc.area)
+                );
+            } else if (area === 'BAFC') {
+                availableLocations = availableLocations.filter(loc => 
+                    ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'].includes(loc.area)
+                );
+            } else {
+                availableLocations = availableLocations.filter(loc => loc.area === area);
+            }
+        }
     }
     if (availableLocations.length === 0) {
         console.error(`No locations available for ${gameCode}`);
@@ -121,7 +145,6 @@ function haversineDistance(coord1, coord2) {
 }
 
 function distanceToSegmentServer(guess, v1, v2) {
-    // Validate inputs
     if (!guess || !v1 || !v2 ||
         isNaN(guess.lat) || isNaN(guess.lng) ||
         isNaN(v1.lat) || isNaN(v1.lng) ||
@@ -130,7 +153,6 @@ function distanceToSegmentServer(guess, v1, v2) {
         return Infinity;
     }
 
-    // Check for degenerate segment
     if (v1.lat === v2.lat && v1.lng === v2.lng) {
         console.log('Degenerate segment, computing point-to-point distance');
         return haversineDistance(guess, v1);
@@ -198,12 +220,11 @@ function endRound(gameCode) {
 
     const results = game.players.map(player => {
         const guess = game.guesses[player.id];
-        let distance = null, points = 0;
+        let distance = null;
         if (guess) {
             if (game.currentLocation.point) {
                 const actual = { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 };
                 distance = haversineDistance(guess, actual);
-                points = distance <= 5 ? 1000 : distance >= 100 ? 0 : Math.floor(1000 - ((distance - 5) * (1000 / 95)));
             } else {
                 const vertices = [
                     { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 },
@@ -218,15 +239,12 @@ function endRound(gameCode) {
                 console.log('Server: Guess coordinates:', guess);
                 console.log('Server: Polygon vertices:', vertices);
 
-                // Validate vertices
                 const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
                 if (validVertices.length < 3) {
                     console.error('Server: Insufficient valid vertices:', validVertices);
-                    distance = 95; // Fallback to max distance
-                    points = 0;
+                    distance = 95;
                 } else if (pointInPolygon(guess, validVertices)) {
                     distance = 0;
-                    points = 1000;
                     console.log('Server: Guess inside polygon, distance: 0');
                 } else {
                     const distances = [];
@@ -245,21 +263,17 @@ function endRound(gameCode) {
                         console.warn('Server: No valid edge distances, defaulting to 95 km');
                         distance = 95;
                     }
-
-                    points = distance >= 95 ? 0 : Math.floor(1000 - (distance * (1000 / 95)));
                 }
             }
-            player.score = (player.score || 0) + points;
-            console.log(`Score for ${player.name}: +${points}, total=${player.score}`);
         }
-        return { name: player.name, guess, distance, points, totalScore: player.score };
+        return { name: player.name, guess, distance };
     });
 
     game.roundHistory = game.roundHistory || [];
     game.roundHistory.push({
         round: game.round,
         location: game.currentLocation.name,
-        scores: results.map(r => ({ name: r.name, points: r.points }))
+        scores: results.map(r => ({ name: r.name, distance: r.distance }))
     });
 
     console.log(`Round ${game.round} ended in ${gameCode}`);
@@ -286,7 +300,7 @@ io.on('connection', (socket) => {
         const gameCode = generateGameCode();
         games[gameCode] = {
             host: socket.id,
-            players: [{ id: socket.id, name: hostName, ready: false, score: 0, disconnected: false }],
+            players: [{ id: socket.id, name: hostName, ready: false, disconnected: false }],
             settings: { rounds, area },
             state: 'lobby',
             round: 0
@@ -308,7 +322,7 @@ io.on('connection', (socket) => {
             socket.emit('error', 'Game already started');
             return;
         }
-        games[gameCode].players.push({ id: socket.id, name: playerName, ready: false, score: 0, disconnected: false });
+        games[gameCode].players.push({ id: socket.id, name: playerName, ready: false, disconnected: false });
         socket.join(gameCode);
         io.to(gameCode).emit('playerList', games[gameCode].players);
         io.to(gameCode).emit('settingsUpdated', games[gameCode].settings);
@@ -435,7 +449,6 @@ io.on('connection', (socket) => {
         game.usedLocations = [];
         game.roundHistory = [];
         game.rejoinedPlayers = new Set();
-        game.players.forEach(player => player.score = 0);
         console.log(`Restarting game ${gameCode} with ${game.players.length} active players`);
         io.to(gameCode).emit('gameRestarted', {
             rounds: game.settings.rounds,

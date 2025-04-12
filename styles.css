@@ -305,6 +305,16 @@ button {
     background: #f2f2f2;
 }
 
+#roundSummary th.no-border {
+    border: none;
+    background: none;
+}
+
+#roundSummary th.distance-header {
+    border: 1px solid #ddd;
+    background: #f2f2f2;
+}
+
 .button-container {
     margin-top: 20px;
     display: flex;

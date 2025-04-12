@@ -2,7 +2,6 @@ const socket = io();
 console.log('Connected to server');
 let map;
 let marker;
-let score = 0;
 let timeLeft = 15;
 let round = 1;
 let maxRounds;
@@ -227,6 +226,8 @@ function getInitialMapSettings(area) {
         case 'QLD-N': return { center: { lat: -18.59, lng: 143.38 }, zoom: 5 };
         case 'QLD-S': return { center: { lat: -26.05, lng: 146.39 }, zoom: 6 };
         case 'NT': return { center: { lat: -19.35, lng: 133.70 }, zoom: 5 };
+        case 'MAFC': return { center: { lat: -32.2, lng: 137.1 }, zoom: 4 };
+        case 'BAFC': return { center: { lat: -24.2, lng: 137.1 }, zoom: 4 };
         case 'All regions':
         default: return { center: { lat: -25.2744, lng: 133.7751 }, zoom: 4 };
     }
@@ -346,12 +347,18 @@ socket.on('roundResults', ({ round, location, results }) => {
 
     map.setZoom(8);
 
+    // Sort results by distance (closest to furthest, null as furthest)
+    results.sort((a, b) => {
+        if (a.distance === null && b.distance === null) return 0;
+        if (a.distance === null) return 1;
+        if (b.distance === null) return -1;
+        return a.distance - b.distance;
+    });
+
     let resultText = '';
     results.forEach(r => {
-        const distanceText = r.distance === 0 ? '0 km' : 
-                            r.distance ? r.distance.toFixed(1) + ' km' : 
-                            'No guess';
-        resultText += `<p class="score-line">${r.name}: ${distanceText} - ${r.points} pts (Total: ${r.totalScore})</p>`;
+        const distanceText = r.distance === null ? 'No guess' : r.distance === 0 ? '0 km' : r.distance.toFixed(1) + ' km';
+        resultText += `<p class="score-line">${r.name}: ${distanceText}</p>`;
         if (r.guess) {
             const playerMarker = new google.maps.Marker({
                 position: { lat: r.guess.lat, lng: r.guess.lng },
@@ -359,10 +366,6 @@ socket.on('roundResults', ({ round, location, results }) => {
                 label: r.name[0]
             });
             markers.push(playerMarker);
-        }
-        if (r.name === localPlayerName) {
-            console.log(`Updating score for ${localPlayerName}: ${score} -> ${r.totalScore}`);
-            score = r.totalScore;
         }
     });
     document.getElementById("result").innerHTML = resultText;
@@ -379,24 +382,38 @@ socket.on('gameOver', ({ players, roundHistory }) => {
     document.getElementById("newRound").style.display = "none";
     document.getElementById("gameOver").classList.remove("hidden");
 
-    const winner = players.reduce((max, p) => p.score > max.score ? p : max, players[0]);
+    const averages = players.map(p => {
+        const distances = roundHistory.map(r => r.scores.find(s => s.name === p.name)?.distance || null)
+                                    .filter(d => d !== null);
+        return {
+            name: p.name,
+            average: distances.length > 0 ? distances.reduce((sum, d) => sum + d, 0) / distances.length : Infinity
+        };
+    });
+    const winner = averages.reduce((min, p) => p.average < min.average ? p : min, averages[0]);
     const summaryDiv = document.getElementById("roundSummary");
     let html = `<h2>Game over, ${winner.name} wins!</h2>`;
-    html += '<table><thead><tr><th>Round</th><th>Location</th>';
+    html += '<table><thead>';
+    html += `<tr><th colspan="2" class="no-border"></th><th colspan="${players.length}" class="distance-header">Distance (km)</th></tr>`;
+    html += '<tr><th>Round</th><th>Location</th>';
     players.forEach(player => html += `<th>${player.name}</th>`);
     html += '</tr></thead><tbody>';
 
     roundHistory.forEach(round => {
         html += `<tr><td>${round.round}</td><td>${round.location}</td>`;
         players.forEach(player => {
-            const score = round.scores.find(s => s.name === player.name)?.points || 0;
-            html += `<td>${score}</td>`;
+            const distance = round.scores.find(s => s.name === player.name)?.distance;
+            const distanceText = distance === null ? '-' : distance === 0 ? '0' : distance.toFixed(1);
+            html += `<td>${distanceText}</td>`;
         });
         html += '</tr>';
     });
 
-    html += '<tr><td colspan="2"><strong>Total</strong></td>';
-    players.forEach(player => html += `<td><strong>${player.score}</strong></td>`);
+    html += '<tr><td colspan="2"><strong>Average</strong></td>';
+    players.forEach(player => {
+        const avg = averages.find(a => a.name === player.name).average;
+        html += `<td><strong>${avg === Infinity ? '-' : avg.toFixed(1)}</strong></td>`;
+    });
     html += '</tr></tbody></table>';
 
     html += `
@@ -424,7 +441,6 @@ socket.on('gameOver', ({ players, roundHistory }) => {
 socket.on('gameRestarted', ({ rounds, area, players }) => {
     maxRounds = rounds;
     selectedArea = area;
-    score = 0;
     lastProcessedRound = 0;
     document.getElementById("gameOver").classList.add("hidden");
     clearMarkers();
