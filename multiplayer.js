@@ -2,7 +2,7 @@ const socket = io();
 console.log('Connected to server');
 let map;
 let marker;
-let score = 0; // Kept for internal tracking
+let score = 0;
 let timeLeft = 15;
 let round = 1;
 let maxRounds;
@@ -13,8 +13,8 @@ let roundActive = false;
 let lastProcessedRound = 0;
 let markers = [];
 let isHost = false;
-let guessSubmitted = false; // Track if a guess has been submitted for the round
-let gameTerminated = false; // Flag to track if game was terminated due to player leaving
+let guessSubmitted = false;
+let gameTerminated = false;
 
 function showSinglePlayer() {
     if (gameCode) {
@@ -60,7 +60,7 @@ function showHostForm() {
 function showJoinForm() {
     document.getElementById('joinForm').classList.remove('hidden');
     document.getElementById('hostForm').classList.add('hidden');
-    document.getElementById('joinError').classList.add('hidden'); // Reset error when showing form
+    document.getElementById('joinError').classList.add('hidden');
 }
 
 function hostMultiplayer() {
@@ -88,7 +88,6 @@ function joinMultiplayer() {
         isHost = false;
         gameCode = gameCodeInput;
         socket.emit('joinGame', { gameCode: gameCodeInput, playerName });
-        // Wait for server response instead of calling showLobby() here
     }
 }
 
@@ -130,8 +129,8 @@ socket.on('playerList', (players) => {
     });
     if (!isHost && gameCode) {
         updateGameCodeDisplay(gameCode);
-        showLobby(); // Show lobby only on successful join
-        document.getElementById('joinError').classList.add('hidden'); // Clear error
+        showLobby();
+        document.getElementById('joinError').classList.add('hidden');
     }
 });
 
@@ -149,11 +148,9 @@ socket.on('updateGameCode', (code) => {
 
 socket.on('error', (message) => {
     if (!document.getElementById('joinForm').classList.contains('hidden')) {
-        // Still on join form
         document.getElementById('joinError').textContent = message;
         document.getElementById('joinError').classList.remove('hidden');
     } else {
-        // In lobby or elsewhere
         document.getElementById('errorMsg').textContent = message;
         document.getElementById('errorMsg').classList.remove('hidden');
     }
@@ -198,7 +195,6 @@ function updateGameCodeDisplay(code) {
     };
 }
 
-// Multiplayer game logic
 const urlParams = new URLSearchParams(window.location.search);
 gameCode = urlParams.get('gameCode');
 maxRounds = parseInt(urlParams.get('rounds')) || 15;
@@ -225,6 +221,12 @@ function getInitialMapSettings(area) {
         case 'SA': return { center: { lat: -31.0, lng: 135.5 }, zoom: 5 };
         case 'VIC': return { center: { lat: -37.0, lng: 144.0 }, zoom: 6 };
         case 'TAS': return { center: { lat: -42.0, lng: 146.0 }, zoom: 7 };
+        case 'NSW-W': return { center: { lat: -32.2, lng: 144.86 }, zoom: 6 };
+        case 'NSW-E': return { center: { lat: -33.07, lng: 150.37 }, zoom: 6 };
+        case 'WA-N': return { center: { lat: -20.31, lng: 122.56 }, zoom: 5 };
+        case 'QLD-N': return { center: { lat: -18.59, lng: 143.38 }, zoom: 5 };
+        case 'QLD-S': return { center: { lat: -26.05, lng: 146.39 }, zoom: 6 };
+        case 'NT': return { center: { lat: -19.35, lng: 133.70 }, zoom: 5 };
         case 'All regions':
         default: return { center: { lat: -25.2744, lng: 133.7751 }, zoom: 4 };
     }
@@ -253,7 +255,10 @@ function initMap() {
 }
 
 function clearMarkers() {
-    markers.forEach(m => m.setMap(null));
+    markers.forEach(m => {
+        if (m.setMap) m.setMap(null);
+        if (m.setPaths) m.setMap(null);
+    });
     markers = [];
     marker = null;
 }
@@ -264,7 +269,7 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
     maxRounds = newMaxRounds;
     timeLeft = serverTime;
     roundActive = true;
-    guessSubmitted = false; // Reset for new round
+    guessSubmitted = false;
     clearMarkers();
     document.getElementById("location").textContent = `Guess: ${location}`;
     document.getElementById("round").textContent = `Round: ${round}/${maxRounds}`;
@@ -279,8 +284,8 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
 });
 
 socket.on('timerUpdate', (newTime) => {
-    timeLeft = newTime; // Allow negative values internally
-    document.getElementById("timer").textContent = `Time left: ${Math.max(0, timeLeft)}s`; // Clamp display to 0
+    timeLeft = newTime;
+    document.getElementById("timer").textContent = `Time left: ${Math.max(0, timeLeft)}s`;
     if (timeLeft === 0 && marker && !guessSubmitted) {
         const guess = marker.getPosition();
         socket.emit('submitGuess', { gameCode, guess: { lat: guess.lat(), lng: guess.lng() } });
@@ -299,19 +304,54 @@ socket.on('roundResults', ({ round, location, results }) => {
     lastProcessedRound = round;
     console.log(`Received round ${round} results for ${localPlayerName}:`, results);
     roundActive = false;
-    const actual = new google.maps.LatLng(location.lat, location.lng);
-    const actualMarker = new google.maps.Marker({
-        position: actual,
-        map: map,
-        icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-    });
-    markers.push(actualMarker);
-    map.setCenter(actual);
+
+    if (location.point) {
+        const actual = new google.maps.LatLng(location.lat1, location.long1);
+        const actualMarker = new google.maps.Marker({
+            position: actual,
+            map: map,
+            icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+        });
+        markers.push(actualMarker);
+        map.setCenter(actual);
+    } else {
+        const vertices = [
+            { lat: location.lat1, lng: location.long1 },
+            { lat: location.lat2, lng: location.long2 },
+            { lat: location.lat3, lng: location.long3 }
+        ];
+        if (location.lat4 && location.long4 && !isNaN(location.lat4) && !isNaN(location.long4)) {
+            vertices.push({ lat: location.lat4, lng: location.long4 });
+        }
+
+        console.log('Multiplayer: Polygon vertices:', vertices);
+
+        const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
+        if (validVertices.length >= 3) {
+            const polygon = new google.maps.Polygon({
+                paths: validVertices,
+                strokeColor: "#00FF00",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+                fillColor: "#00FF00",
+                fillOpacity: 0.3
+            });
+            polygon.setMap(map);
+            markers.push(polygon);
+            map.setCenter({ lat: location.lat1, lng: location.long1 });
+        } else {
+            console.error('Multiplayer: Insufficient valid vertices for polygon:', validVertices);
+        }
+    }
+
     map.setZoom(8);
 
-    let resultText = ''; // No prefix
+    let resultText = '';
     results.forEach(r => {
-        resultText += `<p class="score-line">${r.name}: ${r.distance ? r.distance.toFixed(1) + ' km' : 'No guess'} - ${r.points} pts (Total: ${r.totalScore})</p>`;
+        const distanceText = r.distance === 0 ? '0 km' : 
+                            r.distance ? r.distance.toFixed(1) + ' km' : 
+                            'No guess';
+        resultText += `<p class="score-line">${r.name}: ${distanceText} - ${r.points} pts (Total: ${r.totalScore})</p>`;
         if (r.guess) {
             const playerMarker = new google.maps.Marker({
                 position: { lat: r.guess.lat, lng: r.guess.lng },
@@ -376,7 +416,7 @@ socket.on('gameOver', ({ players, roundHistory }) => {
     });
 
     document.getElementById("backToHome").addEventListener("click", () => {
-        socket.emit('playerLeaveGame', { gameCode }); // Notify server of player leaving
+        socket.emit('playerLeaveGame', { gameCode });
         window.location.href = 'index.html';
     });
 });
@@ -402,7 +442,6 @@ socket.on('gameEnded', (message) => {
 socket.on('gameTerminated', (message) => {
     if (!gameTerminated) {
         gameTerminated = true;
-        // Removed alert(message) to avoid pop-up
         window.location.href = 'index.html';
     }
 });
@@ -412,7 +451,7 @@ document.getElementById("guess").addEventListener("click", () => {
         const guess = marker.getPosition();
         socket.emit('submitGuess', { gameCode, guess: { lat: guess.lat(), lng: guess.lng() } });
         document.getElementById("guess").disabled = true;
-        guessSubmitted = true; // Mark guess as submitted
+        guessSubmitted = true;
         console.log('Guess submitted manually');
     }
 });
@@ -425,7 +464,6 @@ document.getElementById("newRound").addEventListener("click", () => {
     }
 });
 
-// Ensure cleanup on page unload (e.g., browser close)
 window.addEventListener('unload', () => {
     if (gameCode && !gameTerminated) {
         socket.emit('playerLeaveGame', { gameCode });

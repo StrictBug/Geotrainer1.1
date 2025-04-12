@@ -1,0 +1,767 @@
+id,wmo,icao,iata,name,custom-name,elevation,pressure-sensor-height,latitude,longitude,priority,country-code,time-zone,state-region,runway-direction-1,runway-direction-2,minimum-sector-altitude,group,flags,icao-region,polygon,polyline,population,custom-id,GML-id,organisation,hide-coordinates,type,source,state,area-number
+au.bom:YB.ABVUV.WPT,,ABVUV,,ABVUV,,,,-12.51666667,129.433333,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,80
+au.bom:YB.ALEGO.WPT,,ALEGO,,ALEGO,,,,-10.64,125.1333333,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,OTH,86
+au.bom:YB.ANJJO.WPT,,ANJJO,,ANJJO,,,,-12.936469,125.625736,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,86
+au.bom:YB.ARUTA.WPT,,ARUTA,,ARUTA,,,,-25.54166667,147.1633333,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,41
+au.bom:YB.ATSIN.WPT,,ATSIN,,ATSIN,,,,-25.96166667,144.5666667,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,41
+au.bom:YB.AVMAN.WPT,,AVMAN,,AVMAN,,,,-10.599444,129.155556,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,80
+au.bom:YB.AWP.LDM,,AWP,,ARROWSMITH PT,,,,-13.25,136.45,,,,,,,,,------------,YB,,,,,,,,LDM,---pa---,NT,80
+au.bom:YB.BELKI.WPT,,BELKI,,BELKI,,,,-11.68680278,128.4667861,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,86
+au.bom:YB.BIGUP.WPT,,BIGUP,,BIGUP,,,,-18.92543056,123.3296444,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,69
+au.bom:YB.BOING.WPT,,BOING,,BOING,,,,-22.24,127.2505556,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,83
+au.bom:YB.BUCN.LDM,,BUCN,,BUCHANAN HILLS,,,,-18.9,131.0833333,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,84
+au.bom:YB.BUPMO.WPT,,BUPMO,,BUPMO,,,,-13.01333333,137.9483333,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,80
+au.bom:YB.CLOY.LDM,,CLOY,,CLONEYS CREEK,,,,-20.21666667,142.6,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,QLD,43
+au.bom:YB.CRAVN.WPT,,CRAVN,,CRAVN,,,,-32.12666667,151.7666667,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NSW,20
+au.bom:YB.DAG.LDM,,DAG,,DUARINGA,,,,-23.72055278,149.6689944,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,QLD,40
+au.bom:YB.DEJAY.WPT,,DEJAY,,DEJAY,,,,-28.84125556,150.8955361,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NSW,20
+au.bom:YB.DLP.LDM,,DLP,,DOUBLE ISLAND PT,,,,-25.91666667,153.1833333,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,QLD,40
+au.bom:YB.DOORA.WPT,,DOORA,,DOORA,,,,-31.90666667,149.0886111,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NSW,20
+au.bom:YB.DVM.LDM,,DVM,,DEVILS MARBLES,,,,-20.53333333,134.25,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,84
+au.bom:YB.GUGUK.WPT,,GUGUK,,GUGUK,,,,-14.94126111,138.876675,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,45
+au.bom:YB.GULFF.WPT,,GULFF,,GULFF,,,,-14.36666667,140,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,45
+au.bom:YB.GUNAM.WPT,,GUNAM,,GUNAM,,,,-14.70068056,125.2035167,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,69
+au.bom:YB.HOKOR.WPT,,HOKOR,,HOKOR,,,,-13.62166667,138,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,80
+au.bom:YB.HORD.LDM,,HORD,,HORDERN HILLS,,,,-20.65,130.3166667,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,84
+au.bom:YB.IDOTO.WPT,,IDOTO,,IDOTO,,,,-11.51832222,126.6467806,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,86
+au.bom:YB.IGDAM.WPT,,IGDAM,,IGDAM,,,,-32.49853611,150.9124833,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NSW,20
+au.bom:YB.IKUMA.WPT,,IKUMA,,IKUMA,,,,-10.43,127.135,,,,,,,,,---------W--,YB,,,,,,,,WPT,---pa---,NT,86
+au.bom:YB.KERIN.WPT,,KERIN,,KERIN,,,,-16.21,141.295,,,,,,,,,---------W--,YB,,,,,,,,WPT,---pa---,QLD,45
+au.bom:YB.KTG.LDM,,KTG,,KOOLATONG RIVER,,,,-13.08333333,135.65,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,80
+au.bom:YB.LOSKU.WPT,,LOSKU,,LOSKU,,,,-30.49245556,152.3592028,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NSW,20
+au.bom:YB.LSDW.LDM,,LSDW,,LANSDOWNE,,,,-17.615,126.7433333,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,WA,69
+au.bom:YB.MADLU.WPT,,MADLU,,MADLU,,,,-22.4,141.4266667,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,43
+au.bom:YB.MEKOG.WPT,,MEKOG,,MEKOG,,,,-12.53333333,140,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,45
+au.bom:YB.MIE.LDM,,MIE,,MOONIE,,,,-27.71666667,150.3666667,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,QLD,40
+au.bom:YB.MIJ.LDM,,MIJ,,MINJILANG,,,,-11.14826389,132.580475,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,80
+au.bom:YB.MRDAK.WPT,,MRDAK,,MRDAK,,,,-15.14333333,138.345,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,45
+au.bom:YB.MUI.LDM,,MUI,,MURRURUNDI,,,,-31.76666667,150.8333333,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NSW,20
+au.bom:YB.NAILA.WPT,,NAILA,,NAILA,,,,-13.21526389,128.1205667,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,86
+au.bom:YB.NOPAG.WPT,,NOPAG,,NOPAG,,,,-10.86574722,135.87475,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,80
+au.bom:YB.NSTA.LDM,,NSTA,,NORTH STAR,,,,-28.916667,150.416667,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NSW,40
+au.bom:YB.OSVOL.WPT,,OSVOL,,OSVOL,,,,-20.251013,122.048776,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,68
+au.bom:YB.PCB.LDM,,PCB,,PRINCESS CHARLOTTE BAY,,,,-14.33333333,144.1166667,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,QLD,45
+au.bom:YB.POTIP.WPT,,POTIP,,POTIP,,,,-21.69363333,125.1329139,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,WA,83
+au.bom:YB.PRES.LDM,,PRES,,PRESCOTT LAKES,,,,-20.75,125.1666667,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,WA,83
+au.bom:YB.PUTY.LDM,,PUTY,,PUTTY,,,,-32.966667,150.75,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NSW,20
+au.bom:YB.RENR.LDM,,RENR,,RENNER SPRINGS,,,,-18.31666667,133.8,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,84
+au.bom:YB.RGS.VFA,,RGS,,ROLLINGSTONE,,,,-19.04722222,146.3875,,,,,,,,,------------,YB,,,,,,,,VFA,---p----,QLD,44
+au.bom:YB.ROOKI.WPT,,ROOKI,,ROOKI,,,,-10.94714444,139.2045333,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,80
+au.bom:YB.RUPUS.WPT,,RUPUS,,RUPUS,,,,-21.323688,133.458082,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,NT,84
+au.bom:YB.SCATZ.WPT,,SCATZ,,SCATZ,,,,-32.655,150.255,,,,,,,,,---------W--,YB,,,,,,,,WPT,---pa---,NSW,20
+au.bom:YB.SHL.LDM,,SHL,,SHELBURNE BAY,,,,-11.88333333,143.0166667,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,QLD,45
+au.bom:YB.STC.LDM,,STC,,SCOTT CREEK,,,,-14.83333333,131.8333333,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,80
+au.bom:YB.SUG.TSP,,SUG,,SUGARLOAF PT,,,,-32.44444444,152.5402778,,,,,,,,,------------,YB,,,,,,,,TSP,---p----,NSW,20
+au.bom:YB.TBL.LDM,,TBL,,TABULAM,,,,-28.88671111,152.5685861,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NSW,20
+au.bom:YB.UNDW.LDM,,UNDW,,UNDEMOW WATERHOLE,,,,-17.58333333,135.25,,,,,,,,,------------,YB,,,,,,,,LDM,---p----,NT,80
+au.bom:YB.VANVA.WPT,,VANVA,,VANVA,,,,-22.35833333,149.865,,,,,,,,,---------W--,YB,,,,,,,,WPT,---p----,QLD,44
+au.bom:YB.WITE.LDM,,WITE,,LAKE WHITE,,,,-21.1,129.05,,,,,,,,,------------,YB,,,,,,,,LDM,---pa---,NT,84
+au.bom:YB.YABF.ALA,,YABF,,ABERFOYLE,,,,-21.675,145.2666667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YAGD.ALA,,YAGD,,AUGUSTUS DOWNS,,,,-18.5155,139.8787389,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YAMB.AD,,YAMB,,AMBERLEY,,,,-27.64065833,152.7118222,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YAMC.ALA,,YAMC,,ARAMAC,,,,-22.95938889,145.2525556,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YANL.ALA,,YANL,,ANTHONY LAGOON,,,,-17.97563333,135.5381667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YAPA.ALA,,YAPA,,ANNA PLAINS HS,,,,-19.26363889,121.5120889,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,68
+au.bom:YB.YAPH.AD,,YAPH,,ALPHA,,,,-23.64598333,146.5836806,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YARD.ALA,,YARD,,ARGADARGADA,,,,-21.67638889,136.6777778,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YARG.AD,,YARG,,ARGYLE,,,,-16.63683889,128.4513389,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YARM.AD,,YARM,,ARMIDALE,,,,-30.52817778,151.6170917,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YARY.ALA,,YARY,,ARRABURY,,,,-26.69056667,141.0471167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YASF.ALA,,YASF,,ASHFORD,,,,-29.31670278,151.0561167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,20
+au.bom:YB.YATN.ALA,,YATN,,ATHERTON,,,,-17.26203333,145.5144111,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YAUR.AD,,YAUR,,AURUKUN,,,,-13.35384167,141.7208222,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YAUV.ALA,,YAUV,,AUVERGNE STN,,,,-15.69333333,130.0083333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YAVD.ALA,,YAVD,,AVON DOWNS,,,,-20.03916667,137.5216667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YAYR.ALA,,YAYR,,AYR,,,,-19.59633333,147.3246167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YBAB.ALA,,YBAB,,BARALABA,,,,-24.186667,149.845,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YBAD.ALA,,YBAD,,BARADINE,,,,-30.955,149.0916667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,22
+au.bom:YB.YBAF.AD,,YBAF,,BRISBANE/ARCHERFIELD,,,,-27.57034444,153.008025,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBAR.AD,,YBAR,,BARCALDINE,,,,-23.56513889,145.3067111,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YBBN.AD,,YBBN,,BRISBANE,,,,-27.38413056,153.1175667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBCG.AD,,YBCG,,GOLD COAST,,,,-28.16443611,153.5047972,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBCK.AD,,YBCK,,BLACKALL,,,,-24.42789444,145.4285528,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YBCR.ALA,,YBCR,,BATCHELOR,,,,-13.06111111,131.025,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YBCS.AD,,YBCS,,CAIRNS/CAIRNS INTL,,,,-16.88596944,145.7552694,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YBCV.AD,,YBCV,,CHARLEVILLE,,,,-26.41331389,146.2625583,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YBDV.AD,,YBDV,,BIRDSVILLE,,,,-25.89742222,139.3476,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YBEO.ALA,,YBEO,,BETOOTA,,,,-25.695,140.736667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YBGB.ALA,,YBGB,,BEAGLE BAY,,,,-16.98333333,122.65,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YBGO.AD,,YBGO,,BALGO HILL,,,,-20.14826667,127.9739778,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,83
+au.bom:YB.YBHM.AD,,YBHM,,HAMILTON ISLAND,,,,-20.35816111,148.9516389,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YBIE.AD,,YBIE,,BEDOURIE,,,,-24.34611944,139.4602167,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YBIL.ALA,,YBIL,,BILLILUNA,,,,-19.54041667,127.6554667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YBKT.AD,,YBKT,,BURKETOWN,,,,-17.74850278,139.5345083,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YBLL.ALA,,YBLL,,BOLLON,,,,-28.05366667,147.47845,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YBMA.AD,,YBMA,,MOUNT ISA,,,,-20.66390556,139.4887278,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YBMK.AD,,YBMK,,MACKAY,,,,-21.17151944,149.1796167,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YBMY.ALA,,YBMY,,BAMYILI,,,,-14.51965278,132.8834333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YBNA.AD,,YBNA,,BALLINA/BYRON GATEWAY,,,,-28.83377778,153.5624361,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YBNY.ALA,,YBNY,,BRUNCHILLY STN,,,,-18.86916667,134.4611111,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YBOK.AD,,YBOK,,OAKEY,,,,-27.41148333,151.7353056,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBOU.AD,,YBOU,,BOULIA,,,,-22.91333333,139.8997222,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YBPN.AD,,YBPN,,PROSERPINE/WHITSUNDAY COAST,,,,-20.49500278,148.5523472,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YBRJ.ALA,,YBRJ,,BURREN JUNCTION,,,,-30.15861111,148.9741944,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,22
+au.bom:YB.YBRK.AD,,YBRK,,ROCKHAMPTON,,,,-23.38192778,150.4752556,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBRL.ALA,,YBRL,,BORROLOOLA,,,,-16.07526667,136.3023389,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YBRM.AD,,YBRM,,BROOME/INTL,,,,-17.949583,122.227739,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YBRU.ALA,,YBRU,,BRUNETTE DOWNS,,,,-18.63755,135.9437,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YBSU.AD,,YBSU,,SUNSHINE COAST,,,,-26.60341667,153.0910361,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBTD.ALA,,YBTD,,BRIGHTON DOWNS,,,,-23.35,141.5333333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YBTI.AD,,YBTI,,BATHURST ISLAND,,,,-11.76909167,130.6197444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YBTL.AD,,YBTL,,TOWNSVILLE/TOWNSVILLE INTL,,,,-19.2526,146.7652944,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YBTR.ALA,,YBTR,,BLACKWATER,,,,-23.60306389,148.8068306,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YBUD.AD,,YBUD,,BUNDABERG,,,,-24.90375556,152.3185083,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YBWN.AD,,YBWN,,BOWEN,,,,-20.01788889,148.2152667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YBWP.AD,,YBWP,,WEIPA,,,,-12.67857222,141.9253778,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YBWW.AD,,YBWW,,BRISBANE WEST WELLCAMP,,,,-27.55852222,151.7941528,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YCBB.AD,,YCBB,,COONABARABRAN,,,,-31.33258611,149.2671306,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YCBL.ALA,,YCBL,,CAMBALLIN,,,,-17.98617778,124.1645139,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YCBR.ALA,,YCBR,,COLLARENEBRI,,,,-29.52204722,148.5820944,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,22
+au.bom:YB.YCCA.AD,,YCCA,,CHINCHILLA,,,,-26.76933611,150.61655,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YCCY.AD,,YCCY,,CLONCURRY,,,,-20.66868333,140.5043806,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YCFD.ALA,,YCFD,,CAMFIELD STN,,,,-17.021725,131.3265278,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YCFS.AD,,YCFS,,COFFS HARBOUR,,,,-30.32058333,153.1163333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YCGO.AD,,YCGO,,CHILLAGOE,,,,-17.140725,144.5283278,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YCHT.AD,,YCHT,,CHARTERS TOWERS,,,,-20.04360556,146.2721528,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YCIN.AD,,YCIN,,CURTIN,,,,-17.58144722,123.8281944,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YCKN.AD,,YCKN,,COOKTOWN,,,,-15.44464722,145.1843194,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YCMT.AD,,YCMT,,CLERMONT,,,,-22.77294444,147.620625,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YCMU.AD,,YCMU,,CUNNAMULLA,,,,-28.03005556,145.6221167,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YCMW.AD,,YCMW,,CAMOOWEAL,,,,-19.91166667,138.125,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YCNM.AD,,YCNM,,COONAMBLE,,,,-30.98338889,148.3756444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,22
+au.bom:YB.YCNY.AD,,YCNY,,CENTURY MINE,,,,-18.75333333,138.7066667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YCOE.AD,,YCOE,,COEN,,,,-13.76207778,143.1166667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YCOO.ALA,,YCOO,,COOINDA,,,,-12.90271111,132.5323167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YCRA.ALA,,YCRA,,CARINDA,,,,-30.45825,147.7094167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,22
+au.bom:YB.YCRY.ALA,,YCRY,,CROYDON,,,,-18.21756667,142.2529667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YCSV.ALA,,YCSV,,COLLINSVILLE,,,,-20.59620278,147.8599556,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YCYR.ALA,,YCYR,,CHARNLEY RIVER,,,,-16.73333333,125.4391667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YDAJ.ALA,,YDAJ,,DAJARRA,,,,-21.70457778,139.5402472,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YDAY.ALA,,YDAY,,DALBY,,,,-27.15529167,151.2672917,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YDBI.AD,,YDBI,,DIRRANBANDI,,,,-28.59166667,148.2166667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YDBR.ALA,,YDBR,,DUNBAR,,,,-16.05,142.4,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,QLD,45
+au.bom:YB.YDBY.AD,,YDBY,,DERBY,,,,-17.37009722,123.6606528,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YDGN.ALA,,YDGN,,DOONGAN,,,,-15.38598056,126.3049778,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YDLT.ALA,,YDLT,,DELTA DOWNS,,,,-16.99166667,141.3166667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YDLW.ALA,,YDLW,,DALY WATERS,,,,-16.26666667,133.3666667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YDMG.AD,,YDMG,,DOOMADGEE,,,,-17.93693611,138.8163694,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YDMN.ALA,,YDMN,,DALY RIVER MISSION,,,,-13.75,130.6940167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YDMR.ALA,,YDMR,,DELAMERE STN,,,,-15.6245,131.6493333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YDOR.ALA,,YDOR,,DORUNDA STATION,,,,-16.55403611,141.8242694,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YDPD.ALA,,YDPD,,DAVENPORT DOWNS,,,,-24.14553333,141.1121833,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YDRH.ALA,,YDRH,,DURHAM DOWNS,,,,-27.075,141.9,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,QLD,41
+au.bom:YB.YDRI.ALA,,YDRI,,DURRIE,,,,-25.68466667,140.2233056,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YDYS.ALA,,YDYS,,DYSART,,,,-22.62220833,148.363825,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YEGS.ALA,,YEGS,,ELGIN DOWNS,,,,-22,146.9166667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YELD.AD,,YELD,,ELCHO ISLAND,,,,-12.01933889,135.57065,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YELL.ALA,,YELL,,ELLIOTT,,,,-17.52944444,133.5297222,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YEMG.ALA,,YEMG,,EROMANGA,,,,-26.70461667,143.2620167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YEML.AD,,YEML,,EMERALD,,,,-23.56777778,148.1792,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YEUO.ALA,,YEUO,,EULO,,,,-28.16906667,145.0416333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YEVD.ALA,,YEVD,,EVANS HEAD,,,,-29.09328611,153.4203694,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,20
+au.bom:YB.YFLO.ALA,,YFLO,,FLORA VALLEY,,,,-18.28333333,128.4166667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YFTZ.AD,,YFTZ,,FITZROY CROSSING,,,,-18.18200278,125.5586722,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YGAY.AD,,YGAY,,GAYNDAH,,,,-25.615217,151.620772,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YGBI.AD,,YGBI,,SOUTH GOULBURN ISLAND,,,,-11.65061389,133.3820639,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YGDA.AD,,YGDA,,GOODOOGA,,,,-29.07344167,147.3761778,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,22
+au.bom:YB.YGDH.AD,,YGDH,,GUNNEDAH,,,,-30.96108333,150.2506333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YGDI.AD,,YGDI,,GOONDIWINDI,,,,-28.52127778,150.3201944,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YGDS.ALA,,YGDS,,GREGORY DOWNS,,,,-18.62545833,139.2336111,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YGFN.AD,,YGFN,,GRAFTON,,,,-29.75944167,153.0299972,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YGGS.ALA,,YGGS,,GREGORY SPRINGS,,,,-19.71666667,144.3666667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YGIB.ALA,,YGIB,,GIBB RIVER,,,,-16.41871667,126.4460333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YGIL.ALA,,YGIL,,GILGANDRA,,,,-31.69695,148.6360667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,22
+au.bom:YB.YGLA.AD,,YGLA,,GLADSTONE,,,,-23.86980556,151.2227444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YGLE.ALA,,YGLE,,GLENGYLE,,,,-24.7989,139.5967,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YGLI.AD,,YGLI,,GLEN INNES,,,,-29.675,151.689444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YGLO.ALA,,YGLO,,GLENORMISTON,,,,-22.88897222,138.824275,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YGON.AD,,YGON,,MOUNT GORDON,,,,-19.77188056,139.4010889,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YGPT.AD,,YGPT,,GARDEN POINT,,,,-11.399081,130.425244,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YGTE.AD,,YGTE,,GROOTE EYLANDT,,,,-13.97334167,136.460825,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YGTN.AD,,YGTN,,GEORGETOWN (QLD),,,,-18.30325556,143.5309472,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YGYM.ALA,,YGYM,,GYMPIE,,,,-26.28288333,152.7019472,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YHBA.AD,,YHBA,,HERVEY BAY,,,,-25.31881389,152.8802972,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YHID.AD,,YHID,,HORN ISLAND,,,,-10.58644167,142.2900306,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YHLC.AD,,YHLC,,HALLS CREEK,,,,-18.23395556,127.6696028,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YHOO.ALA,,YHOO,,HOOKER CREEK,,,,-18.32833333,130.6466667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YHOV.ALA,,YHOV,,HODGSON RIVER,,,,-15.57472222,134.0955556,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YHUG.AD,,YHUG,,HUGHENDEN,,,,-20.814925,144.2251972,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YIFL.AD,,YIFL,,INNISFAIL/MUNDOO,,,,-17.558583,146.0116194,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YIFY.ALA,,YIFY,,IFFLEY,,,,-18.9,141.2166667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YIGM.ALA,,YIGM,,INGHAM,,,,-18.66060833,146.151775,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YINJ.ALA,,YINJ,,INJUNE,,,,-25.85,148.55,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,QLD,41
+au.bom:YB.YINW.ALA,,YINW,,INVERWAY,,,,-17.8391,129.6381167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YISF.ALA,,YISF,,ISISFORD,,,,-24.25913333,144.4242833,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YIVL.AD,,YIVL,,INVERELL,,,,-29.88831389,151.1441861,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YJAB.AD,,YJAB,,JABIRU,,,,-12.65841667,132.8930917,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YJDA.ALA,,YJDA,,JUNDAH,,,,-24.83149167,143.0654167,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YJLC.AD,,YJLC,,JULIA CREEK,,,,-20.66836667,141.7224917,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YKAL.ALA,,YKAL,,KALUMBURU,,,,-14.28803333,126.6310778,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YKID.ALA,,YKID,,KIDSTON,,,,-18.87069444,144.1733556,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YKIL.ALA,,YKIL,,KILDURK STN,,,,-16.43138889,129.6141667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YKIR.ALA,,YKIR,,KIRKIMBIE STN,,,,-17.77838889,129.2095,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YKKG.AD,,YKKG,,KALKGURUNG,,,,-17.43195,130.8079361,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,84
+au.bom:YB.YKLE.ALA,,YKLE,,KILLARNEY,,,,-16.25027778,131.7469444,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YKMB.AD,,YKMB,,KARUMBA,,,,-17.4555,140.831667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YKML.ALA,,YKML,,KAMILEROI,,,,-19.37461389,140.0560611,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YKMP.AD,,YKMP,,KEMPSEY,,,,-31.07431944,152.7696472,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YKOW.AD,,YKOW,,KOWANYAMA,,,,-15.485594,141.751422,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YKRY.AD,,YKRY,,KINGAROY,,,,-26.58081111,151.8410083,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YLAH.ALA,,YLAH,,LAWN HILL,,,,-18.57638889,138.5847222,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YLBD.AD,,YLBD,,DJARINDJIN/LOMBADINA,,,,-16.51527778,122.9236111,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YLDL.ALA,,YLDL,,LISSADELL,,,,-16.661,128.5938333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YLEV.AD,,YLEV,,LAKE EVELLA,,,,-12.49901111,135.8057028,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YLGB.ALA,,YLGB,,LA GRANGE BAY,,,,-18.68333333,121.8083333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YLGU.ALA,,YLGU,,LEGUNE STN,,,,-15.2152,129.4448806,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YLHI.AD,,YLHI,,LORD HOWE ISLAND,,,,-31.53835,159.0771889,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,24
+au.bom:YB.YLHR.AD,,YLHR,,LOCKHART RIVER,,,,-12.787075,143.3046889,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YLIS.AD,,YLIS,,LISMORE,,,,-28.82666667,153.2575,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YLKN.ALA,,YLKN,,LAKE NASH,,,,-20.97995,137.9174583,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YLLE.AD,,YLLE,,BALLERA,,,,-27.40833333,141.8083333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YLMQ.ALA,,YLMQ,,LAKE MACQUARIE AIRPORT,,,,-33.06622778,151.6480472,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,20
+au.bom:YB.YLOR.ALA,,YLOR,,LORRAINE,,,,-19.00638889,139.8994444,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YLRA.ALA,,YLRA,,LAURA,,,,-15.55,144.45,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,QLD,45
+au.bom:YB.YLRD.AD,,YLRD,,LIGHTNING RIDGE,,,,-29.45677222,147.9845056,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,22
+au.bom:YB.YLRE.AD,,YLRE,,LONGREACH,,,,-23.43416944,144.2802583,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YLVK.HLS,,YLVK,,LAVARACK,,,,-19.32083333,146.8019444,,,,,,,,,------------,YB,,,,,,,,HLS,---p----,QLD,44
+au.bom:YB.YLZI.ALA,,YLZI,,LIZARD ISLAND,,,,-14.6729,145.4542333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YMBA.AD,,YMBA,,MAREEBA,,,,-17.070575,145.4239167,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YMCL.ALA,,YMCL,,MOUNT COOLON,,,,-21.387,147.3322833,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YMDG.AD,,YMDG,,MUDGEE,,,,-32.56248889,149.6110917,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YMGB.AD,,YMGB,,MILINGIMBI,,,,-12.09446667,134.8935306,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YMGD.AD,,YMGD,,MANINGRIDA,,,,-12.05605278,134.2340778,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YMGI.ALA,,YMGI,,MUNGINDI,,,,-28.96711667,149.0536,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,41
+au.bom:YB.YMGV.ALA,,YMGV,,MUSGRAVE ROADHOUSE,,,,-14.78111111,143.5033333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YMHO.ALA,,YMHO,,MOUNT HOUSE,,,,-17.051,125.7134667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YMHU.AD,,YMHU,,MCARTHUR RIVER MINE,,,,-16.44331111,136.0766694,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YMHW.ALA,,YMHW,,MOUNT HOWITT,,,,-26.51106111,142.2832722,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YMIP.ALA,,YMIP,,MITCHELL PLATEAU,,,,-14.79021111,125.8258278,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YMIR.ALA,,YMIR,,MIRANDA DOWNS,,,,-17.33333333,141.9166667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YMIT.ALA,,YMIT,,MITCHELL,,,,-26.48342778,147.9367694,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YMLS.AD,,YMLS,,MILES,,,,-26.80603333,150.1697833,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YMMU.ALA,,YMMU,,MIDDLEMOUNT,,,,-22.8025,148.7047222,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YMND.AD,,YMND,,MAITLAND (NSW),,,,-32.70412778,151.4888333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YMNK.ALA,,YMNK,,MONKIRA,,,,-24.818533,140.5532,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YMNY.ALA,,YMNY,,MORNEY,,,,-25.35833333,141.4333333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YMOR.AD,,YMOR,,MOREE,,,,-29.49881389,149.8446528,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YMQA.ALA,,YMQA,,MARQUA,,,,-22.85,137.3333333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YMRB.AD,,YMRB,,MORANBAH,,,,-22.057911,148.077556,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,44
+au.bom:YB.YMRT.ALA,,YMRT,,MOUNT GARNET,,,,-17.7,145.15,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,QLD,45
+au.bom:YB.YMSF.ALA,,YMSF,,MOUNT SANFORD STATION,,,,-16.97833333,130.555,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YMTA.ALA,,YMTA,,MITTIEBAH,,,,-18.80633333,137.0751667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YMTB.ALA,,YMTB,,MUTTABURRA,,,,-22.58333333,144.5333333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YMTI.AD,,YMTI,,MORNINGTON ISLAND,,,,-16.66262778,139.1779333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YMTJ.ALA,,YMTJ,,MONTEJINNI,,,,-16.70472222,131.7341667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YMTO.ALA,,YMTO,,MONTO,,,,-24.89223333,151.1018194,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YMVY.ALA,,YMVY,,MOUNT VALLEY,,,,-14.08333333,133.8166667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YMYB.AD,,YMYB,,MARYBOROUGH (QLD),,,,-25.51333611,152.7151111,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YMYH.ALA,,YMYH,,MALLAPUNYAH SPRINGS STN,,,,-16.96666667,135.7766667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YNAB.ALA,,YNAB,,NABARLEK,,,,-12.30833333,133.3125,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YNAP.ALA,,YNAP,,NAPPA MERRIE,,,,-27.55833333,141.1333333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YNAT.ALA,,YNAT,,NATHAN RIVER STN,,,,-15.58703889,135.4299139,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YNBR.AD,,YNBR,,NARRABRI,,,,-30.31918333,149.8273417,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YNDS.ALA,,YNDS,,NATAL DOWNS,,,,-21.08333333,146.15,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YNGU.AD,,YNGU,,NGUKURR,,,,-14.722825,134.7476028,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YNKA.ALA,,YNKA,,NOONKANBAH,,,,-18.49166667,124.851,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YNPE.AD,,YNPE,,NORTHERN PENINSULA,,,,-10.95082222,142.4594583,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YNTN.AD,,YNTN,,NORMANTON,,,,-17.685,141.070247,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YNUM.AD,,YNUM,,NUMBULWAR,,,,-14.27166111,135.7166722,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YNUT.ALA,,YNUT,,NUTWOOD DOWNS,,,,-15.81666667,134.15,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YOEN.AD,,YOEN,,OENPELLI,,,,-12.32521111,133.0056444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YORV.ALA,,YORV,,ORD RIVER,,,,-17.34111111,128.9119444,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,WA,69
+au.bom:YB.YPDN.AD,,YPDN,,DARWIN,,,,-12.41460278,130.8767889,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YPGV.AD,,YPGV,,GOVE,,,,-12.26929444,136.8183361,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YPKT.AD,,YPKT,,PORT KEATS,,,,-14.24986944,129.5292167,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YPKU.AD,,YPKU,,KUNUNURRA,,,,-15.77804167,128.707425,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YPMP.AD,,YPMP,,PORMPURAAW,,,,-14.89745556,141.6109278,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YB.YPMQ.AD,,YPMQ,,PORT MACQUARIE,,,,-31.43593611,152.8633528,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YPND.ALA,,YPND,,PENTLAND,,,,-20.53333333,145.3666667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YPTN.AD,,YPTN,,TINDAL,,,,-14.52099444,132.3778611,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YQDI.AD,,YQDI,,QUIRINDI,,,,-31.49869167,150.5180306,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YQLP.AD,,YQLP,,QUILPIE,,,,-26.60852778,144.2573028,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YRBR.ALA,,YRBR,,ROBINSON RIVER,,,,-16.71833333,136.945,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YRLL.ALA,,YRLL,,ROLLESTON,,,,-24.46153056,148.6271972,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YRMD.AD,,YRMD,,RICHMOND (QLD),,,,-20.70202222,143.1148222,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YRNG.AD,,YRNG,,RAMINGINING,,,,-12.35645556,134.8975722,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YROM.AD,,YROM,,ROMA,,,,-26.54524167,148.7748833,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YRSB.ALA,,YRSB,,ROSEBERTH,,,,-25.83333333,139.65,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YRTP.ALA,,YRTP,,RUTLAND PLAINS,,,,-15.64326944,141.8432028,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YSCO.AD,,YSCO,,SCONE,,,,-32.03725,150.8321333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YSGE.AD,,YSGE,,SAINT GEORGE,,,,-28.04975556,148.5952972,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YSLW.ALA,,YSLW,,ST LAWRENCE,,,,-22.36666667,149.4666667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YSMH.ALA,,YSMH,,SAMUEL HILL,,,,-22.75,150.6333333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YSMP.ALA,,YSMP,,SMITH PT,,,,-11.15,132.15,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,NT,80
+au.bom:YB.YSNK.AD,,YSNK,,SNAKE BAY,,,,-11.42288333,130.6535194,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,80
+au.bom:YB.YSPE.AD,,YSPE,,STANTHORPE,,,,-28.62026944,151.9905667,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,20
+au.bom:YB.YSPK.ALA,,YSPK,,SPRING CREEK,,,,-18.62166667,144.5683333,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YSRT.ALA,,YSRT,,SURAT,,,,-27.15955556,149.075975,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YSTO.ALA,,YSTO,,STONEHENGE,,,,-24.35631667,143.2913,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YSTW.AD,,YSTW,,TAMWORTH,,,,-31.08377778,150.8466861,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YSUJ.ALA,,YSUJ,,SUPPLEJACK DOWNS,,,,-19.26666667,129.95,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YTAA.ALA,,YTAA,,TARA,,,,-27.15679722,150.4766806,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YTAM.AD,,YTAM,,TAROOM,,,,-25.80203333,149.8994444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YTAN.ALA,,YTAN,,TANAMI DOWNS,,,,-20.58333333,129.75,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YTBR.ALA,,YTBR,,TIMBER CREEK,,,,-15.6205,130.4456806,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YTDR.AD,,YTDR,,THEODORE,,,,-24.98627778,150.0931028,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YTEE.AD,,YTEE,,TREPELL,,,,-21.83491111,140.8879361,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YTFD.ALA,,YTFD,,TENTERFIELD,,,,-28.99110278,151.9297944,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,20
+au.bom:YB.YTGM.AD,,YTGM,,THARGOMINDAH,,,,-27.98635278,143.8109028,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YTGT.AD,,YTGT,,THE GRANITES,,,,-20.548333,130.35,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,84
+au.bom:YB.YTHY.ALA,,YTHY,,THYLUNGRA,,,,-26.09328056,143.4524972,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YTMO.AD,,YTMO,,THE MONUMENT,,,,-21.81194444,139.9233333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YTNG.AD,,YTNG,,THANGOOL,,,,-24.49377222,150.5762444,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YTNK.AD,,YTNK,,TENNANT CREEK,,,,-19.63450556,134.1832833,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NT,84
+au.bom:YB.YTNR.ALA,,YTNR,,TANUMBIRINI STN,,,,-16.45,134.65,,,,,,,,,------------,YB,,,,,,,,ALA,---pa---,NT,80
+au.bom:YB.YTRE.AD,,YTRE,,TAREE,,,,-31.88855556,152.5138361,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YTTI.AD,,YTTI,,TROUGHTON ISLAND,,,,-13.75166667,126.1483333,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,86
+au.bom:YB.YTWB.AD,,YTWB,,TOOWOOMBA,,,,-27.54146667,151.9124222,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YUCH.ALA,,YUCH,,UCHARONIDGE STN,,,,-17.67361111,134.2380556,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YUDG.ALA,,YUDG,,URANDANGI,,,,-21.59448333,138.36565,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,43
+au.bom:YB.YUNY.ALA,,YUNY,,CLUNY,,,,-24.51148333,139.6172,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YVRD.ALA,,YVRD,,VICTORIA RIVER DOWNS,,,,-16.40361667,131.0025,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,80
+au.bom:YB.YVRS.ALA,,YVRS,,VAN ROOK STATION,,,,-16.96216944,141.9525861,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YWAV.ALA,,YWAV,,WAVE HILL,,,,-17.39363889,131.1190972,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YWBI.ALA,,YWBI,,WARRABRI,,,,-20.99928333,134.3964389,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NT,84
+au.bom:YB.YWCH.ALA,,YWCH,,WALCHA,,,,-31.00708333,151.55535,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,NSW,20
+au.bom:YB.YWCK.AD,,YWCK,,WARWICK,,,,-28.14944444,151.9430556,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,40
+au.bom:YB.YWDH.AD,,YWDH,,WINDORAH,,,,-25.41294444,142.6673056,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,41
+au.bom:YB.YWDL.ALA,,YWDL,,WONDOOLA,,,,-18.575,140.8916667,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YWDV.ALA,,YWDV,,WANDO VALE,,,,-19.66666667,144.9,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,44
+au.bom:YB.YWLG.AD,,YWLG,,WALGETT,,,,-30.03266667,148.1257778,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,22
+au.bom:YB.YWLM.AD,,YWLM,,WILLIAMTOWN,,,,-32.794931,151.834472,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,NSW,20
+au.bom:YB.YWMP.ALA,,YWMP,,WROTHAM PARK,,,,-16.65813056,144.000875,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,45
+au.bom:YB.YWND.ALA,,YWND,,WONDAI,,,,-26.28425556,151.8613361,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,40
+au.bom:YB.YWTN.AD,,YWTN,,WINTON,,,,-22.363475,143.0856083,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,43
+au.bom:YB.YWYA.ALA,,YWYA,,WYANDRA,,,,-27.26666667,145.99,,,,,,,,,------------,YB,,,,,,,,ALA,---p----,QLD,41
+au.bom:YB.YWYM.AD,,YWYM,,WYNDHAM,,,,-15.51143611,128.1531472,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,WA,69
+au.bom:YB.YXMW.HLS,,YXMW,,MERRIWA HOSPITAL,,,,-32.14338611,150.3608917,,,,,,,,,------------,YB,,,,,,,,HLS,---p----,NSW,20
+au.bom:YB.YXTX.HLS,,YXTX,,TEXAS MULTI PURPOSE HEALTH SERVICE,,,,-28.85527778,151.1788889,,,,,,,,,------------,YB,,,,,,,,HLS,---p----,QLD,20
+au.bom:YB.YYKI.AD,,YYKI,,YORKE ISLAND,,,,-9.753333,143.405,,,,,,,,,--------A---,YB,,,,,,,,AD,---p----,QLD,45
+au.bom:YM.AKLAB.WPT,,AKLAB,,AKLAB,,,,-40.00002778,145.5126611,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,TAS,70
+au.bom:YM.ALBUT.WPT,,ALBUT,,ALBUT,,,,-35.68803889,139.3479528,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,50
+au.bom:YM.ALTIR.WPT,,ALTIR,,ALTIR,,,,-32.66,140.5033333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,51
+au.bom:YM.APOMA.WPT,,APOMA,,APOMA,,,,-29.89796111,142.6815361,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.ARRAN.WPT,,ARRAN,,ARRAN,,,,-35.83756667,147.6393833,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,21
+au.bom:YM.ASUBO.WPT,,ASUBO,,ASUBO,,,,-25.39666667,137.9833333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NT,85
+au.bom:YM.AVBEG.WPT,,AVBEG,,AVBEG,,,,-34.82838889,149.0421278,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,21
+au.bom:YM.BENDO.WPT,,BENDO,,BENDO,,,,-35.243375,139.5101444,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,50
+au.bom:YM.BIDAP.WPT,,BIDAP,,BIDAP,,,,-24.40126389,123.2456444,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,66
+au.bom:YM.BRR.LDM,,BRR,,BARRINGUN,,,,-29.01666667,145.7,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,22
+au.bom:YM.BUGA.LDM,,BUGA,,BURRAGA,,,,-33.883333,149.566667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,21
+au.bom:YM.BUNGY.WPT,,BUNGY,,BUNGY,,,,-37.485,138.33,,,,,,,,,---------W--,YM,,,,,,,,WPT,---pa---,SA,50
+au.bom:YM.BUNNY.WPT,,BUNNY,,BUNNY,,,,-27.546821,127.203597,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,64
+au.bom:YM.BURR.LDM,,BURR,,BURRA,,,,-33.68333333,138.9333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,50
+au.bom:YM.BWL.LDM,,BWL,,BOWRAL,,,,-34.4792,150.4181,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,NSW,21
+au.bom:YM.CAJE.VFA,,CAJE,,CAPE JERVIS,,,,-35.60611111,138.0919444,,,,,,,,,------------,YM,,,,,,,,VFA,---p----,SA,50
+au.bom:YM.CAO.LDM,,CAO,,CEDUNA OBSERVATORY,,,,-31.866667,133.8,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,53
+au.bom:YM.CAPT.VFA,,CAPT,,CAPTAINS FLAT,,,,-35.591111,149.445278,,,,,,,,,------------,YM,,,,,,,,VFA,---p----,NSW,21
+au.bom:YM.CLLN.VFC,,CLLN,,CAMPBELLTOWN,,,,-41.93333333,147.4916667,,,,,,,,,------------,YM,,,,,,,,VFC,---p----,TAS,70
+au.bom:YM.CLMN.VFA,,CLMN,,COOLAMON,,,,-34.81666667,147.2,,,,,,,,,------------,YM,,,,,,,,VFA,---p----,NSW,22
+au.bom:YM.CML.LDM,,CML,,CRADLE MOUNTAIN LODGE,,,,-41.59486111,145.9283056,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.CPHE.LDM,,CPHE,,CAPE RICHE,,,,-34.6,118.7666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,63
+au.bom:YM.CPLD.VFR,,CPLD,,CAPE PORTLAND,,,,-40.75,147.95,,,,,,,,,------------,YM,,,,,,,,VFR,---pa---,TAS,70
+au.bom:YM.CRAY.LDM,,CRAY,,CRAYFISH,,,,-38.58333333,139.75,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,50
+au.bom:YM.DADAD.WPT,,DADAD,,DADAD,,,,-40.145225,150.585047,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,OTH,98
+au.bom:YM.DOTOP.WPT,,DOTOP,,DOTOP,,,,-32.105,119.08,,,,,,,,,---------W--,YM,,,,,,,,WPT,---pa---,WA,61
+au.bom:YM.DWB.LDM,,DWB,,DERWENT BRIDGE,,,,-42.13333333,146.2333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.EDP.LDM,,EDP,,EDDYSTONE PT,,,,-40.99833333,148.3483333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.EKUNO.WPT,,EKUNO,,EKUNO,,,,-29.012816,124.7025,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,64
+au.bom:YM.ELAPO.WPT,,ELAPO,,ELAPO,,,,-33.16333333,140.4516667,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,51
+au.bom:YM.ELGON.WPT,,ELGON,,ELGON,,,,-29.895,136.2033333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,51
+au.bom:YM.ENPIT.WPT,,ENPIT,,ENPIT,,,,-23.36637778,126.488425,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,83
+au.bom:YM.ENTRE.WPT,,ENTRE,,ENTRE,,,,-31.53411667,130.9491,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,53
+au.bom:YM.FDP.LDM,,FDP,,FEDERATION PEAK,,,,-43.26666667,146.45,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.FLIKI.WPT,,FLIKI,,FLIKI,,,,-40,146.3933333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,TAS,70
+au.bom:YM.FOWB.TSP,,FOWB,,FOWLERS BAY,,,,-31.98333333,132.4333333,,,,,,,,,------------,YM,,,,,,,,TSP,---p----,SA,53
+au.bom:YM.GDG.VFA,,GDG,,GUNDAGAI,,,,-35.06111111,148.1027778,,,,,,,,,------------,YM,,,,,,,,VFA,---p----,NSW,21
+au.bom:YM.GLC.LDM,,GLC,,GLENORCHY,,,,-31.91666667,139.7833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,51
+au.bom:YM.GUGAB.WPT,,GUGAB,,GUGAB,,,,-29.68523056,139.8331222,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,51
+au.bom:YM.HATF.LDM,,HATF,,HATFIELD,,,,-33.7,143.65,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,NSW,22
+au.bom:YM.HDP.LDM,,HDP,,HOOD PT,,,,-34.38333333,119.5666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,63
+au.bom:YM.HRD.LDM,,HRD,,HUNGERFORD,,,,-29,144.4,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,NSW,41
+au.bom:YM.HYDN.TSP,,HYDN,,HYDEN,,,,-32.45,118.866667,,,,,,,,,------------,YM,,,,,,,,TSP,---p----,WA,63
+au.bom:YM.IDK.LDM,,IDK,,INDULKANA TOWNSHIP,,,,-26.96583333,133.325,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,52
+au.bom:YM.IDNA.LDM,,IDNA,,INDIANA,,,,-23.33333333,135.4333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NT,85
+au.bom:YM.ISB.LDM,,ISB,,ISRAELITE BAY,,,,-33.61666667,123.8833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,62
+au.bom:YM.ISLAV.WPT,,ISLAV,,ISLAV,,,,-32.86046389,132.3465444,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,53
+au.bom:YM.ISRED.WPT,,ISRED,,ISRED,,,,-33.885,131.5,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,98
+au.bom:YM.IVPEM.WPT,,IVPEM,,IVPEM,,,,-32.52666667,128,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,62
+au.bom:YM.JANGU.WPT,,JANGU,,JANGU,,,,-38.765,148.6916667,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,VIC,30
+au.bom:YM.KALK.LDM,,KALK,,BASS STRAIT,,,,-39.5,142.5,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,TAS,30
+au.bom:YM.KALUG.WPT,,KALUG,,KALUG,,,,-25.9,136.725,,,,,,,,,---------W--,YM,,,,,,,,WPT,---pa---,NT,85
+au.bom:YM.KAMBI.WPT,,KAMBI,,KAMBI,,,,-34.13487778,135.3398139,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,53
+au.bom:YM.KDBF.LDM,,KDBF,,KIDSON BLUFF,,,,-22.25,125.0333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,83
+au.bom:YM.KIAN.LDM,,KIAN,,KIANDRA,,,,-35.866667,148.5,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,21
+au.bom:YM.KIM.VFA,,KIM,,KILMORE,,,,-37.3,144.9541667,,,,,,,,,------------,YM,,,,,,,,VFA,---p----,VIC,30
+au.bom:YM.KMG.LDM,,KMG,,KILMORE GAP,,,,-37.3,144.9833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,VIC,30
+au.bom:YM.KOOM.LDM,,KOOM,,KOOMOOLOOBOOKA CAVE,,,,-31.48333333,129.5833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,53
+au.bom:YM.KROWS.WPT,,KROWS,,KROWS,,,,-36.83166667,137.2616667,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,50
+au.bom:YM.LDAP.LDM,,LDAP,,LAKE DISAPPOINTMENT,,,,-23.5,122.6666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,68
+au.bom:YM.LEYN.LDM,,LEYN,,LAKE EYRE NORTH,,,,-28.416667,137.3,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,52
+au.bom:YM.LEYOX.WPT,,LEYOX,,LEYOX,,,,-34.25503056,144.0882639,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.LFRO.LDM,,LFRO,,LAKE FROME,,,,-30.63333333,139.8666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,51
+au.bom:YM.LGEN.LDM,,LGEN,,LAKE GILLEN,,,,-26.21666667,124.6,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,64
+au.bom:YM.LHD.VFC,,LHD,,LOW HEAD,,,,-41.06666667,146.8,,,,,,,,,------------,YM,,,,,,,,VFC,---p----,TAS,70
+au.bom:YM.LKEC.LDM,,LKEC,,LAKE ECHO,,,,-42.16666667,146.6333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.LKG.LDM,,LKG,,LAKE KING,,,,-33.08333333,119.6666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,63
+au.bom:YM.LKIM.LDM,,LKIM,,LAKE ILMA,,,,-29.25,127.7666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,64
+au.bom:YM.LME.LDM,,LME,,LAKE MAURICE,,,,-29.4,130.95,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,SA,52
+au.bom:YM.LMWL.TSP,,LMWL,,LAKE MINIGWAL,,,,-29.583333,123.166667,,,,,,,,,------------,YM,,,,,,,,TSP,---p----,WA,61
+au.bom:YM.LRAN.LDM,,LRAN,,LAKE RASON,,,,-28.66666667,124.2833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,64
+au.bom:YM.LRP.LDM,,LRP,,LOW ROCKY PT,,,,-43,145.5,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,TAS,70
+au.bom:YM.LTL.LDM,,LTL,,LAKE THROSSELL,,,,-27.63333333,124.0833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,64
+au.bom:YM.LTRR.LDM,,LTRR,,LAKE TORRENS,,,,-31.42166667,138.0866667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,51
+au.bom:YM.MARR.LDM,,MARR,,MARRAWAH,,,,-40.9106,144.7075,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,TAS,70
+au.bom:YM.MAYD.LDM,,MAYD,,MAYDENA,,,,-42.7636,146.5972,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,TAS,70
+au.bom:YM.MCD.VFC,,MCD,,MOUNT MACEDON,,,,-37.375,144.5763889,,,,,,,,,------------,YM,,,,,,,,VFC,---p----,VIC,30
+au.bom:YM.MCHR.LDM,,MCHR,,MOUNT CHRISTIE,,,,-30.55,133.2166667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,53
+au.bom:YM.MDU.LDM,,MDU,,MANDURAH,,,,-32.53,115.7216667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,60
+au.bom:YM.MDY.LDM,,MDY,,MOUNT DAY,,,,-32.13333333,120.5,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,63
+au.bom:YM.MEV.LDM,,MEV,,MOUNT EVERARD,,,,-25.18333333,125.0666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,64
+au.bom:YM.MIBUP.WPT,,MIBUP,,MIBUP,,,,-28.075,141.5383333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,QLD,41
+au.bom:YM.MIKIS.WPT,,MIKIS,,MIKIS,,,,-41.77333333,146.4616667,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,TAS,70
+au.bom:YM.MJK.LDM,,MJK,,MOUNT JACKSON HS,,,,-30.2,119.1,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,WA,61
+au.bom:YM.MLUY.LDM,,MLUY,,MOUNT LUCY,,,,-22.6,133.5333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NT,84
+au.bom:YM.MRL.LDM,,MRL,,MARIA ISLAND,,,,-42.63333333,148.0833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.MSTM.LDM,,MSTM,,MILLSTREAM STN,,,,-21.61666667,117.0666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,68
+au.bom:YM.MSV.LDM,,MSV,,MOSS VALE,,,,-34.5253,150.4217,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,NSW,21
+au.bom:YM.MTB.LDM,,MTB,,MOUNT BOYCE,,,,-33.6185,150.2741,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,NSW,20
+au.bom:YM.MTWN.LDM,,MTWN,,MOUNT WELLINGTON,,,,-37.56,146.81,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,VIC,30
+au.bom:YM.MUSD.LDM,,MUSD,,MOUNT SYDNEY,,,,-21.4,121.2,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,WA,68
+au.bom:YM.MVI.LDM,,MVI,,MOUNT VICTORIA,,,,-33.58333333,150.25,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,20
+au.bom:YM.MVO.LDM,,MVO,,MOUNT VERNON HS,,,,-24.23333333,118.2333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,66
+au.bom:YM.NAMA.LDM,,NAMA,,NAROOMA,,,,-36.2,150.133333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,21
+au.bom:YM.NKBO.LDM,,NKBO,,NECKARBOO,,,,-32.066667,144.616667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,22
+au.bom:YM.NODEK.WPT,,NODEK,,NODEK,,,,-32.78333333,145.895,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.NOLUN.WPT,,NOLUN,,NOLUN,,,,-36.01666667,149.51,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,21
+au.bom:YM.NOMON.WPT,,NOMON,,NOMON,,,,-29.250492,143.422785,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.NONAX.WPT,,NONAX,,NONAX,,,,-23.52139167,123.8691167,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,83
+au.bom:YM.OAT.LDM,,OAT,,OATLANDS,,,,-42.3,147.3666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.OBSH.LDM,,OBSH,,OBSERVATORY HILL,,,,-28.96666667,132,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,52
+au.bom:YM.OVL.LDM,,OVL,,OVERLANDER,,,,-26.4,114.4666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,65
+au.bom:YM.OVLUK.WPT,,OVLUK,,OVLUK,,,,-30.59404722,116.7797639,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,60
+au.bom:YM.PAKVU.WPT,,PAKVU,,PAKVU,,,,-30.83333333,141.7433333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.PDV.LDM,,PDV,,PORT DAVEY,,,,-43.33333333,145.8833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.PEAR.LDM,,PEAR,,PEARSON ISLES,,,,-33.95,134.2666667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,53
+au.bom:YM.PILTA.WPT,,PILTA,,PILTA,,,,-33.19166667,141.7933333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.PINAV.WPT,,PINAV,,PINAV,,,,-28.88166667,129,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,52
+au.bom:YM.PNE.LDM,,PNE,,PORT NEILL,,,,-34.116667,136.35,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,50
+au.bom:YM.POLUP.WPT,,POLUP,,POLUP,,,,-31.55666667,137.1416667,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,51
+au.bom:YM.PULOL.WPT,,PULOL,,PULOL,,,,-24.45448611,136.7621611,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NT,85
+au.bom:YM.PVS.LDM,,PVS,,PERCIVAL LAKES,,,,-21.58,124.16,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,WA,83
+au.bom:YM.RARIE.WPT,,RARIE,,RARIE,,,,-25.86833333,117.555,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,66
+au.bom:YM.RUNRO.WPT,,RUNRO,,RUNRO,,,,-32.455,143.9433333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.SABTI.WPT,,SABTI,,SABTI,,,,-24.371306,127.323985,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,64
+au.bom:YM.SAFIR.WPT,,SAFIR,,SAFIR,,,,-19.36666667,120.575,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,68
+au.bom:YM.SAROK.WPT,,SAROK,,SAROK,,,,-26.39425,129.07355,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,52
+au.bom:YM.SEC.LDM,,SEC,,SOUTH EAST CAPE,,,,-43.65,146.8166667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.SOFAL.WPT,,SOFAL,,SOFAL,,,,-33.00166667,149.7733333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,20
+au.bom:YM.STRA.LDM,,STRA,,STRATHGORDON,,,,-42.766667,146.036667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.STTE.LDM,,STTE,,SCOTTSDALE,,,,-41.16666667,147.5166667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.SVR.LDM,,SVR,,SAVAGE RIVER,,,,-41.58333333,145.1333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,TAS,70
+au.bom:YM.TAGO.LDM,,TAGO,,TARAGO,,,,-35.06973333,149.654775,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,NSW,21
+au.bom:YM.TEMIS.WPT,,TEMIS,,TEMIS,,,,-37.20633333,145.8350583,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,VIC,30
+au.bom:YM.TGU.LDM,,TGU,,THE GUMS HS,,,,-33.85,139.35,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,SA,50
+au.bom:YM.TMPT.LDM,,TMPT,,TOM PRICE,,,,-22.695,117.7916667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,68
+au.bom:YM.TOMUM.WPT,,TOMUM,,TOMUM,,,,-36.425,135,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,98
+au.bom:YM.TOWA.LDM,,TOWA,,TOWRANA HS,,,,-25.43333333,115.2333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,65
+au.bom:YM.TREBL.WPT,,TREBL,,TREBL,,,,-26.85833333,136.5383333,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,52
+au.bom:YM.TREST.WPT,,TREST,,TREST,,,,-34.88333333,144.4216667,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,NSW,22
+au.bom:YM.TRWL.LDM,,TRWL,,TALLARINGA WELL,,,,-29.03333333,133.2833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,52
+au.bom:YM.TUNGO.WPT,,TUNGO,,TUNGO,,,,-41.52,141,,,,,,,,,---------W--,YM,,,,,,,,WPT,---pa---,TAS,98
+au.bom:YM.TUTNO.WPT,,TUTNO,,TUTNO,,,,-34.77166667,135,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,SA,53
+au.bom:YM.UDA.VFM,,UDA,,ULLADULLA,,,,-35.35,150.4833333,,,,,,,,,------------,YM,,,,,,,,VFM,---p----,NSW,21
+au.bom:YM.VALDU.WPT,,VALDU,,VALDU,,,,-37.14108611,147.5521694,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,VIC,30
+au.bom:YM.VEMON.WPT,,VEMON,,VEMON,,,,-32.53929167,117.0744778,,,,,,,,,---------W--,YM,,,,,,,,WPT,---p----,WA,60
+au.bom:YM.VOKH.LDM,,VOKH,,VOKES HILL,,,,-28.48333333,130.5833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,SA,52
+au.bom:YM.WEBS.LDM,,WEBS,,WEST BASS,,,,-39.5,141,,,,,,,,,------------,YM,,,,,,,,LDM,---pa---,VIC,30
+au.bom:YM.WELS.TSP,,WELS,,WELSHPOOL,,,,-38.665,146.4383333,,,,,,,,,------------,YM,,,,,,,,TSP,---p----,VIC,30
+au.bom:YM.WGL.LDM,,WGL,,WAIGEN LAKES,,,,-27.61666667,128.7833333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,64
+au.bom:YM.WHM.LDM,,WHM,,WHIM CREEK,,,,-20.83333333,117.8333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,68
+au.bom:YM.WPE.LDM,,WPE,,WALPOLE,,,,-34.98333333,116.7333333,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,WA,63
+au.bom:YM.WTS.LDM,,WTS,,WHITTLESEA,,,,-37.51666667,145.1166667,,,,,,,,,------------,YM,,,,,,,,LDM,---p----,VIC,30
+au.bom:YM.YABA.AD,,YABA,,ALBANY,,,,-34.94344167,117.8089028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,63
+au.bom:YM.YADG.ALA,,YADG,,ALDINGA,,,,-35.28897222,138.4933056,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YADO.ALA,,YADO,,ANDADO,,,,-25.41083333,135.2905556,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YAHD.ALA,,YAHD,,ASHBURTON DOWNS,,,,-23.40583333,117.0825,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YALA.ALA,,YALA,,MARLA,,,,-27.33416667,133.6263889,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YALT.HLS,,YALT,,ALTHORPE ISLAND,,,,-35.37146389,136.8603528,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,SA,50
+au.bom:YM.YAMT.ALA,,YAMT,,AMATA,,,,-26.0973,131.2026833,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YANK.ALA,,YANK,,ANNA CREEK,,,,-28.89733333,136.1705,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YARA.AD,,YARA,,ARARAT,,,,-37.30935556,142.9885972,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YAUG.ALA,,YAUG,,AUGUSTA,,,,-34.33,115.1566667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63
+au.bom:YM.YAYE.AD,,YAYE,,AYERS ROCK/CONNELLAN,,,,-25.18614444,130.9755639,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NT,85
+au.bom:YM.YBAL.ALA,,YBAL,,BALLADONIA,,,,-32.33333333,123.625,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,62
+au.bom:YM.YBAS.AD,,YBAS,,ALICE SPRINGS,,,,-23.80678889,133.9021583,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NT,85
+au.bom:YM.YBCB.ALA,,YBCB,,BENCUBBIN,,,,-30.83333333,117.8666667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YBDG.AD,,YBDG,,BENDIGO,,,,-36.73905833,144.3297417,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YBGD.AD,,YBGD,,BOOLGEEDA,,,,-22.54099444,117.2695472,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YBHI.AD,,YBHI,,BROKEN HILL,,,,-32.00145556,141.471625,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YBKE.AD,,YBKE,,BOURKE,,,,-30.03871111,145.9520611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YBLA.AD,,YBLA,,BENALLA,,,,-36.55403333,146.0090694,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YBLB.ALA,,YBLB,,BILLABONG ROAD HOUSE,,,,-26.81666667,114.6166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,65
+au.bom:YM.YBLN.AD,,YBLN,,BUSSELTON,,,,-33.68729167,115.4002556,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,63
+au.bom:YM.YBLT.AD,,YBLT,,BALLARAT,,,,-37.51158611,143.7912306,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YBNS.AD,,YBNS,,BAIRNSDALE,,,,-37.88751111,147.5676444,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YBOM.ALA,,YBOM,,BOMBALA,,,,-36.905,149.183333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,21
+au.bom:YM.YBOP.ALA,,YBOP,,BOYUP BROOK,,,,-33.896667,116.45,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63
+au.bom:YM.YBOR.ALA,,YBOR,,BORDERTOWN,,,,-36.271667,140.721667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YBRN.AD,,YBRN,,BALRANALD,,,,-34.62349444,143.5782417,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YBRW.AD,,YBRW,,BREWARRINA,,,,-29.97400556,146.81675,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YBTH.AD,,YBTH,,BATHURST,,,,-33.40944444,149.6519444,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YBUN.AD,,YBUN,,BUNBURY,,,,-33.37810278,115.6770528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,63
+au.bom:YM.YBVA.ALA,,YBVA,,BALAKLAVA,,,,-34.089875,138.3400556,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YBWX.AD,,YBWX,,BARROW ISLAND,,,,-20.86451667,115.4060583,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YBYI.ALA,,YBYI,,BRUNY ISLAND,,,,-43.23489444,147.3798111,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,TAS,70
+au.bom:YM.YCAG.ALA,,YCAG,,CAIGUNA,,,,-32.28033333,125.4776667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,62
+au.bom:YM.YCAR.AD,,YCAR,,CARNARVON,,,,-24.88068333,113.6720944,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,65
+au.bom:YM.YCBA.AD,,YCBA,,COBAR,,,,-31.53833333,145.7938889,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YCBO.HLS,,YCBO,,CAPE BORDA,,,,-35.755,136.5983333,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,SA,50
+au.bom:YM.YCBP.AD,,YCBP,,COOBER PEDY,,,,-29.04,134.7208611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,52
+au.bom:YM.YCDH.ALA,,YCDH,,CADNEY HOMESTEAD,,,,-27.90675,134.0559167,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YCDO.AD,,YCDO,,CONDOBOLIN,,,,-33.064375,147.2091,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YCDU.AD,,YCDU,,CEDUNA,,,,-32.13060278,133.70975,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,53
+au.bom:YM.YCEE.AD,,YCEE,,CLEVE,,,,-33.70982778,136.5047472,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YCFH.ALA,,YCFH,,CLIFTON HILLS,,,,-27.01833333,138.8916667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YCHK.AD,,YCHK,,CHRISTMAS CREEK,,,,-22.35581944,119.6426167,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YCIG.ALA,,YCIG,,CORRIGIN,,,,-32.33833611,117.8278889,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YCNN.ALA,,YCNN,,COONANA,,,,-31.03333333,123.1583333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63
+au.bom:YM.YCOM.AD,,YCOM,,COOMA - SNOWY MOUNTAINS,,,,-36.30045,148.9738083,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YCOP.HLS,,YCOP,,CORNY PT,,,,-34.91666667,137.0666667,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,SA,50
+au.bom:YM.YCOR.AD,,YCOR,,COROWA,,,,-35.990333,146.351297,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,30
+au.bom:YM.YCRG.AD,,YCRG,,CORRYONG,,,,-36.18290278,147.8876472,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,21
+au.bom:YM.YCSP.ALA,,YCSP,,CURTIN SPRINGS,,,,-25.33311111,131.7586389,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YCTM.AD,,YCTM,,COOTAMUNDRA,,,,-34.624322,148.035767,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YCTN.ALA,,YCTN,,CASTERTON,,,,-37.61333333,141.3616667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YCTY.HLS,,YCTY,,CAPE OTWAY,,,,-38.85777778,143.5125,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,VIC,30
+au.bom:YM.YCUE.AD,,YCUE,,CUE,,,,-27.44676944,117.9186278,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,65
+au.bom:YM.YCUN.AD,,YCUN,,CUNDERDIN,,,,-31.62222222,117.2166667,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YCWL.ALA,,YCWL,,COWELL,,,,-33.66726944,136.8917056,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YCWR.AD,,YCWR,,COWRA,,,,-33.844825,148.6490083,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YDEG.ALA,,YDEG,,DELEGATE,,,,-37.06306944,148.9405806,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,21
+au.bom:YM.YDGU.AD,,YDGU,,DEGRUSSA,,,,-25.55760278,119.2875028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,66
+au.bom:YM.YDLQ.AD,,YDLQ,,DENILIQUIN,,,,-35.55932778,144.9464056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,30
+au.bom:YM.YDON.ALA,,YDON,,DOWERIN,,,,-31.175,117.0416667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YDPO.AD,,YDPO,,DEVONPORT,,,,-41.16973056,146.4302611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YDRA.ALA,,YDRA,,DONGARA,,,,-29.3,114.9166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YDVR.ALA,,YDVR,,DOCKER RIVER,,,,-24.858333,129.123333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YECH.AD,,YECH,,ECHUCA,,,,-36.15726944,144.7619556,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YECL.ALA,,YECL,,EUCLA,,,,-31.71666667,128.8833333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,62
+au.bom:YM.YEDD.HLS,,YEDD,,EUDUNDA,,,,-34.18116667,139.0891667,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,SA,50
+au.bom:YM.YEDE.ALA,,YEDE,,EDENHOPE,,,,-37.01666667,141.2666667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YEEB.ALA,,YEEB,,ENEABBA,,,,-29.83308333,115.2464,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YELN.ALA,,YELN,,ELLISTON,,,,-33.638333,134.9,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YERH.ALA,,YERH,,EARAHEEDY,,,,-25.6,121.5833333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,66
+au.bom:YM.YERN.ALA,,YERN,,ERNABELLA,,,,-26.26258333,132.1817583,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YESP.AD,,YESP,,ESPERANCE,,,,-33.68444167,121.8226389,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,63
+au.bom:YM.YFBS.AD,,YFBS,,FORBES,,,,-33.36361944,147.9348611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YFLI.AD,,YFLI,,FLINDERS ISLAND,,,,-40.09128889,147.9926722,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YFNE.ALA,,YFNE,,FINKE,,,,-25.59317222,134.5828639,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YFRG.ALA,,YFRG,,FREGON,,,,-26.77583333,132.0175,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YFRT.AD,,YFRT,,FORREST,,,,-30.83806111,128.1150889,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,62
+au.bom:YM.YGEL.AD,,YGEL,,GERALDTON,,,,-28.79621111,114.7075,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YGIG.AD,,YGIG,,GINGIN,,,,-31.46515,115.8632722,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YGLB.AD,,YGLB,,GOULBURN,,,,-34.81021944,149.7265028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YGLS.ALA,,YGLS,,GILES,,,,-25.05,128.3,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,WA,64
+au.bom:YM.YGSC.ALA,,YGSC,,GASCOYNE JUNCTION,,,,-25.05,115.2,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,WA,65
+au.bom:YM.YGTH.AD,,YGTH,,GRIFFITH,,,,-34.25096944,146.0672722,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YGWA.ALA,,YGWA,,GOOLWA,,,,-35.48188333,138.7513722,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YHAA.ALA,,YHAA,,HAASTS BLUFF,,,,-23.45048611,131.8514833,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YHAW.ALA,,YHAW,,HAWKER,,,,-31.85465,138.4682333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,51
+au.bom:YM.YHAY.AD,,YHAY,,HAY,,,,-34.53142222,144.8296722,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YHBK.ALA,,YHBK,,HOLBROOK,,,,-35.68333333,147.3166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,21
+au.bom:YM.YHKT.ALA,,YHKT,,HUCKITTA,,,,-22.94388889,135.4472222,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,84
+au.bom:YM.YHLS.ALA,,YHLS,,HILLSTON,,,,-33.49359722,145.52355,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,22
+au.bom:YM.YHMB.ALA,,YHMB,,HERMANNSBURG,,,,-23.92790278,132.8125278,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YHML.AD,,YHML,,HAMILTON,,,,-37.64875556,142.0652444,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YHPN.AD,,YHPN,,HOPETOUN,,,,-35.71535,142.3596528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YHSM.AD,,YHSM,,HORSHAM,,,,-36.66968889,142.1726833,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YIDR.ALA,,YIDR,,IDRACOWRA STN,,,,-25.06666667,133.7333333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YIMB.AD,,YIMB,,KIMBA,,,,-33.09064722,136.464375,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,53
+au.bom:YM.YINN.ALA,,YINN,,INNAMINCKA,,,,-27.7,140.7333333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YIVO.AD,,YIVO,,IVANHOE,,,,-32.88468611,144.3115722,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YJAM.ALA,,YJAM,,JAMESON,,,,-25.86333333,127.6783333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,64
+au.bom:YM.YJER.ALA,,YJER,,JERILDERIE,,,,-35.37,145.725,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,NSW,22
+au.bom:YM.YJGP.ALA,,YJGP,,JERRAMUNGUP,,,,-33.91666667,118.9,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63
+au.bom:YM.YJIG.ALA,,YJIG,,JIGGALONG MISSION,,,,-23.36666667,120.7833333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YJUR.ALA,,YJUR,,JURIEN BAY,,,,-30.3032,115.05525,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YKBL.AD,,YKBL,,KAMBALDA,,,,-31.190644,121.598358,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,61
+au.bom:YM.YKBR.AD,,YKBR,,KALBARRI,,,,-27.69201111,114.2595611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YKBY.AD,,YKBY,,STREAKY BAY,,,,-32.83581667,134.2927028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,53
+au.bom:YM.YKEB.ALA,,YKEB,,KELLERBERRIN,,,,-31.61777778,117.7238889,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YKER.AD,,YKER,,KERANG,,,,-35.75127222,143.9393667,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YKGA.ALA,,YKGA,,KINGOONYA,,,,-30.91441667,135.3071917,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YKIG.ALA,,YKIG,,KINGSTON,,,,-36.82,139.87,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,SA,50
+au.bom:YM.YKII.AD,,YKII,,KING ISLAND,,,,-39.87747778,143.8783028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YKNG.AD,,YKNG,,KATANNING,,,,-33.7003,117.6533,,,,,,,,,--------A---,YM,,,,,,,,AD,---pa---,WA,63
+au.bom:YM.YKNT.ALA,,YKNT,,KINTORE,,,,-23.265,129.385,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,NT,85
+au.bom:YM.YKOJ.ALA,,YKOJ,,KOJONUP,,,,-33.75033333,117.1358333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63
+au.bom:YM.YKSC.AD,,YKSC,,KINGSCOTE/KANGAROO ISLAND,,,,-35.71400833,137.521325,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YLAO.ALA,,YLAO,,LAMEROO,,,,-35.37333333,140.465,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YLCG.AD,,YLCG,,LAKE CARGELLIGO,,,,-33.27838889,146.3692611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YLEC.AD,,YLEC,,LEIGH CREEK,,,,-30.59831667,138.4259556,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,51
+au.bom:YM.YLEO.AD,,YLEO,,LEONORA,,,,-28.87811667,121.3146472,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,61
+au.bom:YM.YLGN.ALA,,YLGN,,LOONGANA,,,,-30.94166667,127.03,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,62
+au.bom:YM.YLOX.ALA,,YLOX,,LOXTON,,,,-34.47580278,140.66385,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YLST.AD,,YLST,,LEINSTER,,,,-27.84339722,120.703225,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,61
+au.bom:YM.YLTN.AD,,YLTN,,LAVERTON,,,,-28.61368889,122.4239611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,61
+au.bom:YM.YLTV.AD,,YLTV,,LATROBE VALLEY,,,,-38.20723056,146.4703056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YLUC.ALA,,YLUC,,LUCY CREEK,,,,-22.47666667,136.2733333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,84
+au.bom:YM.YLVD.ALA,,YLVD,,LAKE EVERARD,,,,-31.74253333,135.1731167,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YMAD.ALA,,YMAD,,MADURA,,,,-31.88333333,127.025,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,62
+au.bom:YM.YMAU.ALA,,YMAU,,MOUNT AUGUSTUS,,,,-24.31666667,116.9166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,66
+au.bom:YM.YMAV.AD,,YMAV,,AVALON,,,,-38.0394,144.4694806,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMAY.AD,,YMAY,,ALBURY,,,,-36.06764167,146.9581528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YMBB.HLS,,YMBB,,MOUNT BAW BAW,,,,-37.84166667,146.2616667,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,VIC,30
+au.bom:YM.YMBD.ALA,,YMBD,,MURRAY BRIDGE,,,,-35.06444444,139.2266667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YMBL.AD,,YMBL,,MARBLE BAR,,,,-21.16261944,119.8395972,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YMBT.ALA,,YMBT,,MOUNT BEAUTY,,,,-36.72861111,147.1669444,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YMBU.ALA,,YMBU,,MARYBOROUGH (VIC),,,,-37.03296111,143.7087917,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YMCO.AD,,YMCO,,MALLACOOTA,,,,-37.59875,149.7207528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMCT.ALA,,YMCT,,MILLICENT,,,,-37.58354444,140.3661111,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YMDK.ALA,,YMDK,,MOUNT RIDDOCK STN,,,,-23.03666667,134.691,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YMDN.ALA,,YMDN,,MERREDIN,,,,-31.52333333,118.32,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YMDZ.ALA,,YMDZ,,MARDI STN,,,,-21.21,115.9625,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YMEB.ALA,,YMEB,,MOUNT EBA,,,,-30.17833333,135.6733333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,51
+au.bom:YM.YMED.ALA,,YMED,,MENINDEE,,,,-32.36669722,142.4049972,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,22
+au.bom:YM.YMEK.AD,,YMEK,,MEEKATHARRA,,,,-26.61174722,118.547675,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,66
+au.bom:YM.YMEN.AD,,YMEN,,MELBOURNE/ESSENDON,,,,-37.72808889,144.9018167,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMER.AD,,YMER,,MERIMBULA,,,,-36.90870833,149.9013194,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YMES.AD,,YMES,,EAST SALE,,,,-38.09893611,147.1495639,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMEW.ALA,,YMEW,,MINGENEW,,,,-29.2,115.4333333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YMFD.ALA,,YMFD,,MANSFIELD,,,,-37.06666667,146.1166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YMHB.AD,,YMHB,,HOBART,,,,-42.83617222,147.5102417,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YMIA.AD,,YMIA,,MILDURA,,,,-34.22926389,142.0855639,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMIN.ALA,,YMIN,,MINLATON,,,,-34.74399722,137.5289972,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YMIV.ALA,,YMIV,,MOUNT IVE,,,,-32.44433333,136.0696667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YMJM.AD,,YMJM,,MANJIMUP,,,,-34.26515,116.1404056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,63
+au.bom:YM.YMLT.AD,,YMLT,,LAUNCESTON,,,,-41.54530278,147.2141806,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YMMB.AD,,YMMB,,MELBOURNE/MOORABBIN,,,,-37.97585,145.1023056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMML.AD,,YMML,,MELBOURNE,,,,-37.67335278,144.8434028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMNF.ALA,,YMNF,,MANFRED,,,,-26.45,116.55,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,WA,65
+au.bom:YM.YMNG.AD,,YMNG,,MANGALORE,,,,-36.88828611,145.1841917,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMNN.ALA,,YMNN,,MOUNT DENISON,,,,-22.14083333,132.0691667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,84
+au.bom:YM.YMOG.AD,,YMOG,,MOUNT MAGNET,,,,-28.11616111,117.8417306,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YMPA.ALA,,YMPA,,MINNIPA,,,,-32.84291667,135.1444667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YMPC.AD,,YMPC,,POINT COOK,,,,-37.93226389,144.7534611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YMRE.ALA,,YMRE,,MARREE,,,,-29.66265278,138.0658111,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,51
+au.bom:YM.YMRW.AD,,YMRW,,MORAWA,,,,-29.20125,116.0219889,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YMRY.AD,,YMRY,,MORUYA,,,,-35.89753611,150.1455222,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YMSY.HLS,,YMSY,,MAATSUYKER,,,,-43.65486667,146.2746667,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,TAS,70
+au.bom:YM.YMTG.AD,,YMTG,,MOUNT GAMBIER,,,,-37.74543611,140.7852806,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YMUK.ALA,,YMUK,,MULKA,,,,-28.35133333,138.6513333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YMWA.ALA,,YMWA,,MULLEWA,,,,-28.47522222,115.5174222,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YMZI.ALA,,YMZI,,MENZIES,,,,-29.66666667,121.025,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,61
+au.bom:YM.YNAR.AD,,YNAR,,NARRANDERA,,,,-34.70216944,146.5122556,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YNHL.AD,,YNHL,,NHILL,,,,-36.31116667,141.6443083,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YNPB.ALA,,YNPB,,NAPPERBY,,,,-22.53305556,132.7630556,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,84
+au.bom:YM.YNRB.ALA,,YNRB,,NAREMBEEN,,,,-32.11666667,118.4166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YNRC.AD,,YNRC,,NARACOORTE,,,,-36.98522222,140.7249639,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YNRG.ALA,,YNRG,,NARROGIN,,,,-32.93,117.08,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,WA,63
+au.bom:YM.YNRV.AD,,YNRV,,RAVENSTHORPE,,,,-33.797194,120.208083,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,63
+au.bom:YM.YNSM.ALA,,YNSM,,NORSEMAN,,,,-32.20933056,121.7545694,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63
+au.bom:YM.YNUL.ALA,,YNUL,,NULLAGINE,,,,-21.91268056,120.19855,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YNWN.AD,,YNWN,,NEWMAN,,,,-23.41783056,119.8027417,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YNYN.AD,,YNYN,,NYNGAN,,,,-31.55115278,147.2028139,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YOLA.ALA,,YOLA,,COLAC,,,,-38.28638889,143.6797222,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YOLD.AD,,YOLD,,OLYMPIC DAM,,,,-30.485,136.8766667,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,51
+au.bom:YM.YOLW.AD,,YOLW,,ONSLOW,,,,-21.6684,115.113,,,,,,,,,--------A---,YM,,,,,,,,AD,---pa---,WA,68
+au.bom:YM.YOOD.ALA,,YOOD,,OODNADATTA,,,,-27.55993611,135.4449472,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YOOK.ALA,,YOOK,,COOK,,,,-30.61833333,130.406,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YOOM.AD,,YOOM,,MOOMBA,,,,-28.09953889,140.1970472,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,52
+au.bom:YM.YORB.AD,,YORB,,ORBOST,,,,-37.79040278,148.6096056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YORG.AD,,YORG,,ORANGE,,,,-33.37802222,149.1255028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YOUY.ALA,,YOUY,,OUYEN,,,,-35.08866667,142.3547667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,VIC,30
+au.bom:YM.YPAD.AD,,YPAD,,ADELAIDE,,,,-34.94495556,138.5306833,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YPAG.AD,,YPAG,,PORT AUGUSTA,,,,-32.50692222,137.7168028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YPAY.ALA,,YPAY,,PAPUNYA,,,,-23.24098333,131.90695,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YPBO.AD,,YPBO,,PARABURDOO,,,,-23.17121944,117.7453972,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YPCE.AD,,YPCE,,POONCARIE,,,,-33.37308056,142.5848694,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YPEA.AD,,YPEA,,PEARCE,,,,-31.667675,116.0150611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YPED.AD,,YPED,,EDINBURGH,,,,-34.70258333,138.6208056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YPID.HLS,,YPID,,PHILLIP ISLAND HELIPORT,,,,-38.52,145.3266667,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,VIC,30
+au.bom:YM.YPIR.AD,,YPIR,,PORT PIRIE,,,,-33.23894167,137.9949056,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YPJT.AD,,YPJT,,PERTH/JANDAKOT,,,,-32.09744722,115.8812139,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YPKA.AD,,YPKA,,KARRATHA,,,,-20.71228056,116.7732778,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YPKG.AD,,YPKG,,KALGOORLIE-BOULDER,,,,-30.78937778,121.4617278,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,61
+au.bom:YM.YPKS.AD,,YPKS,,PARKES,,,,-33.13126667,148.2390528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YPLC.AD,,YPLC,,PORT LINCOLN,,,,-34.60539167,135.8802778,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YPLM.AD,,YPLM,,LEARMONTH,,,,-22.23547778,114.0885361,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YPMH.AD,,YPMH,,PROMINENT HILL,,,,-29.71787778,135.5244944,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,52
+au.bom:YM.YPNW.ALA,,YPNW,,PANNAWONICA,,,,-21.62833333,116.32,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YPOD.AD,,YPOD,,PORTLAND,,,,-38.31809167,141.4710444,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YPPD.AD,,YPPD,,PORT HEDLAND,,,,-20.37784167,118.6264806,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YPPF.AD,,YPPF,,ADELAIDE/PARAFIELD,,,,-34.79330278,138.6329778,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YPPH.AD,,YPPH,,PERTH,,,,-31.94019444,115.9668806,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YPTB.ALA,,YPTB,,PETERBOROUGH,,,,-33.005,138.8483333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YPWR.AD,,YPWR,,WOOMERA,,,,-31.14407222,136.8169361,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,51
+au.bom:YM.YPYF.ALA,,YPYF,,PAYNES FIND,,,,-29.26222222,117.6694444,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,60
+au.bom:YM.YRAW.ALA,,YRAW,,RAWLINNA,,,,-31.01666667,125.325,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,62
+au.bom:YM.YREN.AD,,YREN,,RENMARK,,,,-34.19641111,140.6739972,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YRNW.ALA,,YRNW,,RINGWOOD STN,,,,-23.82888889,134.9616667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,85
+au.bom:YM.YROE.ALA,,YROE,,ROEBOURNE,,,,-20.761475,117.1561333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YROI.AD,,YROI,,ROBINVALE,,,,-34.65068611,142.7827444,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YRTI.AD,,YRTI,,ROTTNEST ISLAND,,,,-32.00676667,115.53975,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,60
+au.bom:YM.YSAC.HLS,,YSAC,,SANDY CAPE,,,,-41.42,144.745,,,,,,,,,------------,YM,,,,,,,,HLS,---pa---,TAS,70
+au.bom:YM.YSAN.ALA,,YSAN,,SANDSTONE,,,,-27.975,119.2916667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,61
+au.bom:YM.YSBK.AD,,YSBK,,SYDNEY/BANKSTOWN,,,,-33.92436667,150.9883833,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,20
+au.bom:YM.YSCB.AD,,YSCB,,CANBERRA,,,,-35.306822,149.195033,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,ACT,21
+au.bom:YM.YSCK.ALA,,YSCK,,SALT CREEK,,,,-36.13761944,139.6442389,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YSCN.AD,,YSCN,,CAMDEN,,,,-34.0403,150.6866028,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YSCR.AD,,YSCR,,SOUTHERN CROSS,,,,-31.24029722,119.3597944,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,61
+au.bom:YM.YSDU.AD,,YSDU,,DUBBO,,,,-32.21666667,148.5747222,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YSHK.AD,,YSHK,,SHARK BAY,,,,-25.89387222,113.5772333,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,65
+au.bom:YM.YSHL.AD,,YSHL,,SHELLHARBOUR AIRPORT,,,,-34.56114167,150.7885833,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YSHT.AD,,YSHT,,SHEPPARTON,,,,-36.42881389,145.3925611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YSHW.AD,,YSHW,,HOLSWORTHY,,,,-33.995125,150.9524611,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YSMI.ALA,,YSMI,,SMITHTON,,,,-40.83501667,145.0837361,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,TAS,70
+au.bom:YM.YSNW.AD,,YSNW,,NOWRA,,,,-34.94899444,150.5370556,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YSRI.AD,,YSRI,,RICHMOND (NSW),,,,-33.60068889,150.7807222,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,20
+au.bom:YM.YSRN.AD,,YSRN,,STRAHAN,,,,-42.15563056,145.2912917,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YSSY.AD,,YSSY,,SYDNEY/KINGSFORD SMITH,,,,-33.946,151.1771083,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,20
+au.bom:YM.YSTA.AD,,YSTA,,ST ARNAUD,,,,-36.63662222,143.1858361,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YSTH.AD,,YSTH,,SAINT HELENS,,,,-41.33679722,148.2818528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YSWG.AD,,YSWG,,WAGGA WAGGA,,,,-35.16525,147.4664278,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YSWH.AD,,YSWH,,SWAN HILL,,,,-35.37571111,143.5327361,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YSWL.AD,,YSWL,,STAWELL,,,,-37.07169167,142.7402972,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YTAR.ALA,,YTAR,,TARCOOLA,,,,-30.70288333,134.5828167,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YTEF.AD,,YTEF,,TELFER,,,,-21.71495,122.2283806,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,68
+au.bom:YM.YTEM.AD,,YTEM,,TEMORA,,,,-34.42130833,147.5116944,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YTHR.ALA,,YTHR,,THREE RIVERS HS,,,,-25.13333333,119.1166667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,66
+au.bom:YM.YTIB.AD,,YTIB,,TIBOOBURRA,,,,-29.45097222,142.0577917,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YTLP.ALA,,YTLP,,TILPA,,,,-30.92555,144.4199833,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,22
+au.bom:YM.YTMU.AD,,YTMU,,TUMUT,,,,-35.2629,148.2407222,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YTOC.AD,,YTOC,,TOCUMWAL,,,,-35.810761,145.604161,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,30
+au.bom:YM.YTOT.ALA,,YTOT,,TOTTENHAM,,,,-32.25616667,147.3688333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,22
+au.bom:YM.YTRA.AD,,YTRA,,TROPICANA,,,,-29.18659444,124.5503722,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,64
+au.bom:YM.YTSI.HLS,,YTSI,,TASMAN ISLAND,,,,-43.23968333,148.0023833,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,TAS,70
+au.bom:YM.YWAG.ALA,,YWAG,,WANAARING,,,,-29.71176667,144.1710333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NSW,22
+au.bom:YM.YWAL.ALA,,YWAL,,WALLAL DOWNS,,,,-19.775,120.6583333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YWBL.AD,,YWBL,,WARRNAMBOOL,,,,-38.29513889,142.4467389,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YWBR.AD,,YWBR,,WARBURTON,,,,-26.12833333,126.5833333,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,64
+au.bom:YM.YWCA.AD,,YWCA,,WILCANNIA,,,,-31.51948611,143.3811833,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YWDA.ALA,,YWDA,,WINDARRA,,,,-28.475,122.2416667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,61
+au.bom:YM.YWGT.AD,,YWGT,,WANGARATTA,,,,-36.41592778,146.3068583,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YWHA.AD,,YWHA,,WHYALLA,,,,-33.05901111,137.5144833,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,50
+au.bom:YM.YWHC.AD,,YWHC,,WHITE CLIFFS,,,,-30.85125278,143.0732278,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YWIR.ALA,,YWIR,,WIRRAMINNA,,,,-31.2,136.2333333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,53
+au.bom:YM.YWKB.AD,,YWKB,,WARRACKNABEAL,,,,-36.32122222,142.4193278,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YWKI.ALA,,YWKI,,WAIKERIE,,,,-34.18416389,140.0306722,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,50
+au.bom:YM.YWLA.ALA,,YWLA,,WILLOWRA,,,,-21.27666667,132.6233333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,84
+au.bom:YM.YWLP.HLS,,YWLP,,WILSONS PROMONTORY,,,,-39.13111111,146.425,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,VIC,30
+au.bom:YM.YWLU.AD,,YWLU,,WILUNA,,,,-26.62925,120.2205444,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,WA,66
+au.bom:YM.YWMC.ALA,,YWMC,,WILLIAM CREEK,,,,-28.90706667,136.3409833,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,52
+au.bom:YM.YWOG.HLS,,YWOG,,WONTHAGGI TOWNSHIP,,,,-38.6,145.5833333,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,VIC,30
+au.bom:YM.YWPL.ALA,,YWPL,,WINNING POOL NORTH,,,,-23.1,114.5333333,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,68
+au.bom:YM.YWRN.AD,,YWRN,,WARREN,,,,-31.7332,147.8025278,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YWRO.HLS,,YWRO,,WALLAROO,,,,-33.927,137.6376667,,,,,,,,,------------,YM,,,,,,,,HLS,---p----,SA,50
+au.bom:YM.YWSL.AD,,YWSL,,WEST SALE,,,,-38.09165833,146.9652528,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YWUD.AD,,YWUD,,WUDINNA,,,,-33.04323611,135.4472083,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,SA,53
+au.bom:YM.YWWL.AD,,YWWL,,WEST WYALONG,,,,-33.937225,147.1915222,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,22
+au.bom:YM.YWYF.AD,,YWYF,,WYCHEPROOF,,,,-36.05893611,143.2432972,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,VIC,30
+au.bom:YM.YWYY.AD,,YWYY,,WYNYARD,,,,-40.99876389,145.731225,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,TAS,70
+au.bom:YM.YYAL.ALA,,YYAL,,YALGOO,,,,-28.3536,116.679,,,,,,,,,------------,YM,,,,,,,,ALA,---pa---,WA,60
+au.bom:YM.YYND.ALA,,YYND,,YUENDUMU,,,,-22.25412222,131.7821667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,NT,84
+au.bom:YM.YYNG.AD,,YYNG,,YOUNG,,,,-34.25566944,148.248125,,,,,,,,,--------A---,YM,,,,,,,,AD,---p----,NSW,21
+au.bom:YM.YYUN.ALA,,YYUN,,YUNTA,,,,-32.57166667,139.5638889,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,SA,51
+au.bom:YM.YZAN.ALA,,YZAN,,ZANTHUS,,,,-31.03333333,123.5666667,,,,,,,,,------------,YM,,,,,,,,ALA,---p----,WA,63

@@ -18,8 +18,20 @@ function loadLocations() {
         const data = fs.readFileSync(path.join(__dirname, 'locations.csv'), 'utf8');
         const rows = data.trim().split('\n');
         locations = rows.slice(1).map(row => {
-            const [name, lat, lng, area] = row.split(',');
-            return { name: name.trim(), lat: parseFloat(lat), lng: parseFloat(lng), area: area.trim() };
+            const cols = row.split(',');
+            return {
+                name: cols[0].trim(),
+                area: cols[1].trim(),
+                point: cols[2].trim() === 'Y',
+                lat1: parseFloat(cols[3]),
+                long1: parseFloat(cols[4]),
+                lat2: cols[5] ? parseFloat(cols[5]) : null,
+                long2: cols[6] ? parseFloat(cols[6]) : null,
+                lat3: cols[7] ? parseFloat(cols[7]) : null,
+                long3: cols[8] ? parseFloat(cols[8]) : null,
+                lat4: cols[9] ? parseFloat(cols[9]) : null,
+                long4: cols[10] ? parseFloat(cols[10]) : null
+            };
         });
         console.log(`Loaded ${locations.length} locations`);
     } catch (error) {
@@ -86,6 +98,99 @@ function startRound(gameCode) {
     game.timer = timer;
 }
 
+function haversineDistance(coord1, coord2) {
+    if (!coord1 || !coord2 || isNaN(coord1.lat) || isNaN(coord1.lng) || isNaN(coord2.lat) || isNaN(coord2.lng)) {
+        console.warn('Invalid coordinates in haversineDistance:', { coord1, coord2 });
+        return Infinity;
+    }
+
+    const R = 6371;
+    const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
+    const dLng = (coord2.lng - coord1.lng) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(coord1.lat * Math.PI / 180) * Math.cos(coord2.lat * Math.PI / 180) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    if (isNaN(distance)) {
+        console.warn('NaN in haversineDistance:', { coord1, coord2 });
+        return Infinity;
+    }
+    return distance;
+}
+
+function distanceToSegmentServer(guess, v1, v2) {
+    // Validate inputs
+    if (!guess || !v1 || !v2 ||
+        isNaN(guess.lat) || isNaN(guess.lng) ||
+        isNaN(v1.lat) || isNaN(v1.lng) ||
+        isNaN(v2.lat) || isNaN(v2.lng)) {
+        console.warn('Invalid coordinates in distanceToSegmentServer:', { guess, v1, v2 });
+        return Infinity;
+    }
+
+    // Check for degenerate segment
+    if (v1.lat === v2.lat && v1.lng === v2.lng) {
+        console.log('Degenerate segment, computing point-to-point distance');
+        return haversineDistance(guess, v1);
+    }
+
+    const A = guess.lat - v1.lat;
+    const B = guess.lng - v1.lng;
+    const C = v2.lat - v1.lat;
+    const D = v2.lng - v1.lng;
+
+    const len_sq = C * C + D * D;
+    let param = -1;
+    if (len_sq !== 0) {
+        const dot = A * C + B * D;
+        param = dot / len_sq;
+    }
+
+    let xx, yy;
+    if (param < 0 || len_sq === 0) {
+        xx = v1.lat;
+        yy = v1.lng;
+    } else if (param > 1) {
+        xx = v2.lat;
+        yy = v2.lng;
+    } else {
+        xx = v1.lat + param * C;
+        yy = v1.lng + param * D;
+    }
+
+    const distance = haversineDistance(guess, { lat: xx, lng: yy });
+    if (isNaN(distance) || !isFinite(distance)) {
+        console.warn('Invalid distance in distanceToSegmentServer:', { guess, v1, v2, xx, yy });
+        return Infinity;
+    }
+    return distance;
+}
+
+function pointInPolygon(point, vertices) {
+    if (!point || !vertices || vertices.length < 3) {
+        console.warn('Invalid inputs in pointInPolygon:', { point, vertices });
+        return false;
+    }
+
+    let inside = false;
+    for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+        const xi = vertices[i].lat, yi = vertices[i].lng;
+        const xj = vertices[j].lat, yj = vertices[j].lng;
+
+        if (isNaN(xi) || isNaN(yi) || isNaN(xj) || isNaN(yj)) {
+            console.warn('Invalid vertex in pointInPolygon:', { xi, yi, xj, yj });
+            continue;
+        }
+
+        const intersect = ((yi > point.lng) !== (yj > point.lng)) &&
+                          (point.lat < (xj - xi) * (point.lng - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
+
 function endRound(gameCode) {
     const game = games[gameCode];
     if (!game || game.state !== 'playing' || game.roundEnded) return;
@@ -95,9 +200,55 @@ function endRound(gameCode) {
         const guess = game.guesses[player.id];
         let distance = null, points = 0;
         if (guess) {
-            const actual = { lat: game.currentLocation.lat, lng: game.currentLocation.lng };
-            distance = haversineDistance(guess, actual);
-            points = distance <= 5 ? 1000 : distance >= 100 ? 0 : Math.floor(1000 - ((distance - 5) * (1000 / 95)));
+            if (game.currentLocation.point) {
+                const actual = { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 };
+                distance = haversineDistance(guess, actual);
+                points = distance <= 5 ? 1000 : distance >= 100 ? 0 : Math.floor(1000 - ((distance - 5) * (1000 / 95)));
+            } else {
+                const vertices = [
+                    { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 },
+                    { lat: game.currentLocation.lat2, lng: game.currentLocation.long2 },
+                    { lat: game.currentLocation.lat3, lng: game.currentLocation.long3 }
+                ];
+                if (game.currentLocation.lat4 && game.currentLocation.long4 && 
+                    !isNaN(game.currentLocation.lat4) && !isNaN(game.currentLocation.long4)) {
+                    vertices.push({ lat: game.currentLocation.lat4, lng: game.currentLocation.long4 });
+                }
+
+                console.log('Server: Guess coordinates:', guess);
+                console.log('Server: Polygon vertices:', vertices);
+
+                // Validate vertices
+                const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
+                if (validVertices.length < 3) {
+                    console.error('Server: Insufficient valid vertices:', validVertices);
+                    distance = 95; // Fallback to max distance
+                    points = 0;
+                } else if (pointInPolygon(guess, validVertices)) {
+                    distance = 0;
+                    points = 1000;
+                    console.log('Server: Guess inside polygon, distance: 0');
+                } else {
+                    const distances = [];
+                    for (let i = 0; i < validVertices.length; i++) {
+                        const j = (i + 1) % validVertices.length;
+                        const dist = distanceToSegmentServer(guess, validVertices[i], validVertices[j]);
+                        if (!isNaN(dist) && isFinite(dist)) {
+                            distances.push(dist);
+                        }
+                    }
+
+                    distance = distances.length > 0 ? Math.min(...distances) : 95;
+                    console.log('Server: Distances to edges:', distances, 'Selected distance:', distance);
+
+                    if (!isFinite(distance)) {
+                        console.warn('Server: No valid edge distances, defaulting to 95 km');
+                        distance = 95;
+                    }
+
+                    points = distance >= 95 ? 0 : Math.floor(1000 - (distance * (1000 / 95)));
+                }
+            }
             player.score = (player.score || 0) + points;
             console.log(`Score for ${player.name}: +${points}, total=${player.score}`);
         }
@@ -126,17 +277,6 @@ function endRound(gameCode) {
         game.state = 'ended';
         console.log(`Game ${gameCode} ended after round ${game.round}`);
     }
-}
-
-function haversineDistance(coord1, coord2) {
-    const R = 6371;
-    const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
-    const dLng = (coord2.lng - coord1.lng) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(coord1.lat * Math.PI / 180) * Math.cos(coord2.lat * Math.PI / 180) *
-              Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
 }
 
 io.on('connection', (socket) => {
@@ -212,7 +352,7 @@ io.on('connection', (socket) => {
             const player = game.players.find(p => p.name === playerName);
             if (player) {
                 player.id = socket.id;
-                player.disconnected = false; // Reset disconnected status
+                player.disconnected = false;
                 socket.join(gameCode);
                 game.rejoinedPlayers.add(playerName);
                 console.log(`${playerName} rejoined ${gameCode} with new ID ${socket.id}`);
@@ -258,7 +398,6 @@ io.on('connection', (socket) => {
             return;
         }
 
-        // Filter out disconnected players and update with current socket IDs
         const activePlayers = game.players.filter(p => !p.disconnected);
         if (activePlayers.length <= 1) {
             io.to(gameCode).emit('gameTerminated', 'Not enough players to restart the game.');
@@ -267,7 +406,6 @@ io.on('connection', (socket) => {
             return;
         }
 
-        // Update player IDs based on currently connected sockets in the room
         const roomSockets = io.sockets.adapter.rooms.get(gameCode);
         if (!roomSockets) {
             io.to(gameCode).emit('gameTerminated', 'No active connections to restart the game.');
@@ -390,7 +528,7 @@ io.on('connection', (socket) => {
 loadLocations();
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    const isLocal = !process.env.PORT; // If process.env.PORT is undefined, we're running locally
+    const isLocal = !process.env.PORT;
     const url = isLocal ? `http://localhost:${PORT}` : `port ${PORT}`;
     console.log(`Server running on ${url}`);
 });
