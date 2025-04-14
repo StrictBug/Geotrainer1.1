@@ -540,7 +540,7 @@ io.on('connection', (socket) => {
 
 loadLocations();
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     const isLocal = !process.env.PORT;
     const url = isLocal ? `http://localhost:${PORT}` : `port ${PORT}`;
     console.log(`Server running on ${url}`);
