@@ -330,6 +330,9 @@ socket.on('roundResults', ({ round, location, results }) => {
     console.log(`Received round ${round} results for ${localPlayerName}:`, results);
     roundActive = false;
 
+    // Clear existing markers
+    clearMarkers();
+
     if (location.point) {
         const actual = new google.maps.LatLng(location.lat1, location.long1);
         const actualMarker = new google.maps.Marker({
@@ -369,7 +372,7 @@ socket.on('roundResults', ({ round, location, results }) => {
                 map.setCenter(centroid);
             } else {
                 console.warn('Failed to calculate centroid, falling back to first vertex');
-                map.setCenter({ lat: location.lat1, lng: location.long1.NoSuchMethodError });
+                map.setCenter({ lat: location.lat1, lng: location.long1 });
             }
         } else {
             console.error('Multiplayer: Insufficient valid vertices for polygon:', validVertices);

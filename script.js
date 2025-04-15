@@ -261,26 +261,15 @@ function endRound() {
 
     roundActive = false;
 
-    if (!marker) {
-        roundHistory.push({ location: actualLocation.name, distance: null });
-        document.getElementById("result").textContent = "Time's up! You didn’t guess.";
-        round++;
-        document.getElementById("newGame").disabled = false;
-        if (round > maxRounds) {
-            showGameOver();
-        }
-        return;
-    }
-
-    const guess = marker.getPosition();
-    console.log('Guess coordinates:', { lat: guess.lat(), lng: guess.lng() });
+    // Clear existing markers
+    actualMarkers.forEach(m => {
+        if (m.setMap) m.setMap(null);
+        if (m.setPaths) m.setMap(null);
+    });
+    actualMarkers = [];
 
     if (actualLocation.point) {
         const actual = new google.maps.LatLng(actualLocation.lat1, actualLocation.long1);
-        distance = google.maps.geometry.spherical.computeDistanceBetween(guess, actual) / 1000;
-
-        console.log('Point location distance:', distance);
-
         const actualMarker = new google.maps.Marker({
             position: actual,
             map: map,
@@ -288,6 +277,13 @@ function endRound() {
         });
         actualMarkers.push(actualMarker);
         map.setCenter(actual);
+
+        if (marker) {
+            const guess = marker.getPosition();
+            console.log('Guess coordinates:', { lat: guess.lat(), lng: guess.lng() });
+            distance = google.maps.geometry.spherical.computeDistanceBetween(guess, actual) / 1000;
+            console.log('Point location distance:', distance);
+        }
     } else {
         const vertices = [
             { lat: actualLocation.lat1, lng: actualLocation.long1 },
@@ -306,6 +302,7 @@ function endRound() {
         if (validVertices.length < 3) {
             console.error('Insufficient valid vertices for polygon:', validVertices);
             distance = 95;
+            map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
         } else {
             const polygon = new google.maps.Polygon({
                 paths: validVertices,
@@ -318,37 +315,6 @@ function endRound() {
             polygon.setMap(map);
             actualMarkers.push(polygon);
 
-            if (google.maps.geometry.poly.containsLocation(guess, polygon)) {
-                distance = 0;
-                console.log('Guess inside polygon, distance: 0');
-            } else {
-                const v = validVertices.map(v => new google.maps.LatLng(v.lat, v.lng));
-                console.log('LatLng vertices:', v.map(vv => ({ lat: vv.lat(), lng: vv.lng() })));
-                const distances = [];
-                for (let i = 0; i < v.length; i++) {
-                    const j = (i + 1) % v.length;
-                    console.log(`Computing distance to edge ${i}-${j}:`, {
-                        v1: { lat: v[i].lat(), lng: v[i].lng() },
-                        v2: { lat: v[j].lat(), lng: v[j].lng() }
-                    });
-                    const dist = distanceToSegment(guess, v[i], v[j]);
-                    console.log(`Edge ${i}-${j} distance:`, dist);
-                    if (!isNaN(dist) && isFinite(dist)) {
-                        distances.push(dist);
-                    }
-                }
-
-                console.log('All edge distances:', distances);
-
-                if (distances.length === 0) {
-                    console.warn('No valid edge distances computed, defaulting to 95 km');
-                    distance = 95;
-                } else {
-                    distance = Math.min(...distances);
-                }
-                console.log('Selected distance:', distance);
-            }
-
             const centroid = calculatePolygonCentroid(validVertices);
             if (centroid) {
                 map.setCenter(centroid);
@@ -356,13 +322,47 @@ function endRound() {
                 console.warn('Failed to calculate centroid, falling back to first vertex');
                 map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
             }
+
+            if (marker) {
+                const guess = marker.getPosition();
+                if (google.maps.geometry.poly.containsLocation(guess, polygon)) {
+                    distance = 0;
+                    console.log('Guess inside polygon, distance: 0');
+                } else {
+                    const v = validVertices.map(v => new google.maps.LatLng(v.lat, v.lng));
+                    console.log('LatLng vertices:', v.map(vv => ({ lat: vv.lat(), lng: vv.lng() })));
+                    const distances = [];
+                    for (let i = 0; i < v.length; i++) {
+                        const j = (i + 1) % v.length;
+                        console.log(`Computing distance to edge ${i}-${j}:`, {
+                            v1: { lat: v[i].lat(), lng: v[i].lng() },
+                            v2: { lat: v[j].lat(), lng: v[j].lng() }
+                        });
+                        const dist = distanceToSegment(guess, v[i], v[j]);
+                        console.log(`Edge ${i}-${j} distance:`, dist);
+                        if (!isNaN(dist) && isFinite(dist)) {
+                            distances.push(dist);
+                        }
+                    }
+
+                    console.log('All edge distances:', distances);
+
+                    if (distances.length === 0) {
+                        console.warn('No valid edge distances computed, defaulting to 95 km');
+                        distance = 95;
+                    } else {
+                        distance = Math.min(...distances);
+                    }
+                    console.log('Selected distance:', distance);
+                }
+            }
         }
     }
 
     map.setZoom(7);
     roundHistory.push({ location: actualLocation.name, distance });
 
-    document.getElementById("result").textContent = distance === null ? "No guess made." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
+    document.getElementById("result").textContent = distance === null ? "Time's up! You didn’t guess." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
     document.getElementById("guess").disabled = true;
     document.getElementById("newGame").disabled = false;
     round++;
