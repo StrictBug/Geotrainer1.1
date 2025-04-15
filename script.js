@@ -33,6 +33,30 @@ function getInitialMapSettings(area) {
     }
 }
 
+function calculatePolygonCentroid(vertices) {
+    let latSum = 0;
+    let lngSum = 0;
+    let count = 0;
+
+    vertices.forEach(v => {
+        if (!isNaN(v.lat) && !isNaN(v.lng)) {
+            latSum += v.lat;
+            lngSum += v.lng;
+            count++;
+        }
+    });
+
+    if (count === 0) {
+        console.warn('No valid vertices for centroid calculation');
+        return null;
+    }
+
+    return {
+        lat: latSum / count,
+        lng: lngSum / count
+    };
+}
+
 function loadLocations() {
     console.log('Fetching locations.csv...');
     fetch('locations.csv')
@@ -324,12 +348,18 @@ function endRound() {
                 }
                 console.log('Selected distance:', distance);
             }
-        }
 
-        map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
+            const centroid = calculatePolygonCentroid(validVertices);
+            if (centroid) {
+                map.setCenter(centroid);
+            } else {
+                console.warn('Failed to calculate centroid, falling back to first vertex');
+                map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
+            }
+        }
     }
 
-    map.setZoom(8);
+    map.setZoom(7);
     roundHistory.push({ location: actualLocation.name, distance });
 
     document.getElementById("result").textContent = distance === null ? "No guess made." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
@@ -353,7 +383,7 @@ function showGameOver() {
     const summaryDiv = document.getElementById("roundSummary");
     let html = '<h2>Game Over!</h2>';
     html += '<table><tr><th>Round</th><th>Location</th><th>Distance (km)</th></tr>';
-    
+
     roundHistory.forEach((roundData, index) => {
         const distanceText = roundData.distance === null ? '-' : roundData.distance === 0 ? '0' : roundData.distance.toFixed(1);
         html += `<tr><td>${index + 1}</td><td>${roundData.location}</td><td>${distanceText}</td></tr>`;
@@ -363,7 +393,7 @@ function showGameOver() {
     const averageDistance = validDistances.length > 0 ? (validDistances.reduce((sum, d) => sum + d, 0) / validDistances.length).toFixed(1) : '-';
     html += `<tr class="total-row"><td colspan="2">Average</td><td>${averageDistance}</td></tr>`;
     html += '</table>';
-    
+
     html += `
         <div class="button-container">
             <button id="playAgain">Play Again</button>

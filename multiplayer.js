@@ -233,6 +233,30 @@ function getInitialMapSettings(area) {
     }
 }
 
+function calculatePolygonCentroid(vertices) {
+    let latSum = 0;
+    let lngSum = 0;
+    let count = 0;
+
+    vertices.forEach(v => {
+        if (!isNaN(v.lat) && !isNaN(v.lng)) {
+            latSum += v.lat;
+            lngSum += v.lng;
+            count++;
+        }
+    });
+
+    if (count === 0) {
+        console.warn('No valid vertices for centroid calculation');
+        return null;
+    }
+
+    return {
+        lat: latSum / count,
+        lng: lngSum / count
+    };
+}
+
 function initMap() {
     const mapSettings = getInitialMapSettings(selectedArea);
     map = new google.maps.Map(document.getElementById("map"), {
@@ -339,13 +363,21 @@ socket.on('roundResults', ({ round, location, results }) => {
             });
             polygon.setMap(map);
             markers.push(polygon);
-            map.setCenter({ lat: location.lat1, lng: location.long1 });
+
+            const centroid = calculatePolygonCentroid(validVertices);
+            if (centroid) {
+                map.setCenter(centroid);
+            } else {
+                console.warn('Failed to calculate centroid, falling back to first vertex');
+                map.setCenter({ lat: location.lat1, lng: location.long1.NoSuchMethodError });
+            }
         } else {
             console.error('Multiplayer: Insufficient valid vertices for polygon:', validVertices);
+            map.setCenter({ lat: location.lat1, lng: location.long1 });
         }
     }
 
-    map.setZoom(8);
+    map.setZoom(7);
 
     // Sort results by distance (closest to furthest, null as furthest)
     results.sort((a, b) => {
