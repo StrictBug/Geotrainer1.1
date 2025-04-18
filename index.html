@@ -9,14 +9,19 @@
 <body>
     <div class="home-container">
         <div class="content">
-            <div class="top-section">
+            <div id="mainMenu" class="options">
                 <h1>Geotrainer</h1>
-                <div class="mode-selection">
-                    <button onclick="showSinglePlayer()">Single Player</button>
-                    <button onclick="showMultiplayer()">Multiplayer</button>
+                <div class="button-group">
+                    <button id="singlePlayerButton" onclick="showSinglePlayer()">Single Player</button>
+                    <button id="multiplayerButton" onclick="showMultiplayer()">Multiplayer</button>
+                    <button id="howToPlayButton" onclick="window.location.href='howToPlay.html'">How to Play</button>
                 </div>
             </div>
             <div id="singlePlayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="mode-selection">
+                    <button id="mainMenuButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
                 <div class="option">
                     <label for="sp-area">Area</label>
                     <select id="sp-area">
@@ -45,11 +50,17 @@
                         <option value="30">30</option>
                     </select>
                 </div>
-                <button id="startSinglePlayer" onclick="startSinglePlayer()">Start Game</button>
+                <div class="button-container">
+                    <button id="startSinglePlayer" onclick="startSinglePlayer()">Start Game</button>
+                </div>
             </div>
             <div id="multiplayerOptions" class="options hidden">
-                <button id="hostGameButton" onclick="showHostForm()">Host Game</button>
-                <button id="joinGameButton" onclick="showJoinForm()">Join Game</button>
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="mainMenuMultiplayerButton" onclick="showMainMenu()">Main Menu</button>
+                    <button id="hostGameButton" onclick="showHostForm()">Host Game</button>
+                    <button id="joinGameButton" onclick="showJoinForm()">Join Game</button>
+                </div>
                 <div id="hostForm" class="hidden">
                     <input type="text" id="hostName" placeholder="Enter Your Name">
                     <button onclick="hostMultiplayer()">Create Game</button>
@@ -62,6 +73,10 @@
                 </div>
             </div>
             <div id="lobby" class="hidden">
+                <h1>Geotrainer</h1>
+                <div class="mode-selection">
+                    <button id="mainMenuLobbyButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
                 <div class="lobby-left-right">
                     <div class="lobby-left">
                         <h2>Lobby</h2>

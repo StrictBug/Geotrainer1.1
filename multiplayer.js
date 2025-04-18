@@ -15,6 +15,23 @@ let isHost = false;
 let guessSubmitted = false;
 let gameTerminated = false;
 
+function showMainMenu() {
+    if (gameCode) {
+        if (isHost) {
+            socket.emit('hostLeaveLobby', { gameCode });
+        } else {
+            socket.emit('leaveLobby', { gameCode });
+        }
+        gameCode = null;
+    }
+    document.getElementById('singlePlayerOptions').classList.add('hidden');
+    document.getElementById('multiplayerOptions').classList.add('hidden');
+    document.getElementById('lobby').classList.add('hidden');
+    document.getElementById('hostForm').classList.add('hidden');
+    document.getElementById('joinForm').classList.add('hidden');
+    document.getElementById('mainMenu').classList.remove('hidden');
+}
+
 function showSinglePlayer() {
     if (gameCode) {
         if (isHost) {
@@ -22,11 +39,12 @@ function showSinglePlayer() {
         } else {
             socket.emit('leaveLobby', { gameCode });
         }
+        gameCode = null;
     }
+    document.getElementById('mainMenu').classList.add('hidden');
     document.getElementById('singlePlayerOptions').classList.remove('hidden');
     document.getElementById('multiplayerOptions').classList.add('hidden');
     document.getElementById('lobby').classList.add('hidden');
-    gameCode = null;
 }
 
 function showMultiplayer() {
@@ -36,13 +54,14 @@ function showMultiplayer() {
         } else {
             socket.emit('leaveLobby', { gameCode });
         }
+        gameCode = null;
     }
+    document.getElementById('mainMenu').classList.add('hidden');
     document.getElementById('singlePlayerOptions').classList.add('hidden');
     document.getElementById('multiplayerOptions').classList.remove('hidden');
     document.getElementById('lobby').classList.add('hidden');
     document.getElementById('hostForm').classList.add('hidden');
     document.getElementById('joinForm').classList.add('hidden');
-    gameCode = null;
 }
 
 function startSinglePlayer() {
@@ -91,6 +110,7 @@ function joinMultiplayer() {
 }
 
 function showLobby() {
+    document.getElementById('mainMenu').classList.add('hidden');
     document.getElementById('singlePlayerOptions').classList.add('hidden');
     document.getElementById('multiplayerOptions').classList.add('hidden');
     document.getElementById('lobby').classList.remove('hidden');
