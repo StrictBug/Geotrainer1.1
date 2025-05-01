@@ -12,8 +12,10 @@ let roundActive = false;
 let lastProcessedRound = 0;
 let markers = [];
 let isHost = false;
-let guessSubmitted = false;
 let gameTerminated = false;
+let hostName = '';
+let latestPin = null; // Tracks the latest pin location
+let hasSubmittedGuess = false; // Tracks if a guess has been submitted in the current round
 
 function showMainMenu() {
     if (gameCode) {
@@ -84,17 +86,19 @@ function showJoinForm() {
 function hostMultiplayer() {
     const rounds = document.getElementById('sp-rounds').value;
     const area = document.getElementById('sp-area').value;
-    const hostName = document.getElementById('hostName').value.trim();
-    if (hostName) {
-        localPlayerName = hostName;
+    const hostNameInput = document.getElementById('hostName').value.trim();
+    if (hostNameInput) {
+        localPlayerName = hostNameInput;
+        hostName = hostNameInput;
         isHost = true;
-        socket.emit('hostGame', { rounds: parseInt(rounds), area, hostName });
+        socket.emit('hostGame', { rounds: parseInt(rounds), area, hostName: hostNameInput });
         showLobby();
         const playerList = document.getElementById('playerList');
         playerList.innerHTML = '';
         const li = document.createElement('li');
-        li.textContent = hostName;
+        li.textContent = hostNameInput;
         playerList.appendChild(li);
+        console.log('Host set: isHost =', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
     }
 }
 
@@ -106,6 +110,7 @@ function joinMultiplayer() {
         isHost = false;
         gameCode = gameCodeInput;
         socket.emit('joinGame', { gameCode: gameCodeInput, playerName });
+        console.log('Non-host set: isHost =', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
     }
 }
 
@@ -145,6 +150,10 @@ socket.on('playerList', (players) => {
         const li = document.createElement('li');
         li.textContent = player.name || 'Unnamed Player';
         playerList.appendChild(li);
+        if (!hostName && players.length > 0) {
+            hostName = players[0].name;
+            console.log('Set hostName from playerList:', hostName);
+        }
     });
     if (!isHost && gameCode) {
         updateGameCodeDisplay(gameCode);
@@ -183,7 +192,11 @@ function startMultiplayerGame() {
 socket.on('gameStarted', ({ rounds, area, players }) => {
     maxRounds = rounds;
     selectedArea = area;
-    window.location.href = `multiplayer.html?gameCode=${gameCode}&rounds=${rounds}&area=${area}&playerName=${encodeURIComponent(localPlayerName)}`;
+    if (!hostName && players.length > 0) {
+        hostName = players[0].name;
+        console.log('Set hostName from gameStarted:', hostName);
+    }
+    window.location.href = `multiplayer.html?gameCode=${gameCode}&rounds=${rounds}&area=${area}&playerName=${encodeURIComponent(localPlayerName)}&hostName=${encodeURIComponent(hostName)}`;
 });
 
 window.addEventListener('unload', () => {
@@ -219,19 +232,15 @@ gameCode = urlParams.get('gameCode');
 maxRounds = parseInt(urlParams.get('rounds')) || 15;
 selectedArea = urlParams.get('area') || 'All regions';
 localPlayerName = decodeURIComponent(urlParams.get('playerName') || '');
+hostName = decodeURIComponent(urlParams.get('hostName') || '');
+isHost = localPlayerName === hostName;
 
 console.log('Emitting rejoinGame', gameCode, localPlayerName);
+console.log('Initial state: isHost =', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
 socket.emit('rejoinGame', { gameCode, playerName: localPlayerName });
 
-socket.removeAllListeners('roundResults');
-socket.removeAllListeners('newRound');
-socket.removeAllListeners('timerUpdate');
-socket.removeAllListeners('gameOver');
-socket.removeAllListeners('gameEnded');
-socket.removeAllListeners('playerRejoined');
-
 socket.on('playerRejoined', ({ gameCode, playerName }) => {
-    console.log(`Rejoined game ${gameCode} as ${playerName}`);
+    console.log(`Rejoined game ${gameCode} as ${playerName}, isHost: ${isHost}`);
 });
 
 function getInitialMapSettings(area) {
@@ -286,6 +295,28 @@ function initMap() {
 
     console.log('GameOver visibility at start:', document.getElementById('gameOver').classList.contains('hidden'));
 
+    // Explicitly attach event listeners to buttons
+    const guessButton = document.getElementById("guess");
+    const newRoundButton = document.getElementById("newRound");
+    if (guessButton) {
+        guessButton.onclick = () => {
+            console.log('Guess button clicked, latestPin:', latestPin ? latestPin.toJSON() : null);
+            submitGuess();
+        };
+        console.log('Guess button event listener attached');
+    } else {
+        console.error('Guess button not found in DOM');
+    }
+    if (newRoundButton) {
+        newRoundButton.onclick = () => {
+            console.log('New Round button clicked');
+            startNewRound();
+        };
+        console.log('New Round button event listener attached');
+    } else {
+        console.error('New Round button not found in DOM');
+    }
+
     map.addListener("click", (event) => {
         if (roundActive && timeLeft > 0) {
             if (marker) marker.setMap(null);
@@ -294,7 +325,15 @@ function initMap() {
                 map: map
             });
             markers.push(marker);
-            document.getElementById("guess").disabled = false;
+            latestPin = event.latLng; // Update latest pin
+            if (hasSubmittedGuess) {
+                // Rescind previous guess if a new pin is placed
+                socket.emit('rescindGuess', { gameCode, playerName: localPlayerName, round });
+                hasSubmittedGuess = false;
+                console.log('Rescinded previous guess due to new pin at:', event.latLng.toJSON());
+            }
+            guessButton.disabled = false; // Enable Guess button
+            console.log('Marker placed at:', event.latLng.toJSON(), 'Guess button state: disabled =', guessButton.disabled, 'timeLeft =', timeLeft, 'hasSubmittedGuess =', hasSubmittedGuess);
         }
     });
 }
@@ -306,6 +345,9 @@ function clearMarkers() {
     });
     markers = [];
     marker = null;
+    latestPin = null; // Clear latest pin
+    hasSubmittedGuess = false; // Reset guess submission state
+    console.log('Markers cleared, latestPin reset to null, hasSubmittedGuess reset to false');
 }
 
 socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, timeLeft: serverTime }) => {
@@ -314,29 +356,28 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
     maxRounds = newMaxRounds;
     timeLeft = serverTime;
     roundActive = true;
-    guessSubmitted = false;
     clearMarkers();
     document.getElementById("location").textContent = `Guess: ${location}`;
     document.getElementById("round").textContent = `Round: ${round}/${maxRounds}`;
     document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
     document.getElementById("guess").disabled = true;
-    document.getElementById("guess").style.display = "inline";
-    document.getElementById("newRound").disabled = true;
-    document.getElementById("newRound").style.display = "inline";
+    document.getElementById("guess").style.display = "";
+    document.getElementById("newRound").style.display = "none";
     document.getElementById("result").textContent = "";
     map.setCenter(getInitialMapSettings(selectedArea).center);
     map.setZoom(getInitialMapSettings(selectedArea).zoom);
+    console.log('Guess button after newRound: display =', document.getElementById("guess").style.display || 'default', 'disabled =', document.getElementById("guess").disabled);
 });
 
 socket.on('timerUpdate', (newTime) => {
     timeLeft = newTime;
     document.getElementById("timer").textContent = `Time left: ${Math.max(0, timeLeft)}s`;
-    if (timeLeft === 0 && marker && !guessSubmitted) {
-        const guess = marker.getPosition();
-        socket.emit('submitGuess', { gameCode, guess: { lat: guess.lat(), lng: guess.lng() } });
-        guessSubmitted = true;
+    if (timeLeft <= 0 && latestPin) {
+        const guessData = { gameCode, guess: { lat: latestPin.lat(), lng: latestPin.lng() }, playerName: localPlayerName, round };
+        socket.emit('submitGuess', guessData);
         document.getElementById("guess").disabled = true;
-        console.log('Auto-submitted guess at 0 seconds');
+        hasSubmittedGuess = true;
+        console.log('Auto-submitted guess at timeLeft <= 0:', guessData);
     }
 });
 
@@ -348,6 +389,7 @@ socket.on('roundResults', ({ round, location, results }) => {
 
     lastProcessedRound = round;
     console.log(`Received round ${round} results for ${localPlayerName}:`, results);
+    console.log('isHost in roundResults:', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
     roundActive = false;
 
     // Clear existing markers
@@ -421,14 +463,28 @@ socket.on('roundResults', ({ round, location, results }) => {
                 label: r.name[0]
             });
             markers.push(playerMarker);
+            console.log(`Displayed marker for ${r.name} at:`, r.guess);
         }
     });
     document.getElementById("result").innerHTML = resultText;
-    document.getElementById("newRound").disabled = false;
-    document.getElementById("guess").disabled = true;
+    // Show "New Round" button only for host
+    const newRoundButton = document.getElementById("newRound");
+    newRoundButton.style.display = isHost ? "" : "none";
+    newRoundButton.disabled = false;
+    console.log('New Round button state:', {
+        display: newRoundButton.style.display || 'default',
+        disabled: newRoundButton.disabled,
+        onclick: newRoundButton.onclick ? 'set' : 'not set'
+    });
+    console.log('Guess button state after roundResults:', {
+        display: document.getElementById("guess").style.display || 'default',
+        disabled: document.getElementById("guess").disabled,
+        onclick: document.getElementById("guess").onclick ? 'set' : 'not set'
+    });
 });
 
 socket.on('gameOver', ({ players, roundHistory }) => {
+    console.log('GameOver received:', { players, roundHistory });
     roundActive = false;
     document.getElementById("location").textContent = "";
     document.getElementById("timer").textContent = "";
@@ -437,106 +493,140 @@ socket.on('gameOver', ({ players, roundHistory }) => {
     document.getElementById("newRound").style.display = "none";
     document.getElementById("gameOver").classList.remove("hidden");
 
-    const averages = players.map(p => {
-        const distances = roundHistory.map(r => r.scores.find(s => s.name === p.name)?.distance || null)
-                                    .filter(d => d !== null);
-        return {
-            name: p.name,
-            average: distances.length > 0 ? distances.reduce((sum, d) => sum + d, 0) / distances.length : Infinity
-        };
-    });
-    const winner = averages.reduce((min, p) => p.average < min.average ? p : min, averages[0]);
-    const summaryDiv = document.getElementById("roundSummary");
-    let html = `<h2>Game over, ${winner.name} wins!</h2>`;
-    html += '<table><thead>';
-    html += `<tr><th colspan="2" class="no-border"></th><th colspan="${players.length}" class="distance-header">Distance (km)</th></tr>`;
-    html += '<tr><th>Round</th><th>Location</th>';
-    players.forEach(player => html += `<th>${player.name}</th>`);
-    html += '</tr></thead><tbody>';
+    // Validate data and handle edge cases
+    if (!players || !Array.isArray(players) || players.length === 0 || !roundHistory || !Array.isArray(roundHistory)) {
+        console.error('Invalid gameOver data:', { players, roundHistory });
+        document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: No valid game data available.</p>';
+        return;
+    }
 
-    roundHistory.forEach(round => {
-        html += `<tr><td>${round.round}</td><td>${round.location}</td>`;
-        players.forEach(player => {
-            const distance = round.scores.find(s => s.name === player.name)?.distance;
-            const distanceText = distance === null ? '-' : distance === 0 ? '0' : distance.toFixed(1);
-            html += `<td>${distanceText}</td>`;
+    // Calculate averages and find winner
+    let averages;
+    let winner;
+    try {
+        averages = players.map(p => {
+            if (!p || !p.name) throw new Error('Invalid player data');
+            const distances = roundHistory
+                .map(r => r.scores?.find(s => s?.name === p.name)?.distance || null)
+                .filter(d => d !== null);
+            return {
+                name: p.name,
+                average: distances.length > 0 ? distances.reduce((sum, d) => sum + d, 0) / distances.length : Infinity
+            };
         });
-        html += '</tr>';
+
+        if (averages.length === 0) throw new Error('No valid averages calculated');
+        winner = averages.reduce((min, p) => (p.average < min.average ? p : min), averages[0]);
+    } catch (error) {
+        console.error('Error calculating averages:', error);
+        document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to calculate scores.</p>';
+        return;
+    }
+
+    // Build table HTML to match the desired layout
+    let gameOverText = `<h3>Game over, ${winner.name} wins!</h3>`;
+    gameOverText += '<table>';
+    // First row: "Distance (km)" header spanning player columns
+    gameOverText += `<tr><th class="no-border"></th><th class="no-border"></th><th colspan="${players.length}" class="distance-header">Distance (km)</th></tr>`;
+    // Second row: "Round", "Location", and player names
+    gameOverText += '<tr><th>Round</th><th>Location</th>';
+    players.forEach(p => {
+        gameOverText += `<th>${p.name || 'Unknown'}</th>`;
     });
+    gameOverText += '</tr>';
 
-    html += '<tr><td colspan="2"><strong>Average</strong></td>';
-    players.forEach(player => {
-        const avg = averages.find(a => a.name === player.name).average;
-        html += `<td><strong>${avg === Infinity ? '-' : avg.toFixed(1)}</strong></td>`;
-    });
-    html += '</tr></tbody></table>';
-
-    html += `
-        <div class="button-container">
-            <button id="playAgain">Play Again</button>
-            <button id="backToHome">Back to Home</button>
-        </div>
-    `;
-
-    summaryDiv.innerHTML = html;
-
-    document.getElementById("playAgain").addEventListener("click", () => {
-        if (!gameTerminated) {
-            socket.emit('restartGame', gameCode);
-            document.getElementById("gameOver").classList.add("hidden");
+    // Round rows
+    roundHistory.forEach((round, index) => {
+        if (!round || !round.location || !round.scores) {
+            console.warn(`Invalid round data at index ${index}:`, round);
+            return;
         }
+        gameOverText += `<tr><td>${index + 1}</td><td>${round.location}</td>`;
+        players.forEach(p => {
+            const score = round.scores.find(s => s?.name === p.name);
+            const distanceText = score?.distance === null ? 'No guess' : score.distance === 0 ? '0' : score.distance.toFixed(1);
+            gameOverText += `<td>${distanceText}</td>`;
+        });
+        gameOverText += '</tr>';
     });
 
-    document.getElementById("backToHome").addEventListener("click", () => {
-        socket.emit('playerLeaveGame', { gameCode });
-        window.location.href = 'index.html';
+    // Average row with merged "Average" cell, centered text, and bold styling
+    gameOverText += '<tr class="average-row"><td colspan="2" style="text-align: center;">Average</td>';
+    averages.forEach(p => {
+        const avgText = p.average === Infinity ? 'N/A' : p.average.toFixed(1);
+        gameOverText += `<td>${avgText}</td>`;
     });
+    gameOverText += '</tr>';
+    gameOverText += '</table>';
+
+    console.log('GameOver HTML:', gameOverText);
+    try {
+        document.getElementById("roundSummary").innerHTML = gameOverText;
+
+        // Attach event listeners to buttons
+        const playAgainButton = document.getElementById("playAgain");
+        const backToHomeButton = document.getElementById("backToHome");
+        playAgainButton.style.display = isHost ? "" : "none"; // Only host can restart
+        playAgainButton.onclick = restartGame;
+        backToHomeButton.onclick = returnToMenu;
+    } catch (error) {
+        console.error('Error setting roundSummary:', error);
+        document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to display results.</p>';
+    }
+});
+
+socket.on('gameEnded', (message) => {
+    gameTerminated = true;
+    document.getElementById("gameOver").classList.remove("hidden");
+    document.getElementById("roundSummary").innerHTML = `<h3>Game Ended</h3><p>${message}</p>`;
+    document.getElementById("playAgain").style.display = "none";
+    document.getElementById("backToHome").onclick = returnToMenu;
 });
 
 socket.on('gameRestarted', ({ rounds, area, players }) => {
     maxRounds = rounds;
     selectedArea = area;
+    round = 0;
     lastProcessedRound = 0;
+    roundActive = false;
     document.getElementById("gameOver").classList.add("hidden");
+    document.getElementById("guess").style.display = "";
+    document.getElementById("result").textContent = "";
     clearMarkers();
-    document.getElementById("guess").style.display = "inline";
-    document.getElementById("newRound").style.display = "inline";
-    console.log('Game restarted, resetting UI');
+    map.setCenter(getInitialMapSettings(selectedArea).center);
+    map.setZoom(getInitialMapSettings(selectedArea).zoom);
 });
 
-socket.on('gameEnded', (message) => {
-    if (!isHost) {
-        window.location.href = 'index.html';
-    }
-});
-
-socket.on('gameTerminated', (message) => {
-    if (!gameTerminated) {
-        gameTerminated = true;
-        window.location.href = 'index.html';
-    }
-});
-
-document.getElementById("guess").addEventListener("click", () => {
-    if (roundActive && timeLeft > 0 && !document.getElementById("guess").disabled) {
-        const guess = marker.getPosition();
-        socket.emit('submitGuess', { gameCode, guess: { lat: guess.lat(), lng: guess.lng() } });
+function submitGuess() {
+    console.log('submitGuess called, round:', round, 'timeLeft:', timeLeft, 'roundActive:', roundActive, 'latestPin:', latestPin ? latestPin.toJSON() : null);
+    if (latestPin && timeLeft > 0 && roundActive) {
+        const guessData = { gameCode, guess: { lat: latestPin.lat(), lng: latestPin.lng() }, playerName: localPlayerName, round };
+        socket.emit('submitGuess', guessData);
         document.getElementById("guess").disabled = true;
-        guessSubmitted = true;
-        console.log('Guess submitted manually');
+        hasSubmittedGuess = true;
+        console.log('Manual guess submitted:', guessData, 'hasSubmittedGuess set to true');
+    } else {
+        console.log('Guess not submitted: latestPin =', !!latestPin, 'timeLeft =', timeLeft, 'roundActive =', roundActive);
     }
-});
+}
 
-document.getElementById("newRound").addEventListener("click", () => {
-    if (!document.getElementById("newRound").disabled) {
-        socket.emit('startNewRound', gameCode);
-        document.getElementById("newRound").disabled = true;
-        console.log('Requested new round for', gameCode);
-    }
-});
+function startNewRound() {
+    console.log('startNewRound called');
+    socket.emit('startNewRound', gameCode);
+}
 
-window.addEventListener('unload', () => {
-    if (gameCode && !gameTerminated) {
+function restartGame() {
+    if (!isHost) return;
+    socket.emit('restartGame', gameCode);
+}
+
+function returnToMenu() {
+    if (gameCode && !isHost && !gameTerminated) {
         socket.emit('playerLeaveGame', { gameCode });
     }
-});
+    if (gameCode && isHost && !gameTerminated) {
+        socket.emit('hostLeaveLobby', { gameCode });
+    }
+    gameCode = null;
+    window.location.href = 'index.html';
+}

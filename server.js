@@ -114,7 +114,7 @@ function startRound(gameCode) {
         game.timeLeft--;
         io.to(gameCode).emit('timerUpdate', game.timeLeft);
         console.log(`Timer update for ${gameCode}: ${game.timeLeft}s`);
-        if (!game.roundEnded && (game.timeLeft < 0 || Object.keys(game.guesses).length === game.players.length)) {
+        if (!game.roundEnded && game.timeLeft <= -1) {
             clearInterval(timer);
             endRound(gameCode);
         }
@@ -218,6 +218,8 @@ function endRound(gameCode) {
     if (!game || game.state !== 'playing' || game.roundEnded) return;
     game.roundEnded = true;
 
+    console.log(`Ending round ${game.round} for ${gameCode}, guesses:`, game.guesses);
+
     const results = game.players.map(player => {
         const guess = game.guesses[player.id];
         let distance = null;
@@ -276,7 +278,7 @@ function endRound(gameCode) {
         scores: results.map(r => ({ name: r.name, distance: r.distance }))
     });
 
-    console.log(`Round ${game.round} ended in ${gameCode}`);
+    console.log(`Round ${game.round} ended in ${gameCode}, results:`, results);
     io.to(gameCode).emit('roundResults', {
         round: game.round,
         location: game.currentLocation,
@@ -381,17 +383,64 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('submitGuess', ({ gameCode, guess }) => {
+    socket.on('submitGuess', ({ gameCode, guess, playerName, round }) => {
         const game = games[gameCode];
-        if (game && game.state === 'playing' && !game.roundEnded && !game.guesses[socket.id]) {
-            game.guesses[socket.id] = guess;
-            console.log(`Guess submitted by ${socket.id} in ${gameCode} at ${game.timeLeft}s`);
-            if (Object.keys(game.guesses).length === game.players.length && game.timeLeft >= 0) {
-                clearInterval(game.timer);
-                endRound(gameCode);
-            }
-        } else {
-            console.log(`Guess rejected for ${socket.id} in ${gameCode}: Round ended or already guessed`);
+        if (!game || game.state !== 'playing') {
+            console.log(`Guess rejected for ${socket.id} in ${gameCode}: Invalid game state`);
+            return;
+        }
+        if (round !== game.round) {
+            console.log(`Guess rejected for ${socket.id} in ${gameCode}: Round mismatch (submitted for round ${round}, current round ${game.round})`);
+            return;
+        }
+        if (game.roundEnded) {
+            console.log(`Guess rejected for ${socket.id} in ${gameCode}: Round already ended`);
+            return;
+        }
+
+        const player = game.players.find(p => p.name === playerName);
+        if (!player) {
+            console.log(`Guess rejected for ${socket.id} in ${gameCode}: Player ${playerName} not found`);
+            return;
+        }
+
+        const guessesBefore = JSON.stringify(game.guesses[player.id]);
+        game.guesses[player.id] = guess;
+        console.log(`Guess ${guessesBefore ? 'updated' : 'submitted'} by ${playerName} (ID: ${player.id}) in ${gameCode} at ${game.timeLeft}s:`, guess, `Previous guess: ${guessesBefore || 'none'}`);
+
+        // Check if all active players have submitted guesses
+        const activePlayers = game.players.filter(p => !p.disconnected);
+        const allGuessesSubmitted = activePlayers.every(p => game.guesses[p.id]);
+        if (allGuessesSubmitted && game.timeLeft >= 0) {
+            clearInterval(game.timer);
+            endRound(gameCode);
+        }
+    });
+
+    socket.on('rescindGuess', ({ gameCode, playerName, round }) => {
+        const game = games[gameCode];
+        if (!game || game.state !== 'playing') {
+            console.log(`Rescind request rejected for ${playerName} in ${gameCode}: Invalid game state`);
+            return;
+        }
+        if (round !== game.round) {
+            console.log(`Rescind request rejected for ${playerName} in ${gameCode}: Round mismatch (requested for round ${round}, current round ${game.round})`);
+            return;
+        }
+        if (game.roundEnded) {
+            console.log(`Rescind request rejected for ${playerName} in ${gameCode}: Round already ended`);
+            return;
+        }
+
+        const player = game.players.find(p => p.name === playerName);
+        if (!player) {
+            console.log(`Rescind request rejected for ${playerName} in ${gameCode}: Player not found`);
+            return;
+        }
+
+        if (game.guesses[player.id]) {
+            delete game.guesses[player.id];
+            console.log(`Guess rescinded by ${playerName} (ID: ${player.id}) in ${gameCode} for round ${round}`);
         }
     });
 

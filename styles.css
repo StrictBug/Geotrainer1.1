@@ -94,6 +94,25 @@ button:hover {
     justify-content: center;
     gap: 20px;
     margin-top: 0px;
+    width: 100%; /* Ensure it takes full width for centering */
+}
+
+/* Game Over button styles */
+#playAgain,
+#backToHome {
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #e0e0e0;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 140px;
+}
+
+#playAgain:hover,
+#backToHome:hover {
+    background: #f0f0f0;
 }
 
 #hostName, #gameCode, #playerName {
@@ -154,20 +173,27 @@ button:hover {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 400px;
+    max-width: 600px; /* Increased from 400px to give more room */
     margin-top: 20px;
     margin-bottom: 0px;
+    gap: 2rem; /* Add 32px gap between left and right columns */
+}
+
+.lobby-left-right:has(#hostSettings.hidden) {
+    justify-content: center; /* Center .lobby-left when #hostSettings is hidden */
 }
 
 .lobby-left {
     text-align: left; /* Default for host */
+    min-width: 150px; /* Ensure space for long names */
 }
 
 .lobby-left.non-host-lobby {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: auto; /* Override width: 100% to prevent stretching */
+    max-width: 300px; /* Constrain width for centering */
     text-align: center;
 }
 
@@ -193,6 +219,11 @@ button:hover {
 
 .lobby-right {
     text-align: right;
+    min-width: 290px; /* Match .option width for dropdowns */
+}
+
+.lobby-right:has(#hostSettings.hidden) {
+    display: none; /* Hide empty .lobby-right for non-hosts */
 }
 
 #hostSettings .option {
@@ -223,7 +254,7 @@ button:hover {
 }
 
 .copy-btn {
-    padding: 5px 10px;
+    padding: 5px 10px; /* Fixed syntax error */
     font-size: 14px;
     background-color: #b0b0b0; /* Medium grey for "Copy" state */
     color: white;
@@ -311,12 +342,13 @@ button:hover {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
-#roundSummary {
+.dialog-content {
     background: white;
     padding: 20px;
     border-radius: 10px;
@@ -329,6 +361,10 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#roundSummary {
+    width: 100%; /* Ensure it takes the full width of the parent */
 }
 
 #roundSummary table {
@@ -356,29 +392,8 @@ button:hover {
     background: #f2f2f2;
 }
 
-.button-container {
-    margin-top: 0px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-/* Game Over button styles */
-#playAgain,
-#backToHome {
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-    background: #e0e0e0;
-    color: black;
-    border: 1px solid black;
-    border-radius: 5px;
-    width: 140px;
-}
-
-#playAgain:hover,
-#backToHome:hover {
-    background: #f0f0f0;
+.average-row td {
+    font-weight: bold;
 }
 
 /* How to Play styles */
@@ -401,4 +416,32 @@ button:hover {
     text-align: left;
     max-width: 600px;
     line-height: 1.5;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .lobby-left-right {
+        flex-direction: column; /* Stack columns vertically */
+        align-items: center;
+        gap: 1rem; /* Reduced gap for vertical layout */
+        max-width: 100%; /* Allow full width */
+    }
+
+    .lobby-left {
+        min-width: 0; /* Allow shrinking */
+        margin-bottom: 1rem; /* Add vertical spacing */
+    }
+
+    .lobby-right {
+        min-width: 0; /* Allow shrinking */
+        text-align: center; /* Center dropdowns */
+    }
+
+    #hostSettings .option {
+        justify-content: center; /* Center dropdowns on small screens */
+    }
+
+    .lobby-left-right:has(#hostSettings.hidden) {
+        align-items: center; /* Ensure centering in mobile view */
+    }
 }
