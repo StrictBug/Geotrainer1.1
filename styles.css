@@ -348,27 +348,38 @@ button:hover {
     z-index: 1000;
 }
 
-.dialog-content {
-    background: white;
+#gameOver .dialog-content,
+#gameOver[class*="single-player"] .dialog-content,
+#gameOver [class*="dialog-content"] {
+    background-color: white !important; /* Ensure white background for dialog */
     padding: 20px;
     border-radius: 10px;
     max-height: 80vh;
     overflow-y: auto;
     text-align: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 840px; /* Increased to accommodate wider #roundSummary */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
-#roundSummary {
-    width: 100%; /* Ensure it takes the full width of the parent */
+#gameOver #roundSummary,
+#gameOver[class*="single-player"] #roundSummary {
+    background-color: white !important; /* White background for round summary */
+    width: 100%; /* Fill available space */
+    max-width: 800px; /* Wider, just below map's 68vw */
+    padding: 20px; /* Space around table/text */
+    border-radius: 10px; /* Rounded corners */
+    display: block; /* Standard block behavior */
+    box-sizing: border-box; /* Include padding in width */
 }
 
 #roundSummary table {
-    width: 90%;
+    width: 100%; /* Fill #roundSummary */
+    max-width: 540px; /* Constrain table width */
     border-collapse: collapse;
     margin: 20px auto;
 }
@@ -443,5 +454,24 @@ button:hover {
 
     .lobby-left-right:has(#hostSettings.hidden) {
         align-items: center; /* Ensure centering in mobile view */
+    }
+
+    #gameOver .dialog-content,
+    #gameOver[class*="single-player"] .dialog-content,
+    #gameOver [class*="dialog-content"] {
+        max-width: 90%; /* Adjust for smaller screens */
+        padding: 15px; /* Slightly less padding */
+    }
+
+    #gameOver #roundSummary,
+    #gameOver[class*="single-player"] #roundSummary {
+        max-width: 90%; /* Adjust for smaller screens */
+        padding: 15px; /* Slightly less padding */
+        width: 100%;
+        display: block;
+    }
+
+    #roundSummary table {
+        max-width: 100%; /* Allow table to fit smaller #roundSummary */
     }
 }
