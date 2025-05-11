@@ -132,7 +132,7 @@ button:hover {
 
 #joinForm {
     position: relative; /* For #joinError positioning */
-    margin-top: 5px; /* Minimal gap from Join Game */
+    margin-top: 0px; /* Minimal gap from Join Game */
     display: flex;
     flex-direction: row; /* Single-line layout */
     gap: 10px; /* Space between inputs and button */

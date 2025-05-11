@@ -213,6 +213,14 @@ function pointInPolygon(point, vertices) {
     return inside;
 }
 
+function calculateScore(distance) {
+    if (distance === null || !isFinite(distance)) {
+        return 0;
+    }
+    const rawScore = Math.max(0, 1000 - Math.floor(distance));
+    return Math.round(rawScore / 10) * 10;
+}
+
 function endRound(gameCode) {
     const game = games[gameCode];
     if (!game || game.state !== 'playing' || game.roundEnded) return;
@@ -223,6 +231,7 @@ function endRound(gameCode) {
     const results = game.players.map(player => {
         const guess = game.guesses[player.id];
         let distance = null;
+        let score = 0;
         if (guess) {
             if (game.currentLocation.point) {
                 const actual = { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 };
@@ -267,15 +276,18 @@ function endRound(gameCode) {
                     }
                 }
             }
+            score = calculateScore(distance);
+        } else {
+            console.log(`No guess submitted by ${player.name} in round ${game.round}, score: 0`);
         }
-        return { name: player.name, guess, distance };
+        return { name: player.name, guess, distance, score };
     });
 
     game.roundHistory = game.roundHistory || [];
     game.roundHistory.push({
         round: game.round,
         location: game.currentLocation.name,
-        scores: results.map(r => ({ name: r.name, distance: r.distance }))
+        scores: results.map(r => ({ name: r.name, distance: r.distance, score: r.score }))
     });
 
     console.log(`Round ${game.round} ended in ${gameCode}, results:`, results);

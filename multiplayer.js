@@ -444,18 +444,13 @@ socket.on('roundResults', ({ round, location, results }) => {
 
     map.setZoom(7);
 
-    // Sort results by distance (closest to furthest, null as furthest)
-    results.sort((a, b) => {
-        if (a.distance === null && b.distance === null) return 0;
-        if (a.distance === null) return 1;
-        if (b.distance === null) return -1;
-        return a.distance - b.distance;
-    });
+    // Sort results by score (highest to lowest)
+    results.sort((a, b) => b.score - a.score);
 
     let resultText = '';
     results.forEach(r => {
         const distanceText = r.distance === null ? 'No guess' : r.distance === 0 ? '0 km' : r.distance.toFixed(1) + ' km';
-        resultText += `<p class="score-line">${r.name}: ${distanceText}</p>`;
+        resultText += `<p class="score-line">${r.name}: ${r.score} points (${distanceText})</p>`;
         if (r.guess) {
             const playerMarker = new google.maps.Marker({
                 position: { lat: r.guess.lat, lng: r.guess.lng },
@@ -500,25 +495,25 @@ socket.on('gameOver', ({ players, roundHistory }) => {
         return;
     }
 
-    // Calculate averages and find winner
-    let averages;
+    // Calculate total scores and find winner
+    let scores;
     let winner;
     try {
-        averages = players.map(p => {
+        scores = players.map(p => {
             if (!p || !p.name) throw new Error('Invalid player data');
-            const distances = roundHistory
-                .map(r => r.scores?.find(s => s?.name === p.name)?.distance || null)
-                .filter(d => d !== null);
+            const playerScores = roundHistory
+                .map(r => r.scores?.find(s => s?.name === p.name)?.score || 0);
+            const total = playerScores.reduce((sum, s) => sum + s, 0);
             return {
                 name: p.name,
-                average: distances.length > 0 ? distances.reduce((sum, d) => sum + d, 0) / distances.length : Infinity
+                total
             };
         });
 
-        if (averages.length === 0) throw new Error('No valid averages calculated');
-        winner = averages.reduce((min, p) => (p.average < min.average ? p : min), averages[0]);
+        if (scores.length === 0) throw new Error('No valid scores calculated');
+        winner = scores.reduce((max, p) => (p.total > max.total ? p : max), scores[0]);
     } catch (error) {
-        console.error('Error calculating averages:', error);
+        console.error('Error calculating scores:', error);
         document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to calculate scores.</p>';
         return;
     }
@@ -526,8 +521,8 @@ socket.on('gameOver', ({ players, roundHistory }) => {
     // Build table HTML to match the desired layout
     let gameOverText = `<h3>Game over, ${winner.name} wins!</h3>`;
     gameOverText += '<table>';
-    // First row: "Distance (km)" header spanning player columns
-    gameOverText += `<tr><th class="no-border"></th><th class="no-border"></th><th colspan="${players.length}" class="distance-header">Distance (km)</th></tr>`;
+    // First row: "Score" header spanning player columns
+    gameOverText += `<tr><th class="no-border"></th><th class="no-border"></th><th colspan="${players.length}" class="distance-header">Score</th></tr>`;
     // Second row: "Round", "Location", and player names
     gameOverText += '<tr><th>Round</th><th>Location</th>';
     players.forEach(p => {
@@ -543,20 +538,20 @@ socket.on('gameOver', ({ players, roundHistory }) => {
         }
         gameOverText += `<tr><td>${index + 1}</td><td>${round.location}</td>`;
         players.forEach(p => {
-            const score = round.scores.find(s => s?.name === p.name);
-            const distanceText = score?.distance === null ? 'No guess' : score.distance === 0 ? '0' : score.distance.toFixed(1);
-            gameOverText += `<td>${distanceText}</td>`;
+            const scoreData = round.scores.find(s => s?.name === p.name);
+            const scoreText = scoreData ? scoreData.score : '0';
+            gameOverText += `<td>${scoreText}</td>`;
         });
         gameOverText += '</tr>';
     });
 
-    // Average row with merged "Average" cell, centered text, and bold styling
-    gameOverText += '<tr class="average-row"><td colspan="2" style="text-align: center;">Average</td>';
-    averages.forEach(p => {
-        const avgText = p.average === Infinity ? 'N/A' : p.average.toFixed(1);
-        gameOverText += `<td>${avgText}</td>`;
+    // Total row
+    gameOverText += '<tr class="average-row"><td colspan="2" style="text-align: center;">Total</td>';
+    scores.forEach(p => {
+        gameOverText += `<td>${p.total}</td>`;
     });
     gameOverText += '</tr>';
+
     gameOverText += '</table>';
 
     console.log('GameOver HTML:', gameOverText);
