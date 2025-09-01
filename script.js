@@ -16,20 +16,20 @@ const selectedArea = urlParams.get('area') || 'All regions';
 
 function getInitialMapSettings(area) {
     switch (area) {
-        case 'WA-S': return { center: { lat: -30.0, lng: 120.5 }, zoom: 5 };
-        case 'SA': return { center: { lat: -31.0, lng: 135.5 }, zoom: 5 };
-        case 'VIC': return { center: { lat: -37.0, lng: 144.0 }, zoom: 6 };
-        case 'TAS': return { center: { lat: -42.0, lng: 146.0 }, zoom: 7 };
-        case 'NSW-W': return { center: { lat: -32.2, lng: 144.86 }, zoom: 6 };
-        case 'NSW-E': return { center: { lat: -33.07, lng: 150.37 }, zoom: 6 };
-        case 'WA-N': return { center: { lat: -20.31, lng: 122.56 }, zoom: 5 };
-        case 'QLD-N': return { center: { lat: -18.59, lng: 143.38 }, zoom: 5 };
-        case 'QLD-S': return { center: { lat: -26.05, lng: 146.39 }, zoom: 6 };
-        case 'NT': return { center: { lat: -19.35, lng: 133.70 }, zoom: 5 };
-        case 'MAFC': return { center: { lat: -32.2, lng: 137.1 }, zoom: 4 };
-        case 'BAFC': return { center: { lat: -24.2, lng: 137.1 }, zoom: 4 };
+        case 'WA-S': return { center: [-30.0, 120.5], zoom: 5 };
+        case 'SA': return { center: [-31.0, 135.5], zoom: 5 };
+        case 'VIC': return { center: [-37.0, 144.0], zoom: 6 };
+        case 'TAS': return { center: [-42.0, 146.0], zoom: 7 };
+        case 'NSW-W': return { center: [-32.2, 144.86], zoom: 6 };
+        case 'NSW-E': return { center: [-33.07, 150.37], zoom: 6 };
+        case 'WA-N': return { center: [-20.31, 122.56], zoom: 5 };
+        case 'QLD-N': return { center: [-18.59, 143.38], zoom: 5 };
+        case 'QLD-S': return { center: [-26.05, 146.39], zoom: 6 };
+        case 'NT': return { center: [-19.35, 133.70], zoom: 5 };
+        case 'MAFC': return { center: [-32.2, 137.1], zoom: 4 };
+        case 'BAFC': return { center: [-24.2, 137.1], zoom: 4 };
         case 'All regions':
-        default: return { center: { lat: -25.2744, lng: 133.7751 }, zoom: 4 };
+        default: return { center: [-25.2744, 133.7751], zoom: 4 };
     }
 }
 
@@ -51,10 +51,7 @@ function calculatePolygonCentroid(vertices) {
         return null;
     }
 
-    return {
-        lat: latSum / count,
-        lng: lngSum / count
-    };
+    return [latSum / count, lngSum / count];
 }
 
 function loadLocations() {
@@ -114,25 +111,122 @@ function loadLocations() {
 function initMap() {
     console.log('initMap called');
     const mapSettings = getInitialMapSettings(selectedArea);
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: mapSettings.center,
-        zoom: mapSettings.zoom
-    });
-    console.log('Map initialized');
-    console.log('Map object:', map);
+    
+    // Initialize Leaflet map
+    map = L.map('map').setView(mapSettings.center, mapSettings.zoom);
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    console.log('Leaflet map initialized');
 
-    map.addListener("click", (event) => {
+    // Add click listener
+    map.on('click', (event) => {
         if (timeLeft > 0 && roundActive) {
-            if (marker) marker.setMap(null);
-            marker = new google.maps.Marker({
-                position: event.latLng,
-                map: map
-            });
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
             document.getElementById("guess").disabled = false;
         }
     });
 
     loadLocations();
+}
+
+// Haversine distance calculation
+function calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+function distanceToSegment(point, v1, v2) {
+    console.log('distanceToSegment called with:', {
+        point: point ? { lat: point.lat, lng: point.lng } : null,
+        v1: v1 ? { lat: v1.lat, lng: v1.lng } : null,
+        v2: v2 ? { lat: v2.lat, lng: v2.lng } : null
+    });
+
+    if (!point || !v1 || !v2 || 
+        isNaN(point.lat) || isNaN(point.lng) ||
+        isNaN(v1.lat) || isNaN(v1.lng) || 
+        isNaN(v2.lat) || isNaN(v2.lng)) {
+        console.warn('Invalid coordinates in distanceToSegment, returning fallback');
+        return 95;
+    }
+
+    if (v1.lat === v2.lat && v1.lng === v2.lng) {
+        console.log('Degenerate segment, computing point-to-point distance');
+        const dist = calculateDistance(point.lat, point.lng, v1.lat, v1.lng);
+        console.log('Point-to-point distance:', dist);
+        return dist;
+    }
+
+    const A = point.lat - v1.lat;
+    const B = point.lng - v1.lng;
+    const C = v2.lat - v1.lat;
+    const D = v2.lng - v1.lng;
+
+    console.log('Projection inputs:', { A, B, C, D });
+
+    const len_sq = C * C + D * D;
+    let param = -1;
+    if (len_sq !== 0) {
+        const dot = A * C + B * D;
+        param = dot / len_sq;
+    }
+
+    console.log('Projection param:', param);
+
+    let xx, yy;
+    if (param < 0 || len_sq === 0) {
+        xx = v1.lat;
+        yy = v1.lng;
+    } else if (param > 1) {
+        xx = v2.lat;
+        yy = v2.lng;
+    } else {
+        xx = v1.lat + param * C;
+        yy = v1.lng + param * D;
+    }
+
+    console.log('Closest point:', { xx, yy });
+
+    if (isNaN(xx) || isNaN(yy)) {
+        console.warn('Invalid closest point coordinates, returning fallback:', { xx, yy });
+        return 95;
+    }
+
+    const distance = calculateDistance(point.lat, point.lng, xx, yy);
+
+    console.log('Computed distance:', distance);
+
+    if (isNaN(distance) || !isFinite(distance)) {
+        console.warn('Invalid distance computed, returning fallback:', { xx, yy });
+        return 95;
+    }
+
+    return distance;
+}
+
+// Point-in-polygon test using ray casting
+function pointInPolygon(point, vertices) {
+    let inside = false;
+    for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+        if (((vertices[i].lng > point.lng) !== (vertices[j].lng > point.lng)) &&
+            (point.lat < (vertices[j].lat - vertices[i].lat) * (point.lng - vertices[i].lng) / (vertices[j].lng - vertices[i].lng) + vertices[i].lat)) {
+            inside = !inside;
+        }
+    }
+    return inside;
 }
 
 function startNewRound() {
@@ -141,8 +235,10 @@ function startNewRound() {
         return;
     }
 
-    if (marker) marker.setMap(null);
-    marker = null;
+    if (marker) {
+        map.removeLayer(marker);
+        marker = null;
+    }
     clearInterval(timer);
     document.getElementById("result").textContent = "";
     document.getElementById("guess").style.display = "inline";
@@ -151,15 +247,14 @@ function startNewRound() {
     document.getElementById("newGame").disabled = true;
     document.getElementById("gameOver").classList.add("hidden");
 
+    // Clear actual markers
     actualMarkers.forEach(m => {
-        if (m.setMap) m.setMap(null);
-        if (m.setPaths) m.setMap(null);
+        map.removeLayer(m);
     });
     actualMarkers = [];
 
     const mapSettings = getInitialMapSettings(selectedArea);
-    map.setCenter(mapSettings.center);
-    map.setZoom(mapSettings.zoom);
+    map.setView(mapSettings.center, mapSettings.zoom);
 
     let availableLocations = locations.filter(loc => !usedLocations.includes(loc));
     if (availableLocations.length === 0) {
@@ -186,105 +281,40 @@ function startNewRound() {
     }, 1000);
 }
 
-function distanceToSegment(point, v1, v2) {
-    console.log('distanceToSegment called with:', {
-        point: point ? { lat: point.lat(), lng: point.lng() } : null,
-        v1: v1 ? { lat: v1.lat(), lng: v1.lng() } : null,
-        v2: v2 ? { lat: v2.lat(), lng: v2.lng() } : null
-    });
-
-    if (!point || !v1 || !v2 || 
-        isNaN(point.lat()) || isNaN(point.lng()) ||
-        isNaN(v1.lat()) || isNaN(v1.lng()) || 
-        isNaN(v2.lat()) || isNaN(v2.lng())) {
-        console.warn('Invalid coordinates in distanceToSegment, returning fallback');
-        return 95;
-    }
-
-    if (v1.lat() === v2.lat() && v1.lng() === v2.lng()) {
-        console.log('Degenerate segment, computing point-to-point distance');
-        const dist = google.maps.geometry.spherical.computeDistanceBetween(point, v1) / 1000;
-        console.log('Point-to-point distance:', dist);
-        return dist;
-    }
-
-    const A = point.lat() - v1.lat();
-    const B = point.lng() - v1.lng();
-    const C = v2.lat() - v1.lat();
-    const D = v2.lng() - v1.lng();
-
-    console.log('Projection inputs:', { A, B, C, D });
-
-    const len_sq = C * C + D * D;
-    let param = -1;
-    if (len_sq !== 0) {
-        const dot = A * C + B * D;
-        param = dot / len_sq;
-    }
-
-    console.log('Projection param:', param);
-
-    let xx, yy;
-    if (param < 0 || len_sq === 0) {
-        xx = v1.lat();
-        yy = v1.lng();
-    } else if (param > 1) {
-        xx = v2.lat();
-        yy = v2.lng();
-    } else {
-        xx = v1.lat() + param * C;
-        yy = v1.lng() + param * D;
-    }
-
-    console.log('Closest point:', { xx, yy });
-
-    if (isNaN(xx) || isNaN(yy)) {
-        console.warn('Invalid closest point coordinates, returning fallback:', { xx, yy });
-        return 95;
-    }
-
-    const closestPoint = new google.maps.LatLng(xx, yy);
-    const distance = google.maps.geometry.spherical.computeDistanceBetween(point, closestPoint) / 1000;
-
-    console.log('Computed distance:', distance);
-
-    if (isNaN(distance) || !isFinite(distance)) {
-        console.warn('Invalid distance computed, returning fallback:', { xx, yy });
-        return 95;
-    }
-
-    return distance;
-}
-
 function endRound() {
     let distance = null;
-
     roundActive = false;
 
     // Clear existing markers
     actualMarkers.forEach(m => {
-        if (m.setMap) m.setMap(null);
-        if (m.setPaths) m.setMap(null);
+        map.removeLayer(m);
     });
     actualMarkers = [];
 
     if (actualLocation.point) {
-        const actual = new google.maps.LatLng(actualLocation.lat1, actualLocation.long1);
-        const actualMarker = new google.maps.Marker({
-            position: actual,
-            map: map,
-            icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-        });
+        // Point location
+        const actual = [actualLocation.lat1, actualLocation.long1];
+        const actualMarker = L.marker(actual, {
+            icon: L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            })
+        }).addTo(map);
         actualMarkers.push(actualMarker);
-        map.setCenter(actual);
+        map.setView(actual, 7);
 
         if (marker) {
-            const guess = marker.getPosition();
-            console.log('Guess coordinates:', { lat: guess.lat(), lng: guess.lng() });
-            distance = google.maps.geometry.spherical.computeDistanceBetween(guess, actual) / 1000;
+            const guess = marker.getLatLng();
+            console.log('Guess coordinates:', { lat: guess.lat, lng: guess.lng });
+            distance = calculateDistance(guess.lat, guess.lng, actualLocation.lat1, actualLocation.long1);
             console.log('Point location distance:', distance);
         }
     } else {
+        // Polygon location
         const vertices = [
             { lat: actualLocation.lat1, lng: actualLocation.long1 },
             { lat: actualLocation.lat2, lng: actualLocation.long2 },
@@ -302,43 +332,44 @@ function endRound() {
         if (validVertices.length < 3) {
             console.error('Insufficient valid vertices for polygon:', validVertices);
             distance = 95;
-            map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
+            map.setView([actualLocation.lat1, actualLocation.long1], 7);
         } else {
-            const polygon = new google.maps.Polygon({
-                paths: validVertices,
-                strokeColor: "#00FF00",
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
-                fillColor: "#00FF00",
+            // Convert to Leaflet polygon format
+            const polygonCoords = validVertices.map(v => [v.lat, v.lng]);
+            const polygon = L.polygon(polygonCoords, {
+                color: '#00FF00',
+                weight: 2,
+                opacity: 1.0,
+                fillColor: '#00FF00',
                 fillOpacity: 0.3
-            });
-            polygon.setMap(map);
+            }).addTo(map);
             actualMarkers.push(polygon);
 
             const centroid = calculatePolygonCentroid(validVertices);
             if (centroid) {
-                map.setCenter(centroid);
+                map.setView(centroid, 7);
             } else {
                 console.warn('Failed to calculate centroid, falling back to first vertex');
-                map.setCenter({ lat: actualLocation.lat1, lng: actualLocation.long1 });
+                map.setView([actualLocation.lat1, actualLocation.long1], 7);
             }
 
             if (marker) {
-                const guess = marker.getPosition();
-                if (google.maps.geometry.poly.containsLocation(guess, polygon)) {
+                const guess = marker.getLatLng();
+                const guessPoint = { lat: guess.lat, lng: guess.lng };
+                
+                if (pointInPolygon(guessPoint, validVertices)) {
                     distance = 0;
                     console.log('Guess inside polygon, distance: 0');
                 } else {
-                    const v = validVertices.map(v => new google.maps.LatLng(v.lat, v.lng));
-                    console.log('LatLng vertices:', v.map(vv => ({ lat: vv.lat(), lng: vv.lng() })));
+                    console.log('Calculating distance to polygon edges');
                     const distances = [];
-                    for (let i = 0; i < v.length; i++) {
-                        const j = (i + 1) % v.length;
+                    for (let i = 0; i < validVertices.length; i++) {
+                        const j = (i + 1) % validVertices.length;
                         console.log(`Computing distance to edge ${i}-${j}:`, {
-                            v1: { lat: v[i].lat(), lng: v[i].lng() },
-                            v2: { lat: v[j].lat(), lng: v[j].lng() }
+                            v1: validVertices[i],
+                            v2: validVertices[j]
                         });
-                        const dist = distanceToSegment(guess, v[i], v[j]);
+                        const dist = distanceToSegment(guessPoint, validVertices[i], validVertices[j]);
                         console.log(`Edge ${i}-${j} distance:`, dist);
                         if (!isNaN(dist) && isFinite(dist)) {
                             distances.push(dist);
@@ -359,10 +390,9 @@ function endRound() {
         }
     }
 
-    map.setZoom(7);
     roundHistory.push({ location: actualLocation.name, distance });
 
-    document.getElementById("result").textContent = distance === null ? "Time's up! You didn’t guess." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
+    document.getElementById("result").textContent = distance === null ? "Time's up! You didn't guess." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
     document.getElementById("guess").disabled = true;
     document.getElementById("newGame").disabled = false;
     round++;
@@ -408,8 +438,7 @@ function showGameOver() {
         usedLocations = [];
         roundHistory = [];
         actualMarkers.forEach(m => {
-            if (m.setMap) m.setMap(null);
-            if (m.setPaths) m.setMap(null);
+            map.removeLayer(m);
         });
         actualMarkers = [];
         document.getElementById("gameOver").classList.add("hidden");
@@ -433,3 +462,6 @@ document.getElementById("guess").addEventListener("click", () => {
         endRound();
     }
 });
+
+// Initialize map when page loads
+document.addEventListener('DOMContentLoaded', initMap);

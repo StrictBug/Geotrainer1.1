@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0",
+    "leaflet": "^1.9.4",
     "socket.io": "^4.8.1"
   }
 }

@@ -245,20 +245,20 @@ socket.on('playerRejoined', ({ gameCode, playerName }) => {
 
 function getInitialMapSettings(area) {
     switch (area) {
-        case 'WA-S': return { center: { lat: -30.0, lng: 120.5 }, zoom: 5 };
-        case 'SA': return { center: { lat: -31.0, lng: 135.5 }, zoom: 5 };
-        case 'VIC': return { center: { lat: -37.0, lng: 144.0 }, zoom: 6 };
-        case 'TAS': return { center: { lat: -42.0, lng: 146.0 }, zoom: 7 };
-        case 'NSW-W': return { center: { lat: -32.2, lng: 144.86 }, zoom: 6 };
-        case 'NSW-E': return { center: { lat: -33.07, lng: 150.37 }, zoom: 6 };
-        case 'WA-N': return { center: { lat: -20.31, lng: 122.56 }, zoom: 5 };
-        case 'QLD-N': return { center: { lat: -18.59, lng: 143.38 }, zoom: 5 };
-        case 'QLD-S': return { center: { lat: -26.05, lng: 146.39 }, zoom: 6 };
-        case 'NT': return { center: { lat: -19.35, lng: 133.70 }, zoom: 5 };
-        case 'MAFC': return { center: { lat: -32.2, lng: 137.1 }, zoom: 4 };
-        case 'BAFC': return { center: { lat: -24.2, lng: 137.1 }, zoom: 4 };
+        case 'WA-S': return { center: [-30.0, 120.5], zoom: 5 };
+        case 'SA': return { center: [-31.0, 135.5], zoom: 5 };
+        case 'VIC': return { center: [-37.0, 144.0], zoom: 6 };
+        case 'TAS': return { center: [-42.0, 146.0], zoom: 7 };
+        case 'NSW-W': return { center: [-32.2, 144.86], zoom: 6 };
+        case 'NSW-E': return { center: [-33.07, 150.37], zoom: 6 };
+        case 'WA-N': return { center: [-20.31, 122.56], zoom: 5 };
+        case 'QLD-N': return { center: [-18.59, 143.38], zoom: 5 };
+        case 'QLD-S': return { center: [-26.05, 146.39], zoom: 6 };
+        case 'NT': return { center: [-19.35, 133.70], zoom: 5 };
+        case 'MAFC': return { center: [-32.2, 137.1], zoom: 4 };
+        case 'BAFC': return { center: [-24.2, 137.1], zoom: 4 };
         case 'All regions':
-        default: return { center: { lat: -25.2744, lng: 133.7751 }, zoom: 4 };
+        default: return { center: [-25.2744, 133.7751], zoom: 4 };
     }
 }
 
@@ -280,18 +280,43 @@ function calculatePolygonCentroid(vertices) {
         return null;
     }
 
-    return {
-        lat: latSum / count,
-        lng: lngSum / count
-    };
+    return [latSum / count, lngSum / count];
+}
+
+// Haversine distance calculation
+function calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// Point-in-polygon test using ray casting
+function pointInPolygon(point, vertices) {
+    let inside = false;
+    for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+        if (((vertices[i].lng > point.lng) !== (vertices[j].lng > point.lng)) &&
+            (point.lat < (vertices[j].lat - vertices[i].lat) * (point.lng - vertices[i].lng) / (vertices[j].lng - vertices[i].lng) + vertices[i].lat)) {
+            inside = !inside;
+        }
+    }
+    return inside;
 }
 
 function initMap() {
     const mapSettings = getInitialMapSettings(selectedArea);
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: mapSettings.center,
-        zoom: mapSettings.zoom
-    });
+    
+    // Initialize Leaflet map
+    map = L.map('map').setView(mapSettings.center, mapSettings.zoom);
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
     console.log('GameOver visibility at start:', document.getElementById('gameOver').classList.contains('hidden'));
 
@@ -300,7 +325,7 @@ function initMap() {
     const newRoundButton = document.getElementById("newRound");
     if (guessButton) {
         guessButton.onclick = () => {
-            console.log('Guess button clicked, latestPin:', latestPin ? latestPin.toJSON() : null);
+            console.log('Guess button clicked, latestPin:', latestPin ? { lat: latestPin.lat, lng: latestPin.lng } : null);
             submitGuess();
         };
         console.log('Guess button event listener attached');
@@ -317,31 +342,30 @@ function initMap() {
         console.error('New Round button not found in DOM');
     }
 
-    map.addListener("click", (event) => {
+    // Add click listener for Leaflet
+    map.on('click', (event) => {
         if (roundActive && timeLeft > 0) {
-            if (marker) marker.setMap(null);
-            marker = new google.maps.Marker({
-                position: event.latLng,
-                map: map
-            });
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
             markers.push(marker);
-            latestPin = event.latLng; // Update latest pin
+            latestPin = { lat: event.latlng.lat, lng: event.latlng.lng }; // Update latest pin
             if (hasSubmittedGuess) {
                 // Rescind previous guess if a new pin is placed
                 socket.emit('rescindGuess', { gameCode, playerName: localPlayerName, round });
                 hasSubmittedGuess = false;
-                console.log('Rescinded previous guess due to new pin at:', event.latLng.toJSON());
+                console.log('Rescinded previous guess due to new pin at:', event.latlng);
             }
             guessButton.disabled = false; // Enable Guess button
-            console.log('Marker placed at:', event.latLng.toJSON(), 'Guess button state: disabled =', guessButton.disabled, 'timeLeft =', timeLeft, 'hasSubmittedGuess =', hasSubmittedGuess);
+            console.log('Marker placed at:', event.latlng, 'Guess button state: disabled =', guessButton.disabled, 'timeLeft =', timeLeft, 'hasSubmittedGuess =', hasSubmittedGuess);
         }
     });
 }
 
 function clearMarkers() {
     markers.forEach(m => {
-        if (m.setMap) m.setMap(null);
-        if (m.setPaths) m.setMap(null);
+        map.removeLayer(m);
     });
     markers = [];
     marker = null;
@@ -364,8 +388,7 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
     document.getElementById("guess").style.display = "";
     document.getElementById("newRound").style.display = "none";
     document.getElementById("result").textContent = "";
-    map.setCenter(getInitialMapSettings(selectedArea).center);
-    map.setZoom(getInitialMapSettings(selectedArea).zoom);
+    map.setView(getInitialMapSettings(selectedArea).center, getInitialMapSettings(selectedArea).zoom);
     console.log('Guess button after newRound: display =', document.getElementById("guess").style.display || 'default', 'disabled =', document.getElementById("guess").disabled);
 });
 
@@ -373,7 +396,7 @@ socket.on('timerUpdate', (newTime) => {
     timeLeft = newTime;
     document.getElementById("timer").textContent = `Time left: ${Math.max(0, timeLeft)}s`;
     if (timeLeft <= 0 && latestPin) {
-        const guessData = { gameCode, guess: { lat: latestPin.lat(), lng: latestPin.lng() }, playerName: localPlayerName, round };
+        const guessData = { gameCode, guess: latestPin, playerName: localPlayerName, round };
         socket.emit('submitGuess', guessData);
         document.getElementById("guess").disabled = true;
         hasSubmittedGuess = true;
@@ -396,15 +419,22 @@ socket.on('roundResults', ({ round, location, results }) => {
     clearMarkers();
 
     if (location.point) {
-        const actual = new google.maps.LatLng(location.lat1, location.long1);
-        const actualMarker = new google.maps.Marker({
-            position: actual,
-            map: map,
-            icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-        });
+        // Point location
+        const actual = [location.lat1, location.long1];
+        const actualMarker = L.marker(actual, {
+            icon: L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            })
+        }).addTo(map);
         markers.push(actualMarker);
-        map.setCenter(actual);
+        map.setView(actual, 7);
     } else {
+        // Polygon location
         const vertices = [
             { lat: location.lat1, lng: location.long1 },
             { lat: location.lat2, lng: location.long2 },
@@ -418,31 +448,29 @@ socket.on('roundResults', ({ round, location, results }) => {
 
         const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
         if (validVertices.length >= 3) {
-            const polygon = new google.maps.Polygon({
-                paths: validVertices,
-                strokeColor: "#00FF00",
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
-                fillColor: "#00FF00",
+            // Convert to Leaflet polygon format
+            const polygonCoords = validVertices.map(v => [v.lat, v.lng]);
+            const polygon = L.polygon(polygonCoords, {
+                color: '#00FF00',
+                weight: 2,
+                opacity: 1.0,
+                fillColor: '#00FF00',
                 fillOpacity: 0.3
-            });
-            polygon.setMap(map);
+            }).addTo(map);
             markers.push(polygon);
 
             const centroid = calculatePolygonCentroid(validVertices);
             if (centroid) {
-                map.setCenter(centroid);
+                map.setView(centroid, 7);
             } else {
                 console.warn('Failed to calculate centroid, falling back to first vertex');
-                map.setCenter({ lat: location.lat1, lng: location.long1 });
+                map.setView([location.lat1, location.long1], 7);
             }
         } else {
             console.error('Multiplayer: Insufficient valid vertices for polygon:', validVertices);
-            map.setCenter({ lat: location.lat1, lng: location.long1 });
+            map.setView([location.lat1, location.long1], 7);
         }
     }
-
-    map.setZoom(7);
 
     // Sort results by score (highest to lowest)
     results.sort((a, b) => b.score - a.score);
@@ -452,16 +480,21 @@ socket.on('roundResults', ({ round, location, results }) => {
         const distanceText = r.distance === null ? 'No guess' : r.distance === 0 ? '0 km' : r.distance.toFixed(1) + ' km';
         resultText += `<p class="score-line">${r.name}: ${r.score} points (${distanceText})</p>`;
         if (r.guess) {
-            const playerMarker = new google.maps.Marker({
-                position: { lat: r.guess.lat, lng: r.guess.lng },
-                map: map,
-                label: r.name[0]
-            });
+            // Create player marker with first letter of name as label
+            const playerMarker = L.marker([r.guess.lat, r.guess.lng], {
+                icon: L.divIcon({
+                    className: 'player-marker',
+                    html: `<div style="background: #007cff; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${r.name[0]}</div>`,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                })
+            }).addTo(map);
             markers.push(playerMarker);
             console.log(`Displayed marker for ${r.name} at:`, r.guess);
         }
     });
     document.getElementById("result").innerHTML = resultText;
+    
     // Show "New Round" button only for host
     const newRoundButton = document.getElementById("newRound");
     newRoundButton.style.display = isHost ? "" : "none";
@@ -588,14 +621,13 @@ socket.on('gameRestarted', ({ rounds, area, players }) => {
     document.getElementById("guess").style.display = "";
     document.getElementById("result").textContent = "";
     clearMarkers();
-    map.setCenter(getInitialMapSettings(selectedArea).center);
-    map.setZoom(getInitialMapSettings(selectedArea).zoom);
+    map.setView(getInitialMapSettings(selectedArea).center, getInitialMapSettings(selectedArea).zoom);
 });
 
 function submitGuess() {
-    console.log('submitGuess called, round:', round, 'timeLeft:', timeLeft, 'roundActive:', roundActive, 'latestPin:', latestPin ? latestPin.toJSON() : null);
+    console.log('submitGuess called, round:', round, 'timeLeft:', timeLeft, 'roundActive:', roundActive, 'latestPin:', latestPin);
     if (latestPin && timeLeft > 0 && roundActive) {
-        const guessData = { gameCode, guess: { lat: latestPin.lat(), lng: latestPin.lng() }, playerName: localPlayerName, round };
+        const guessData = { gameCode, guess: latestPin, playerName: localPlayerName, round };
         socket.emit('submitGuess', guessData);
         document.getElementById("guess").disabled = true;
         hasSubmittedGuess = true;
@@ -624,4 +656,9 @@ function returnToMenu() {
     }
     gameCode = null;
     window.location.href = 'index.html';
+}
+
+// Initialize map when the multiplayer page loads
+if (window.location.pathname.includes('multiplayer.html')) {
+    document.addEventListener('DOMContentLoaded', initMap);
 }
