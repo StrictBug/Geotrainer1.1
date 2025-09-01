@@ -394,11 +394,20 @@ function endRound() {
 
     document.getElementById("result").textContent = distance === null ? "Time's up! You didn't guess." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
     document.getElementById("guess").disabled = true;
-    document.getElementById("newGame").disabled = false;
+    if (round < maxRounds) {
+        document.getElementById("newGame").disabled = false;
+    } else {
+        document.getElementById("newGame").disabled = true;
+        document.getElementById("newGame").style.display = "none";
+        document.getElementById("timer").textContent = "";
+        document.getElementById("result").textContent = "Scoreboard showing in 5 seconds...";
+    }
     round++;
 
     if (round > maxRounds) {
-        showGameOver();
+        setTimeout(() => {
+            showGameOver();
+        }, 5000);
     }
 }
 

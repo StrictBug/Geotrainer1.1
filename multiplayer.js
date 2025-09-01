@@ -516,10 +516,95 @@ socket.on('gameOver', ({ players, roundHistory }) => {
     roundActive = false;
     document.getElementById("location").textContent = "";
     document.getElementById("timer").textContent = "";
-    document.getElementById("result").textContent = "";
+    document.getElementById("result").textContent = "Scoreboard showing in 5 seconds...";
     document.getElementById("guess").style.display = "none";
     document.getElementById("newRound").style.display = "none";
-    document.getElementById("gameOver").classList.remove("hidden");
+    // Delay showing the scoreboard by 5 seconds
+    setTimeout(() => {
+        document.getElementById("result").textContent = "";
+        document.getElementById("gameOver").classList.remove("hidden");
+
+        // Validate data and handle edge cases
+        if (!players || !Array.isArray(players) || players.length === 0 || !roundHistory || !Array.isArray(roundHistory)) {
+            console.error('Invalid gameOver data:', { players, roundHistory });
+            document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: No valid game data available.</p>';
+            return;
+        }
+
+        // Calculate total scores and find winner
+        let scores;
+        let winner;
+        try {
+            scores = players.map(p => {
+                if (!p || !p.name) throw new Error('Invalid player data');
+                const playerScores = roundHistory
+                    .map(r => r.scores?.find(s => s?.name === p.name)?.score || 0);
+                const total = playerScores.reduce((sum, s) => sum + s, 0);
+                return {
+                    name: p.name,
+                    total
+                };
+            });
+
+            if (scores.length === 0) throw new Error('No valid scores calculated');
+            winner = scores.reduce((max, p) => (p.total > max.total ? p : max), scores[0]);
+        } catch (error) {
+            console.error('Error calculating scores:', error);
+            document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to calculate scores.</p>';
+            return;
+        }
+
+        // Build table HTML to match the desired layout
+        let gameOverText = `<h3>Game over, ${winner.name} wins!</h3>`;
+        gameOverText += '<table>';
+        // First row: "Score" header spanning player columns
+        gameOverText += `<tr><th class="no-border"></th><th class="no-border"></th><th colspan="${players.length}" class="distance-header">Score</th></tr>`;
+        // Second row: "Round", "Location", and player names
+        gameOverText += '<tr><th>Round</th><th>Location</th>';
+        players.forEach(p => {
+            gameOverText += `<th>${p.name || 'Unknown'}</th>`;
+        });
+        gameOverText += '</tr>';
+
+        // Round rows
+        roundHistory.forEach((round, index) => {
+            if (!round || !round.location || !round.scores) {
+                console.warn(`Invalid round data at index ${index}:`, round);
+                return;
+            }
+            gameOverText += `<tr><td>${index + 1}</td><td>${round.location}</td>`;
+            players.forEach(p => {
+                const scoreData = round.scores.find(s => s?.name === p.name);
+                const scoreText = scoreData ? scoreData.score : '0';
+                gameOverText += `<td>${scoreText}</td>`;
+            });
+            gameOverText += '</tr>';
+        });
+
+        // Total row
+        gameOverText += '<tr class="average-row"><td colspan="2" style="text-align: center;">Total</td>';
+        scores.forEach(p => {
+            gameOverText += `<td>${p.total}</td>`;
+        });
+        gameOverText += '</tr>';
+
+        gameOverText += '</table>';
+
+        console.log('GameOver HTML:', gameOverText);
+        try {
+            document.getElementById("roundSummary").innerHTML = gameOverText;
+
+            // Attach event listeners to buttons
+            const playAgainButton = document.getElementById("playAgain");
+            const backToHomeButton = document.getElementById("backToHome");
+            playAgainButton.style.display = isHost ? "" : "none"; // Only host can restart
+            playAgainButton.onclick = restartGame;
+            backToHomeButton.onclick = returnToMenu;
+        } catch (error) {
+            console.error('Error setting roundSummary:', error);
+            document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to display results.</p>';
+        }
+    }, 5000);
 
     // Validate data and handle edge cases
     if (!players || !Array.isArray(players) || players.length === 0 || !roundHistory || !Array.isArray(roundHistory)) {
