@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OGRVRTDataSource>
+    <OGRVRTLayer name="pca_taf-pca_taf">
+        <SrcDataSource relativeToVRT="1">pca_taf.csv</SrcDataSource>
+        <!--Header=False-->
+        <SrcLayer>pca_taf</SrcLayer>
+        <Field name="icao" src="icao" type="String"/>
+        <Field name="longitude" src="longitude" type="String"/>
+        <Field name="latitude" src="latitude" type="String"/>
+    </OGRVRTLayer>
+</OGRVRTDataSource>

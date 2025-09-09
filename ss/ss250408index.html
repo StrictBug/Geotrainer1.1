@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotrainer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="home-container">
+        <div class="content">
+            <h1>Geotrainer</h1>
+            <div class="options">
+                <div class="option">
+                    <label for="area">Area</label>
+                    <select id="area">
+                        <option value="All regions">All areas</option>
+                        <option value="WA-S">WA-S</option>
+                        <option value="SA">SA</option>
+                        <option value="VIC">VIC</option>
+                        <option value="TAS">TAS</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="rounds">Number of Rounds</label>
+                    <select id="rounds">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+    <script>
+        function startGame() {
+            const rounds = document.getElementById("rounds").value;
+            const area = document.getElementById("area").value;
+            window.location.href = `game.html?rounds=${rounds}&area=${area}`;
+        }
+    </script>
+</body>
+</html>

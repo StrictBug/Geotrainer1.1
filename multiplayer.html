@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotrainer Multiplayer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Geotrainer Multiplayer</h1>
+        <p id="location">Guess the location!</p>
+        <div id="round-timer">
+            <span id="round">Round: 1/15</span>
+            <span id="timer">Time left: 15s</span>
+        </div>
+        <div id="map"></div>
+        <div id="players"><span id="playerList"></span></div>
+        <div id="result"></div>
+        <button id="newRound" disabled>New Round</button>
+        <button id="guess" disabled>Guess</button>
+        <div id="gameOver" class="game-over hidden">
+            <div class="dialog-content">
+                <div id="roundSummary"></div>
+                <div class="button-container">
+                    <button id="playAgain">Play Again</button>
+                    <button id="backToHome">Back to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="multiplayer.js"></script>
+</body>
+</html>

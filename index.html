@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotrainer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="home-container">
+        <div class="content">
+            <div id="mainMenu" class="options">
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="singlePlayerButton" onclick="showSinglePlayer()">Single Player</button>
+                    <button id="multiplayerButton" onclick="showMultiplayer()">Multiplayer</button>
+                    <button id="howToPlayButton" onclick="window.location.href='howToPlay.html'">How to Play</button>
+                </div>
+            </div>
+            <div id="singlePlayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="mode-selection">
+                    <button id="mainMenuButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
+                <div class="option">
+                    <label for="sp-area">Area</label>
+                    <select id="sp-area">
+                        <option value="All regions">All areas</option>
+                        <option value="MAFC">MAFC</option>
+                        <option value="BAFC">BAFC</option>
+                        <option value="NSW-W">NSW-W</option>
+                        <option value="NSW-E">NSW-E</option>
+                        <option value="NT">NT</option>
+                        <option value="QLD-N">QLD-N</option>
+                        <option value="QLD-S">QLD-S</option>
+                        <option value="SA">SA</option>
+                        <option value="TAS">TAS</option>
+                        <option value="VIC">VIC</option>
+                        <option value="WA-S">WA-S</option>
+                        <option value="WA-N">WA-N</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="sp-rounds">Number of Rounds</label>
+                    <select id="sp-rounds">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                </div>
+                <div class="button-container">
+                    <button id="startSinglePlayer" onclick="startSinglePlayer()">Start Game</button>
+                </div>
+            </div>
+            <div id="multiplayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="mainMenuMultiplayerButton" onclick="showMainMenu()">Main Menu</button>
+                    <button id="hostGameButton" onclick="showHostForm()">Host Game</button>
+                    <button id="joinGameButton" onclick="showJoinForm()">Join Game</button>
+                </div>
+                <div id="hostForm" class="hidden">
+                    <input type="text" id="hostName" placeholder="Enter Your Name">
+                    <button onclick="hostMultiplayer()">Create Game</button>
+                </div>
+                <div id="joinForm" class="hidden">
+                    <input type="text" id="gameCode" placeholder="Enter Game Code" maxlength="6">
+                    <input type="text" id="playerName" placeholder="Enter Your Name">
+                    <p id="joinError" class="hidden"></p>
+                    <button onclick="joinMultiplayer()">Join</button>
+                </div>
+            </div>
+            <div id="lobby" class="hidden">
+                <h1>Geotrainer</h1>
+                <div class="space">
+                    <br>
+                <div class="mode-selection">
+                    <button id="mainMenuLobbyButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
+                <div class="lobby-left-right">
+                    <div class="lobby-left">
+                        <h2>Lobby</h2>
+                        <ul id="playerList"></ul>
+                    </div>
+                    <div class="lobby-right">
+                        <div id="hostSettings" class="options hidden">
+                            <div class="option">
+                                <label for="mp-area">Area</label>
+                                <select id="mp-area" onchange="updateGameSettings()">
+                                    <option value="All regions">All areas</option>
+                                    <option value="MAFC">MAFC</option>
+                                    <option value="BAFC">BAFC</option>
+                                    <option value="NSW-W">NSW-W</option>
+                                    <option value="NSW-E">NSW-E</option>
+                                    <option value="NT">NT</option>
+                                    <option value="QLD-N">QLD-N</option>
+                                    <option value="QLD-S">QLD-S</option>
+                                    <option value="SA">SA</option>
+                                    <option value="TAS">TAS</option>
+                                    <option value="VIC">VIC</option>
+                                    <option value="WA-S">WA-S</option>
+                                    <option value="WA-N">WA-N</option>
+                                </select>
+                            </div>
+                            <div class="option">
+                                <label for="mp-rounds">Number of Rounds</label>
+                                <select id="mp-rounds" onchange="updateGameSettings()">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lobby-bottom">
+                    <div class="game-code-container">
+                        <p id="lobbyCode"></p>
+                        <button id="copyCodeBtn" class="copy-btn hidden">Copy</button>
+                    </div>
+                    <p id="areaDisplay"></p>
+                    <p id="roundsDisplay"></p>
+                    <button id="startMultiplayer" onclick="startMultiplayerGame()" class="hidden">Start Game</button>
+                    <p id="errorMsg" class="hidden"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="multiplayer.js"></script>
+</body>
+</html>
