@@ -446,6 +446,9 @@ socket.on('roundResults', ({ round, location, results }) => {
         if (location.lat4 && location.long4 && !isNaN(location.lat4) && !isNaN(location.long4)) {
             vertices.push({ lat: location.lat4, lng: location.long4 });
         }
+        if (location.lat5 && location.long5 && !isNaN(location.lat5) && !isNaN(location.long5)) {
+            vertices.push({ lat: location.lat5, lng: location.long5 });
+        }
 
         console.log('Multiplayer: Polygon vertices:', vertices);
 

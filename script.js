@@ -80,7 +80,9 @@ function loadLocations() {
                     lat3: cols[7] ? parseFloat(cols[7]) : null,
                     long3: cols[8] ? parseFloat(cols[8]) : null,
                     lat4: cols[9] ? parseFloat(cols[9]) : null,
-                    long4: cols[10] ? parseFloat(cols[10]) : null
+                    long4: cols[10] ? parseFloat(cols[10]) : null,
+                    lat5: cols[11] ? parseFloat(cols[11]) : null,
+                    long5: cols[12] ? parseFloat(cols[12]) : null
                 };
             });
             if (selectedArea !== 'All regions') {
@@ -325,6 +327,9 @@ function endRound() {
         ];
         if (actualLocation.lat4 && actualLocation.long4 && !isNaN(actualLocation.lat4) && !isNaN(actualLocation.long4)) {
             vertices.push({ lat: actualLocation.lat4, lng: actualLocation.long4 });
+        }
+        if (actualLocation.lat5 && actualLocation.long5 && !isNaN(actualLocation.lat5) && !isNaN(actualLocation.long5)) {
+            vertices.push({ lat: actualLocation.lat5, lng: actualLocation.long5 });
         }
 
         console.log('Raw vertices:', vertices);

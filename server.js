@@ -30,7 +30,9 @@ function loadLocations() {
                 lat3: cols[7] ? parseFloat(cols[7]) : null,
                 long3: cols[8] ? parseFloat(cols[8]) : null,
                 lat4: cols[9] ? parseFloat(cols[9]) : null,
-                long4: cols[10] ? parseFloat(cols[10]) : null
+                long4: cols[10] ? parseFloat(cols[10]) : null,
+                lat5: cols[11] ? parseFloat(cols[11]) : null,
+                long5: cols[12] ? parseFloat(cols[12]) : null
             };
         });
         console.log(`Loaded ${locations.length} locations`);
@@ -245,6 +247,10 @@ function endRound(gameCode) {
                 if (game.currentLocation.lat4 && game.currentLocation.long4 && 
                     !isNaN(game.currentLocation.lat4) && !isNaN(game.currentLocation.long4)) {
                     vertices.push({ lat: game.currentLocation.lat4, lng: game.currentLocation.long4 });
+                }
+                if (game.currentLocation.lat5 && game.currentLocation.long5 && 
+                    !isNaN(game.currentLocation.lat5) && !isNaN(game.currentLocation.long5)) {
+                    vertices.push({ lat: game.currentLocation.lat5, lng: game.currentLocation.long5 });
                 }
 
                 console.log('Server: Guess coordinates:', guess);
