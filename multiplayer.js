@@ -311,12 +311,12 @@ function initMap() {
     const mapSettings = getInitialMapSettings(selectedArea);
     
     // Initialize Leaflet map with constrained zoom matching local tiles
-    map = L.map('map', { minZoom: 4, maxZoom: 8 }).setView(mapSettings.center, mapSettings.zoom);
+    map = L.map('map', { minZoom: 4, maxZoom: 9 }).setView(mapSettings.center, mapSettings.zoom);
 
     // Add custom topographic tiles (EPSG:3857)
     L.tileLayer('/topo/tiles/{z}/{x}/{y}.png', {
         minZoom: 4,
-        maxZoom: 8,
+        maxZoom: 9,
         noWrap: true,
         attribution: 'Custom topo tiles'
     }).addTo(map);
