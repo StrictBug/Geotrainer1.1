@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geotrainer</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="multiplayer-centering.css">
 </head>
 <body>
     <div class="home-container">
@@ -22,36 +23,166 @@
                 <div class="mode-selection">
                     <button id="mainMenuButton" onclick="showMainMenu()">Main Menu</button>
                 </div>
-                <div class="option">
-                    <label for="sp-area">Area</label>
-                    <select id="sp-area">
-                        <option value="All regions">All areas</option>
-                        <option value="MAFC">MAFC</option>
-                        <option value="BAFC">BAFC</option>
-                        <option value="NSW-W">NSW-W</option>
-                        <option value="NSW-E">NSW-E</option>
-                        <option value="NT">NT</option>
-                        <option value="QLD-N">QLD-N</option>
-                        <option value="QLD-S">QLD-S</option>
-                        <option value="SA">SA</option>
-                        <option value="TAS">TAS</option>
-                        <option value="VIC">VIC</option>
-                        <option value="WA-S">WA-S</option>
-                        <option value="WA-N">WA-N</option>
-                    </select>
-                </div>
-                <div class="option">
-                    <label for="sp-rounds">Number of Rounds</label>
-                    <select id="sp-rounds">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                    </select>
-                </div>
-                <div class="button-container">
+                <div class="option-column" style="display: flex; flex-direction: column; align-items: center; max-width: 350px; margin: 0 auto; gap: 16px;">
+                    <div class="option">
+                        <label for="sp-area">Area</label>
+                        <select id="sp-area">
+                            <option value="All regions">All regions</option>
+                            <option value="MAFC">MAFC</option>
+                            <option value="BAFC">BAFC</option>
+                            <option value="WA-S">WA-S</option>
+                            <option value="SA">SA</option>
+                            <option value="VIC">VIC</option>
+                            <option value="TAS">TAS</option>
+                            <option value="NSW-W">NSW-W</option>
+                            <option value="NSW-E">NSW-E</option>
+                            <option value="WA-N">WA-N</option>
+                            <option value="QLD-N">QLD-N</option>
+                            <option value="QLD-S">QLD-S</option>
+                            <option value="NT">NT</option>
+                        </select>
+                    </div>
+                    <div class="option">
+                        <label for="sp-locationType">Location type</label>
+                        <select id="sp-locationType">
+                            <option value="all">All types</option>
+                            <option value="Forecast district">Forecast districts</option>
+                            <option value="Geographical feature">Geographical features</option>
+                            <option value="TAF">TAF points</option>
+                            <option value="Non TAF">Non-TAF points</option>
+                        </select>
+                    </div>
+                    <div class="option">
+                        <label for="sp-roundLength">Round length</label>
+                        <select id="sp-roundLength">
+                            <option value="5">5 seconds</option>
+                            <option value="10">10 seconds</option>
+                            <option value="15" selected>15 seconds</option>
+                        </select>
+                    </div>
+                    <div class="option">
+                        <label for="sp-rounds">Number of Rounds</label>
+                        <select id="sp-rounds">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
                     <button id="startSinglePlayer" onclick="startSinglePlayer()">Start Game</button>
+                </div>
+            </div>
+            <div id="multiplayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="mainMenuMultiplayerButton" onclick="showMainMenu()">Main Menu</button>
+                    <button id="hostGameButton" onclick="showHostForm()">Host Game</button>
+                    <button id="joinGameButton" onclick="showJoinForm()">Join Game</button>
+                </div>
+                <div id="hostForm" class="hidden">
+                    <input type="text" id="hostName" placeholder="Enter Your Name">
+                    <button onclick="hostMultiplayer()">Create Game</button>
+                </div>
+                <div id="joinForm" class="hidden">
+                    <input type="text" id="gameCode" placeholder="Enter Game Code" maxlength="6">
+                    <input type="text" id="playerName" placeholder="Enter Your Name">
+                    <p id="joinError" class="hidden"></p>
+                    <button onclick="joinMultiplayer()">Join</button>
+                </div>
+            </div>
+            <div id="lobby" class="hidden">
+                <h1>Geotrainer</h1>
+                <div class="space">
+                    <br>
+                <div class="mode-selection">
+                    <button id="mainMenuLobbyButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
+                <div class="lobby-left-right">
+                    <div class="lobby-left">
+                        <h2>Lobby</h2>
+                        <ul id="playerList"></ul>
+                        <!-- Game settings for non-hosts only -->
+                        <div id="nonHostSettings" class="non-host-lobby hidden" style="margin-top: 20px;">
+                            <h2>Game Settings</h2>
+                            <p id="nh-areaRow">Area: <span id="nh-areaDisplay"></span></p>
+                            <p id="nh-locationTypeRow">Location type: <span id="nh-locationTypeDisplay"></span></p>
+                            <p id="nh-roundLengthRow">Round Length: <span id="nh-roundLengthDisplay"></span></p>
+                            <p id="nh-roundsRow">Number of Rounds: <span id="nh-roundsDisplay"></span></p>
+                        </div>
+                    </div>
+                    <div class="lobby-right">
+                        <div id="hostSettings" class="options hidden">
+                            <div class="option">
+                                <label for="mp-area">Area</label>
+                                <select id="mp-area" onchange="updateGameSettings()">
+                                    <option value="All regions">All areas</option>
+                                    <option value="MAFC">MAFC</option>
+                                    <option value="BAFC">BAFC</option>
+                                    <option value="NSW-W">NSW-W</option>
+                                    <option value="NSW-E">NSW-E</option>
+                                    <option value="NT">NT</option>
+                                    <option value="QLD-N">QLD-N</option>
+                                    <option value="QLD-S">QLD-S</option>
+                                    <option value="SA">SA</option>
+                                    <option value="TAS">TAS</option>
+                                    <option value="VIC">VIC</option>
+                                    <option value="WA-S">WA-S</option>
+                                    <option value="WA-N">WA-N</option>
+                                </select>
+                                </div>
+                                <div class="option">
+                                    <label for="mp-locationType">Location type</label>
+                                    <select id="mp-locationType" onchange="updateGameSettings()">
+                                        <option value="all">All types</option>
+                                        <option value="Forecast district">Forecast districts</option>
+                                        <option value="Geographical feature">Geographical features</option>
+                                        <option value="TAF">TAF points</option>
+                                        <option value="Non TAF">Non-TAF points</option>
+                                    </select>
+                                </div>
+                                <div class="option">
+                                    <label for="mp-roundLength">Round length</label>
+                                    <select id="mp-roundLength" onchange="updateGameSettings()">
+                                        <option value="5">5 seconds</option>
+                                        <option value="10">10 seconds</option>
+                                        <option value="15" selected>15 seconds</option>
+                                    </select>
+                                </div>
+                            <div class="option">
+                                <label for="mp-rounds">Number of Rounds</label>
+                                <select id="mp-rounds" onchange="updateGameSettings()">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lobby-bottom">
+                    <div class="game-code-container">
+                        <p id="lobbyCode"></p>
+                        <button id="copyCodeBtn" class="copy-btn hidden">Copy</button>
+                    </div>
+                    <button id="startMultiplayer" onclick="startMultiplayerGame()" class="hidden">Start Game</button>
+                    <p id="errorMsg" class="hidden"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function startSinglePlayer() {
+        const area = document.getElementById('sp-area').value;
+        const rounds = document.getElementById('sp-rounds').value;
+        const locationType = document.getElementById('sp-locationType').value;
+        const roundLength = parseInt(document.getElementById('sp-roundLength').value, 10);
+        console.log('Single Player Start: roundLength', roundLength);
+        window.location.href = `game.html?area=${encodeURIComponent(area)}&rounds=${encodeURIComponent(rounds)}&locationType=${encodeURIComponent(locationType)}&roundLength=${roundLength}`;
+    }
+    </script>
                 </div>
             </div>
             <div id="multiplayerOptions" class="options hidden">
@@ -103,7 +234,17 @@
                                     <option value="WA-S">WA-S</option>
                                     <option value="WA-N">WA-N</option>
                                 </select>
-                            </div>
+                                </div>
+                                <div class="option">
+                                    <label for="mp-locationType">Location type:</label>
+                                    <select id="mp-locationType" onchange="updateGameSettings()">
+                                        <option value="all">All types</option>
+                                        <option value="Forecast district">Forecast districts</option>
+                                        <option value="Geographical feature">Geographical features</option>
+                                        <option value="TAF">TAF points</option>
+                                        <option value="Non TAF">Non-TAF points</option>
+                                    </select>
+                                </div>
                             <div class="option">
                                 <label for="mp-rounds">Number of Rounds</label>
                                 <select id="mp-rounds" onchange="updateGameSettings()">
@@ -124,6 +265,7 @@
                     </div>
                     <p id="areaDisplay"></p>
                     <p id="roundsDisplay"></p>
+                    <p id="locationTypeDisplay"></p>
                     <button id="startMultiplayer" onclick="startMultiplayerGame()" class="hidden">Start Game</button>
                     <p id="errorMsg" class="hidden"></p>
                 </div>
@@ -133,4 +275,14 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="multiplayer.js"></script>
 </body>
+    <script>
+    function startSinglePlayer() {
+        const area = document.getElementById('sp-area').value;
+        const rounds = document.getElementById('sp-rounds').value;
+        const locationType = document.getElementById('sp-locationType').value;
+        const roundLength = parseInt(document.getElementById('sp-roundLength').value, 10);
+        console.log('Single Player Start: roundLength', roundLength);
+        window.location.href = `game.html?area=${encodeURIComponent(area)}&rounds=${encodeURIComponent(rounds)}&locationType=${encodeURIComponent(locationType)}&roundLength=${roundLength}`;
+    }
+    </script>
 </html>

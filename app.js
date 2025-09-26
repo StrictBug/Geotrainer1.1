@@ -69,19 +69,47 @@ function initMap() {
 
 // Load locations from CSV
 async function loadLocations() {
-    const response = await fetch('locations.csv');
-    const text = await response.text();
-    const rows = text.split('\n').slice(1); // Skip header
-    locations = rows.map(row => {
-        const [name, area, point, lat1, long1, lat2, long2, lat3, long3, lat4, long4] = row.split(',');
-        const coords = [
-            { lat: parseFloat(lat1), lng: parseFloat(long1) },
-            lat2 ? { lat: parseFloat(lat2), lng: parseFloat(long2) } : null,
-            lat3 ? { lat: parseFloat(lat3), lng: parseFloat(long3) } : null,
-            lat4 ? { lat: parseFloat(lat4), lng: parseFloat(long4) } : null
-        ].filter(c => c !== null);
-        return { name, area, point, lat1: parseFloat(lat1), long1: parseFloat(long1), coords };
+    // Fetch point locations from points.csv
+    const pointsRes = await fetch('points.csv');
+    const pointsText = await pointsRes.text();
+    const pointRows = pointsText.split('\n').slice(1); // Skip header
+    const pointLocations = pointRows.map(row => {
+        const [name, area, lat, lng] = row.split(',');
+        return {
+            type: 'point',
+            name: name.trim(),
+            area: area.trim(),
+            lat: parseFloat(lat),
+            lng: parseFloat(lng)
+        };
     });
+
+    // Fetch area locations from areas.geojson
+    const areaRes = await fetch('areas.geojson');
+    const areaGeojson = await areaRes.json();
+    const areaLocations = [];
+    if (areaGeojson.features && Array.isArray(areaGeojson.features)) {
+        areaGeojson.features.forEach(feature => {
+            if (feature.geometry && feature.geometry.type === 'Polygon') {
+                const coords = feature.geometry.coordinates[0].map(([lng, lat]) => ({ lat, lng }));
+                let latSum = 0, lngSum = 0;
+                coords.forEach(c => { latSum += c.lat; lngSum += c.lng; });
+                const centroid = { lat: latSum / coords.length, lng: lngSum / coords.length };
+                areaLocations.push({
+                    type: 'area',
+                    name: feature.properties?.NAME || 'Unknown Area',
+                    area: feature.properties?.AREA || 'Unknown',
+                    polygon: coords,
+                    centroid
+                });
+            }
+        });
+    }
+
+    // Merge both datasets
+    locations = [...pointLocations, ...areaLocations];
+
+    // Filter by area if needed
     const urlParams = new URLSearchParams(window.location.search);
     const area = urlParams.get('area') || 'All regions';
     if (area !== 'All regions') {

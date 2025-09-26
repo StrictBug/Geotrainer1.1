@@ -69,7 +69,8 @@ function showMultiplayer() {
 function startSinglePlayer() {
     const rounds = document.getElementById('sp-rounds').value;
     const area = document.getElementById('sp-area').value;
-    window.location.href = `game.html?rounds=${rounds}&area=${area}`;
+    const locationType = document.getElementById('sp-locationType').value;
+    window.location.href = `game.html?rounds=${rounds}&area=${area}&locationType=${encodeURIComponent(locationType)}`;
 }
 
 function showHostForm() {
@@ -84,14 +85,16 @@ function showJoinForm() {
 }
 
 function hostMultiplayer() {
-    const rounds = document.getElementById('sp-rounds').value;
-    const area = document.getElementById('sp-area').value;
+    const rounds = document.getElementById('mp-rounds').value;
+    const area = document.getElementById('mp-area').value;
+    const locationType = document.getElementById('mp-locationType').value;
+    const roundLength = document.getElementById('mp-roundLength').value;
     const hostNameInput = document.getElementById('hostName').value.trim();
     if (hostNameInput) {
         localPlayerName = hostNameInput;
         hostName = hostNameInput;
         isHost = true;
-        socket.emit('hostGame', { rounds: parseInt(rounds), area, hostName: hostNameInput });
+        socket.emit('hostGame', { rounds: parseInt(rounds), area, locationType, roundLength: parseInt(roundLength), hostName: hostNameInput });
         showLobby();
         const playerList = document.getElementById('playerList');
         playerList.innerHTML = '';
@@ -127,6 +130,7 @@ function showLobby() {
     } else {
         document.getElementById('hostSettings').classList.add('hidden');
         document.getElementById('startMultiplayer').classList.add('hidden');
+        document.getElementById('nonHostSettings').classList.remove('hidden');
         lobbyLeft.classList.add('non-host-lobby');
     }
 }
@@ -135,12 +139,22 @@ function updateGameSettings() {
     if (!isHost) return;
     const rounds = document.getElementById('mp-rounds').value;
     const area = document.getElementById('mp-area').value;
-    socket.emit('updateSettings', { gameCode, rounds: parseInt(rounds), area });
+    const locationType = document.getElementById('mp-locationType').value;
+    const roundLength = document.getElementById('mp-roundLength').value;
+    socket.emit('updateSettings', { gameCode, rounds: parseInt(rounds), area, locationType, roundLength: parseInt(roundLength) });
 }
 
 socket.on('gameHosted', (code) => {
     gameCode = code;
     updateGameCodeDisplay(code);
+});
+
+socket.on('settingsUpdated', (settings) => {
+    if (!isHost) {
+        document.getElementById('nh-areaDisplay').textContent = settings.area;
+        document.getElementById('nh-locationTypeDisplay').textContent = settings.locationType;
+        document.getElementById('nh-roundsDisplay').textContent = settings.rounds;
+    }
 });
 
 socket.on('playerList', (players) => {
@@ -162,12 +176,20 @@ socket.on('playerList', (players) => {
     }
 });
 
-socket.on('settingsUpdated', ({ rounds, area }) => {
+socket.on('settingsUpdated', ({ rounds, area, locationType, roundLength }) => {
     maxRounds = rounds;
     selectedArea = area;
+    selectedLocationType = locationType || 'all';
+    selectedRoundLength = roundLength || 15;
     const displayArea = area === 'All regions' ? 'All areas' : area;
-    document.getElementById('areaDisplay').textContent = `Area: ${displayArea}`;
-    document.getElementById('roundsDisplay').textContent = `Rounds: ${rounds}`;
+    
+    // Update displays if they exist (handles both game and lobby views)
+    if (document.getElementById('nh-areaDisplay')) {
+        document.getElementById('nh-areaDisplay').textContent = displayArea;
+        document.getElementById('nh-roundsDisplay').textContent = rounds;
+        document.getElementById('nh-locationTypeDisplay').textContent = selectedLocationType === 'all' ? 'All types' : selectedLocationType;
+        document.getElementById('nh-roundLengthDisplay').textContent = roundLength + ' seconds';
+    }
 });
 
 socket.on('updateGameCode', (code) => {
@@ -189,14 +211,15 @@ function startMultiplayerGame() {
     socket.emit('startGame', gameCode);
 }
 
-socket.on('gameStarted', ({ rounds, area, players }) => {
+socket.on('gameStarted', ({ rounds, area, locationType, players }) => {
     maxRounds = rounds;
     selectedArea = area;
+    selectedLocationType = locationType;
     if (!hostName && players.length > 0) {
         hostName = players[0].name;
         console.log('Set hostName from gameStarted:', hostName);
     }
-    window.location.href = `multiplayer.html?gameCode=${gameCode}&rounds=${rounds}&area=${area}&playerName=${encodeURIComponent(localPlayerName)}&hostName=${encodeURIComponent(hostName)}`;
+    window.location.href = `multiplayer.html?gameCode=${gameCode}&rounds=${rounds}&area=${area}&locationType=${locationType || 'all'}&playerName=${encodeURIComponent(localPlayerName)}&hostName=${encodeURIComponent(hostName)}`;
 });
 
 window.addEventListener('unload', () => {
@@ -231,6 +254,7 @@ const urlParams = new URLSearchParams(window.location.search);
 gameCode = urlParams.get('gameCode');
 maxRounds = parseInt(urlParams.get('rounds')) || 15;
 selectedArea = urlParams.get('area') || 'All regions';
+selectedLocationType = urlParams.get('locationType') || 'all';
 localPlayerName = decodeURIComponent(urlParams.get('playerName') || '');
 hostName = decodeURIComponent(urlParams.get('hostName') || '');
 isHost = localPlayerName === hostName;
@@ -284,6 +308,41 @@ function calculatePolygonCentroid(vertices) {
 }
 
 // Haversine distance calculation
+function calculateAreaBounds(polygons) {
+    let minLat = Infinity;
+    let maxLat = -Infinity;
+    let minLng = Infinity;
+    let maxLng = -Infinity;
+
+    polygons.forEach(polygon => {
+        polygon.forEach(point => {
+            if (!isNaN(point.lat) && !isNaN(point.lng)) {
+                minLat = Math.min(minLat, point.lat);
+                maxLat = Math.max(maxLat, point.lat);
+                minLng = Math.min(minLng, point.lng);
+                maxLng = Math.max(maxLng, point.lng);
+            }
+        });
+    });
+
+    return {
+        minLat, maxLat, minLng, maxLng,
+        latSpan: maxLat - minLat,
+        lngSpan: maxLng - minLng
+    };
+}
+
+function calculateAppropriateZoom(bounds) {
+    // These values are tuned for Australian geography
+    const LAT_THRESHOLD = 2; // Degrees of latitude span
+    const LNG_THRESHOLD = 2; // Degrees of longitude span
+    
+    if (bounds.latSpan > LAT_THRESHOLD || bounds.lngSpan > LNG_THRESHOLD) {
+        return 6; // Larger areas get zoom level 6
+    }
+    return 7; // Smaller areas get zoom level 7
+}
+
 function calculateDistance(lat1, lng1, lat2, lng2) {
     const R = 6371; // Earth's radius in km
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -421,9 +480,9 @@ socket.on('roundResults', ({ round, location, results }) => {
     // Clear existing markers
     clearMarkers();
 
-    if (location.point) {
+    if (location.type === 'point') {
         // Point location
-        const actual = [location.lat1, location.long1];
+        const actual = [location.lat, location.lng];
         const actualMarker = L.marker(actual, {
             icon: L.icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -436,45 +495,39 @@ socket.on('roundResults', ({ round, location, results }) => {
         }).addTo(map);
         markers.push(actualMarker);
         map.setView(actual, 7);
-    } else {
-        // Polygon location
-        const vertices = [
-            { lat: location.lat1, lng: location.long1 },
-            { lat: location.lat2, lng: location.long2 },
-            { lat: location.lat3, lng: location.long3 }
-        ];
-        if (location.lat4 && location.long4 && !isNaN(location.lat4) && !isNaN(location.long4)) {
-            vertices.push({ lat: location.lat4, lng: location.long4 });
-        }
-        if (location.lat5 && location.long5 && !isNaN(location.lat5) && !isNaN(location.long5)) {
-            vertices.push({ lat: location.lat5, lng: location.long5 });
-        }
+    } else if (location.type === 'area') {
+        // Area location
+        const style = {
+            color: '#00FF00',
+            weight: 2,
+            opacity: 1.0,
+            fillColor: '#00FF00',
+            fillOpacity: 0.3
+        };
 
-        console.log('Multiplayer: Polygon vertices:', vertices);
-
-        const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
-        if (validVertices.length >= 3) {
-            // Convert to Leaflet polygon format
-            const polygonCoords = validVertices.map(v => [v.lat, v.lng]);
-            const polygon = L.polygon(polygonCoords, {
-                color: '#00FF00',
-                weight: 2,
-                opacity: 1.0,
-                fillColor: '#00FF00',
-                fillOpacity: 0.3
-            }).addTo(map);
-            markers.push(polygon);
-
-            const centroid = calculatePolygonCentroid(validVertices);
-            if (centroid) {
-                map.setView(centroid, 7);
-            } else {
-                console.warn('Failed to calculate centroid, falling back to first vertex');
-                map.setView([location.lat1, location.long1], 7);
+        // Use polygonParts if available (for multi-polygons), otherwise use single polygon
+        const parts = location.isMultiPolygon ? location.polygonParts : [location.polygon];
+        
+        // Create a separate polygon for each part
+        parts.forEach(polygonCoords => {
+            if (polygonCoords && polygonCoords.length >= 3) {
+                const leafletCoords = polygonCoords.map(v => [v.lat, v.lng]);
+                const polygon = L.polygon(leafletCoords, style).addTo(map);
+                markers.push(polygon);
             }
+        });
+
+        // Calculate appropriate zoom level based on area size
+        const bounds = calculateAreaBounds(parts);
+        const zoomLevel = calculateAppropriateZoom(bounds);
+
+        if (location.centroid && !isNaN(location.centroid.lat) && !isNaN(location.centroid.lng)) {
+            map.setView([location.centroid.lat, location.centroid.lng], zoomLevel);
+        } else if (parts[0] && parts[0].length > 0) {
+            map.setView([parts[0][0].lat, parts[0][0].lng], zoomLevel);
         } else {
-            console.error('Multiplayer: Insufficient valid vertices for polygon:', validVertices);
-            map.setView([location.lat1, location.long1], 7);
+            console.error('Multiplayer: Invalid area coordinates:', parts);
+            map.setView(getInitialMapSettings(selectedArea).center, getInitialMapSettings(selectedArea).zoom);
         }
     }
 
@@ -751,5 +804,55 @@ function returnToMenu() {
 
 // Initialize map when the multiplayer page loads
 if (window.location.pathname.includes('multiplayer.html')) {
-    document.addEventListener('DOMContentLoaded', initMap);
+    document.addEventListener('DOMContentLoaded', async () => {
+        await initMap();
+        // Fetch point and area locations, merge
+        const pointsRes = await fetch('points.csv');
+        const pointsText = await pointsRes.text();
+        const pointRows = pointsText.split('\n').slice(1);
+        const pointLocations = pointRows.map(row => {
+            const [name, area, type, lat, lng] = row.split(',');
+            return {
+                type: 'point',
+                name: name.trim(),
+                area: area.trim(),
+                pointType: type ? type.trim() : undefined,
+                lat: parseFloat(lat),
+                lng: parseFloat(lng)
+            };
+        });
+        const areaRes = await fetch('areas.geojson');
+        const areaGeojson = await areaRes.json();
+        const areaLocations = [];
+        if (areaGeojson.features && Array.isArray(areaGeojson.features)) {
+            areaGeojson.features.forEach(feature => {
+                if (feature.geometry && (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon')) {
+                    let coords = [];
+                    if (feature.geometry.type === 'Polygon') {
+                        coords = feature.geometry.coordinates[0].map(([lng, lat]) => ({ lat, lng }));
+                    } else if (feature.geometry.type === 'MultiPolygon') {
+                        // Flatten all rings into a single array of vertices
+                        feature.geometry.coordinates.forEach(polygon => {
+                            polygon[0].forEach(([lng, lat]) => {
+                                coords.push({ lat, lng });
+                            });
+                        });
+                    }
+                    let latSum = 0, lngSum = 0;
+                    coords.forEach(c => { latSum += c.lat; lngSum += c.lng; });
+                    const centroid = coords.length > 0 ? { lat: latSum / coords.length, lng: lngSum / coords.length } : { lat: 0, lng: 0 };
+                    areaLocations.push({
+                        type: 'area',
+                        name: feature.properties?.NAME || 'Unknown Area',
+                        area: feature.properties?.AREA || feature.properties?.GAF_AREA || 'Unknown',
+                        areaType: feature.properties?.TYPE || 'Unknown',
+                        polygon: coords,
+                        centroid
+                    });
+                }
+            });
+        }
+        window.locations = [...pointLocations, ...areaLocations];
+        // ...existing code...
+    });
 }

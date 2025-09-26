@@ -14,30 +14,71 @@ const games = {};
 let locations = [];
 
 function loadLocations() {
+    locations = [];
+    // Load point locations from points.csv
     try {
-        const data = fs.readFileSync(path.join(__dirname, 'locations.csv'), 'utf8');
+        const data = fs.readFileSync(path.join(__dirname, 'points.csv'), 'utf8');
         const rows = data.trim().split('\n');
-        locations = rows.slice(1).map(row => {
+        locations.push(...rows.slice(1).map(row => {
             const cols = row.split(',');
             return {
+                type: 'point',
                 name: cols[0].trim(),
                 area: cols[1].trim(),
-                point: cols[2].trim() === 'Y',
-                lat1: parseFloat(cols[3]),
-                long1: parseFloat(cols[4]),
-                lat2: cols[5] ? parseFloat(cols[5]) : null,
-                long2: cols[6] ? parseFloat(cols[6]) : null,
-                lat3: cols[7] ? parseFloat(cols[7]) : null,
-                long3: cols[8] ? parseFloat(cols[8]) : null,
-                lat4: cols[9] ? parseFloat(cols[9]) : null,
-                long4: cols[10] ? parseFloat(cols[10]) : null,
-                lat5: cols[11] ? parseFloat(cols[11]) : null,
-                long5: cols[12] ? parseFloat(cols[12]) : null
+                pointType: cols[2] ? cols[2].trim() : undefined,
+                lat: parseFloat(cols[3]),
+                lng: parseFloat(cols[4])
             };
-        });
-        console.log(`Loaded ${locations.length} locations`);
+        }));
+        console.log(`Loaded ${rows.length - 1} point locations from points.csv`);
     } catch (error) {
-        console.error('Error loading locations.csv:', error);
+        console.error('Error loading points.csv:', error);
+    }
+
+    // Load area locations from areas.geojson
+    try {
+        const geojson = JSON.parse(fs.readFileSync(path.join(__dirname, 'areas.geojson'), 'utf8'));
+        if (geojson.features && Array.isArray(geojson.features)) {
+            geojson.features.forEach(feature => {
+                if (feature.geometry && (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon')) {
+                    let parts = [];
+                    let allCoords = [];
+                    
+                    if (feature.geometry.type === 'Polygon') {
+                        // Single polygon case
+                        const coords = feature.geometry.coordinates[0].map(([lng, lat]) => ({ lat, lng }));
+                        parts.push(coords);
+                        allCoords = coords;
+                    } else if (feature.geometry.type === 'MultiPolygon') {
+                        // Handle each polygon part separately
+                        feature.geometry.coordinates.forEach(polygon => {
+                            const coords = polygon[0].map(([lng, lat]) => ({ lat, lng }));
+                            parts.push(coords);
+                            allCoords.push(...coords);
+                        });
+                    }
+
+                    // Calculate centroid from all coordinates
+                    let latSum = 0, lngSum = 0;
+                    allCoords.forEach(c => { latSum += c.lat; lngSum += c.lng; });
+                    const centroid = allCoords.length > 0 ? { lat: latSum / allCoords.length, lng: lngSum / allCoords.length } : { lat: 0, lng: 0 };
+                    
+                    locations.push({
+                        type: 'area',
+                        name: feature.properties?.NAME || 'Unknown Area',
+                        area: feature.properties?.AREA || feature.properties?.GAF_AREA || 'Unknown',
+                        areaType: feature.properties?.TYPE || 'Unknown',
+                        polygon: parts[0], // Keep original polygon for compatibility
+                        polygonParts: parts, // Store all parts for multi-polygon rendering
+                        isMultiPolygon: feature.geometry.type === 'MultiPolygon',
+                        centroid
+                    });
+                }
+            });
+            console.log(`Loaded ${geojson.features.length} area locations from areas.geojson`);
+        }
+    } catch (error) {
+        console.error('Error loading areas.geojson:', error);
     }
 }
 
@@ -59,7 +100,27 @@ function startRound(gameCode) {
 
     game.round = (game.round || 0) + 1;
     const area = game.settings.area;
+    const locationType = game.settings.locationType || 'all';
     let availableLocations = locations.filter(loc => !game.usedLocations?.includes(loc));
+
+    // Filter by location type first
+    if (locationType !== 'all') {
+        availableLocations = availableLocations.filter(loc => {
+            if (loc.type === 'point') {
+                // Handle point location types
+                if (locationType === 'TAF') return loc.pointType === 'TAF';
+                if (locationType === 'Non TAF') return loc.pointType === 'Non TAF';
+                if (locationType === 'Forecast district') return loc.pointType === 'Forecast district';
+                if (locationType === 'Geographical feature') return loc.pointType === 'Geographical feature';
+            } else if (loc.type === 'area') {
+                // Handle area location types
+                if (locationType === 'Forecast district') return loc.areaType === 'Forecast district';
+            }
+            return false;
+        });
+    }
+
+    // Then filter by area
     if (area !== 'All regions') {
         if (area === 'MAFC') {
             availableLocations = availableLocations.filter(loc => 
@@ -72,6 +133,21 @@ function startRound(gameCode) {
         } else {
             availableLocations = availableLocations.filter(loc => loc.area === area);
         }
+    }
+    // Filter by location type
+    if (locationType && locationType !== 'all') {
+        availableLocations = availableLocations.filter(loc => {
+            if (locationType === 'Forecast district') {
+                return loc.type === 'area' && loc.areaType === 'Forecast district';
+            } else if (locationType === 'Geographical feature') {
+                return loc.type === 'area' && loc.areaType === 'Geographical feature';
+            } else if (locationType === 'TAF') {
+                return loc.type === 'point' && loc.pointType === 'TAF';
+            } else if (locationType === 'Non TAF') {
+                return loc.type === 'point' && loc.pointType === 'Non TAF';
+            }
+            return false;
+        });
     }
     if (availableLocations.length === 0) {
         game.usedLocations = [];
@@ -101,10 +177,10 @@ function startRound(gameCode) {
     game.usedLocations.push(location);
     game.currentLocation = location;
     game.guesses = {};
-    game.timeLeft = 15;
+    game.timeLeft = game.settings.roundLength || 15;
     game.roundEnded = false;
 
-    console.log(`Starting round ${game.round} in ${gameCode}: ${location.name}`);
+    console.log(`Starting round ${game.round} in ${gameCode}: ${location.name} with ${game.timeLeft}s timer`);
     io.to(gameCode).emit('newRound', {
         round: game.round,
         maxRounds: game.settings.rounds,
@@ -235,50 +311,50 @@ function endRound(gameCode) {
         let distance = null;
         let score = 0;
         if (guess) {
-            if (game.currentLocation.point) {
-                const actual = { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 };
+            if (game.currentLocation.type === 'point') {
+                const actual = { lat: game.currentLocation.lat, lng: game.currentLocation.lng };
                 distance = haversineDistance(guess, actual);
-            } else {
-                const vertices = [
-                    { lat: game.currentLocation.lat1, lng: game.currentLocation.long1 },
-                    { lat: game.currentLocation.lat2, lng: game.currentLocation.long2 },
-                    { lat: game.currentLocation.lat3, lng: game.currentLocation.long3 }
-                ];
-                if (game.currentLocation.lat4 && game.currentLocation.long4 && 
-                    !isNaN(game.currentLocation.lat4) && !isNaN(game.currentLocation.long4)) {
-                    vertices.push({ lat: game.currentLocation.lat4, lng: game.currentLocation.long4 });
-                }
-                if (game.currentLocation.lat5 && game.currentLocation.long5 && 
-                    !isNaN(game.currentLocation.lat5) && !isNaN(game.currentLocation.long5)) {
-                    vertices.push({ lat: game.currentLocation.lat5, lng: game.currentLocation.long5 });
-                }
+            } else if (game.currentLocation.type === 'area') {
+                // Get polygon parts - either from multi-polygon or single polygon
+                const parts = game.currentLocation.isMultiPolygon ? 
+                    game.currentLocation.polygonParts : 
+                    [game.currentLocation.polygon];
+                
+                // Filter out invalid vertices in each part
+                const validParts = parts.map(part => 
+                    Array.isArray(part) ? part.filter(v => !isNaN(v.lat) && !isNaN(v.lng)) : []
+                ).filter(part => part.length >= 3);
 
-                console.log('Server: Guess coordinates:', guess);
-                console.log('Server: Polygon vertices:', vertices);
-
-                const validVertices = vertices.filter(v => !isNaN(v.lat) && !isNaN(v.lng));
-                if (validVertices.length < 3) {
-                    console.error('Server: Insufficient valid vertices:', validVertices);
+                if (validParts.length === 0) {
+                    console.error('Server: No valid polygon parts found');
                     distance = 95;
-                } else if (pointInPolygon(guess, validVertices)) {
-                    distance = 0;
-                    console.log('Server: Guess inside polygon, distance: 0');
                 } else {
-                    const distances = [];
-                    for (let i = 0; i < validVertices.length; i++) {
-                        const j = (i + 1) % validVertices.length;
-                        const dist = distanceToSegmentServer(guess, validVertices[i], validVertices[j]);
-                        if (!isNaN(dist) && isFinite(dist)) {
-                            distances.push(dist);
+                    // Check if point is inside any of the parts
+                    const insideAny = validParts.some(part => pointInPolygon(guess, part));
+                    
+                    if (insideAny) {
+                        distance = 0;
+                        console.log('Server: Guess inside area polygon, distance: 0');
+                    } else {
+                        // Calculate distances to all polygon parts
+                        const allDistances = [];
+                        validParts.forEach(part => {
+                            for (let i = 0; i < part.length; i++) {
+                                const j = (i + 1) % part.length;
+                                const dist = distanceToSegmentServer(guess, part[i], part[j]);
+                                if (!isNaN(dist) && isFinite(dist)) {
+                                    allDistances.push(dist);
+                                }
+                            }
+                        });
+                        
+                        distance = allDistances.length > 0 ? Math.min(...allDistances) : 95;
+                        console.log('Server: Distances to area edges:', allDistances, 'Selected distance:', distance);
+                        
+                        if (!isFinite(distance)) {
+                            console.warn('Server: No valid edge distances, defaulting to 95 km');
+                            distance = 95;
                         }
-                    }
-
-                    distance = distances.length > 0 ? Math.min(...distances) : 95;
-                    console.log('Server: Distances to edges:', distances, 'Selected distance:', distance);
-
-                    if (!isFinite(distance)) {
-                        console.warn('Server: No valid edge distances, defaulting to 95 km');
-                        distance = 95;
                     }
                 }
             }
@@ -316,12 +392,12 @@ function endRound(gameCode) {
 io.on('connection', (socket) => {
     console.log(`Player connected: ${socket.id}`);
 
-    socket.on('hostGame', ({ rounds, area, hostName }) => {
+    socket.on('hostGame', ({ rounds, area, locationType, roundLength, hostName }) => {
         const gameCode = generateGameCode();
         games[gameCode] = {
             host: socket.id,
             players: [{ id: socket.id, name: hostName, ready: false, disconnected: false }],
-            settings: { rounds, area },
+            settings: { rounds, area, locationType, roundLength: roundLength || 15 },
             state: 'lobby',
             round: 0
         };
@@ -330,7 +406,7 @@ io.on('connection', (socket) => {
         io.to(gameCode).emit('playerList', games[gameCode].players);
         io.to(gameCode).emit('settingsUpdated', games[gameCode].settings);
         io.to(gameCode).emit('updateGameCode', gameCode);
-        console.log(`Game hosted: ${gameCode} by ${hostName}`);
+        console.log(`Game hosted: ${gameCode} by ${hostName} with settings:`, games[gameCode].settings);
     });
 
     socket.on('joinGame', ({ gameCode, playerName }) => {
@@ -350,14 +426,14 @@ io.on('connection', (socket) => {
         console.log(`${playerName} joined ${gameCode}`);
     });
 
-    socket.on('updateSettings', ({ gameCode, rounds, area }) => {
+    socket.on('updateSettings', ({ gameCode, rounds, area, locationType, roundLength }) => {
         if (!games[gameCode] || games[gameCode].host !== socket.id) {
             console.log(`Invalid settings update request for ${gameCode} by ${socket.id}`);
             return;
         }
-        games[gameCode].settings = { rounds, area };
-        io.to(gameCode).emit('settingsUpdated', { rounds, area });
-        console.log(`Settings updated for ${gameCode}: ${area}, ${rounds} rounds`);
+        games[gameCode].settings = { rounds, area, locationType, roundLength: roundLength || 15 };
+        io.to(gameCode).emit('settingsUpdated', { rounds, area, locationType, roundLength: roundLength || 15 });
+        console.log(`Settings updated for ${gameCode}: ${area}, ${locationType}, ${rounds} rounds, ${roundLength} seconds`);
     });
 
     socket.on('startGame', (gameCode) => {
@@ -370,6 +446,7 @@ io.on('connection', (socket) => {
         io.to(gameCode).emit('gameStarted', {
             rounds: games[gameCode].settings.rounds,
             area: games[gameCode].settings.area,
+            locationType: games[gameCode].settings.locationType,
             players: games[gameCode].players
         });
         console.log(`Game ${gameCode} started, waiting for players to rejoin`);
