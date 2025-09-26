@@ -509,24 +509,41 @@ socket.on('roundResults', ({ round, location, results }) => {
         const parts = location.isMultiPolygon ? location.polygonParts : [location.polygon];
         
         // Create a separate polygon for each part
-        parts.forEach(polygonCoords => {
-            if (polygonCoords && polygonCoords.length >= 3) {
-                const leafletCoords = polygonCoords.map(v => [v.lat, v.lng]);
-                const polygon = L.polygon(leafletCoords, style).addTo(map);
-                markers.push(polygon);
-            }
-        });
+        if (location.isMultiPolygon && location.polygonParts) {
+            // Handle multipolygon areas
+            location.polygonParts.forEach(polygonCoords => {
+                if (polygonCoords && polygonCoords.length >= 3) {
+                    const leafletCoords = polygonCoords.map(v => [v.lat, v.lng]);
+                    const polygon = L.polygon(leafletCoords, style).addTo(map);
+                    markers.push(polygon);
+                }
+            });
+        } else if (location.polygon) {
+            // Handle single polygons
+            const leafletCoords = location.polygon.map(v => [v.lat, v.lng]);
+            const polygon = L.polygon(leafletCoords, style).addTo(map);
+            markers.push(polygon);
+        }
 
-        // Calculate appropriate zoom level based on area size
-        const bounds = calculateAreaBounds(parts);
+        // Calculate appropriate zoom level and center based on area size
+        let polygonParts = [];
+        if (location.isMultiPolygon && location.polygonParts) {
+            polygonParts = location.polygonParts;
+        } else if (location.polygon) {
+            polygonParts = [location.polygon];
+        }
+        
+        const bounds = calculateAreaBounds(polygonParts);
         const zoomLevel = calculateAppropriateZoom(bounds);
 
-        if (location.centroid && !isNaN(location.centroid.lat) && !isNaN(location.centroid.lng)) {
-            map.setView([location.centroid.lat, location.centroid.lng], zoomLevel);
-        } else if (parts[0] && parts[0].length > 0) {
-            map.setView([parts[0][0].lat, parts[0][0].lng], zoomLevel);
+        // Calculate the center point from the bounds
+        const centerLat = (bounds.minLat + bounds.maxLat) / 2;
+        const centerLng = (bounds.minLng + bounds.maxLng) / 2;
+        
+        if (!isNaN(centerLat) && !isNaN(centerLng)) {
+            map.setView([centerLat, centerLng], zoomLevel);
         } else {
-            console.error('Multiplayer: Invalid area coordinates:', parts);
+            console.error('Multiplayer: Invalid bounds:', bounds);
             map.setView(getInitialMapSettings(selectedArea).center, getInitialMapSettings(selectedArea).zoom);
         }
     }
@@ -827,26 +844,30 @@ if (window.location.pathname.includes('multiplayer.html')) {
         if (areaGeojson.features && Array.isArray(areaGeojson.features)) {
             areaGeojson.features.forEach(feature => {
                 if (feature.geometry && (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon')) {
-                    let coords = [];
+                    let parts = [];
                     if (feature.geometry.type === 'Polygon') {
-                        coords = feature.geometry.coordinates[0].map(([lng, lat]) => ({ lat, lng }));
+                        const coords = feature.geometry.coordinates[0].map(([lng, lat]) => ({ lat, lng }));
+                        parts.push(coords);
                     } else if (feature.geometry.type === 'MultiPolygon') {
-                        // Flatten all rings into a single array of vertices
+                        // Keep each polygon part separate
                         feature.geometry.coordinates.forEach(polygon => {
-                            polygon[0].forEach(([lng, lat]) => {
-                                coords.push({ lat, lng });
-                            });
+                            const coords = polygon[0].map(([lng, lat]) => ({ lat, lng }));
+                            parts.push(coords);
                         });
                     }
-                    let latSum = 0, lngSum = 0;
-                    coords.forEach(c => { latSum += c.lat; lngSum += c.lng; });
-                    const centroid = coords.length > 0 ? { lat: latSum / coords.length, lng: lngSum / coords.length } : { lat: 0, lng: 0 };
+                    // Use x_0 and y_0 from GeoJSON properties as centroid
+                    const centroid = {
+                        lat: feature.properties?.Y_0 || 0,
+                        lng: feature.properties?.X_0 || 0
+                    };
                     areaLocations.push({
                         type: 'area',
                         name: feature.properties?.NAME || 'Unknown Area',
                         area: feature.properties?.AREA || feature.properties?.GAF_AREA || 'Unknown',
                         areaType: feature.properties?.TYPE || 'Unknown',
-                        polygon: coords,
+                        polygon: parts[0], // Use first part for compatibility
+                        polygonParts: parts, // Store all parts for rendering
+                        isMultiPolygon: feature.geometry.type === 'MultiPolygon',
                         centroid
                     });
                 }

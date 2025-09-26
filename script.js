@@ -138,10 +138,11 @@ function loadLocations() {
                         });
                     }
 
-                    // Calculate centroid from all coordinates
-                    let latSum = 0, lngSum = 0;
-                    allCoords.forEach(c => { latSum += c.lat; lngSum += c.lng; });
-                    const centroid = allCoords.length > 0 ? { lat: latSum / allCoords.length, lng: lngSum / allCoords.length } : { lat: 0, lng: 0 };
+                    // Use x_0 and y_0 from GeoJSON properties as centroid
+                    const centroid = {
+                        lat: feature.properties?.Y_0 || 0,
+                        lng: feature.properties?.X_0 || 0
+                    };
                     
                     areaLocations.push({
                         type: 'area',
