@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=                                <div class="option">
+                                    <label for="mp-locationType">Location type:</label>
+                                    <div id="mp-locationType" class="custom-dropdown">
+                                        <button class="dropdown-btn" type="button" onclick="event.stopPropagation()">
+                                            <span class="dropdown-label">Select Location Types</span>
+                                            <span class="arrow">▼</span>
+                                        </button>
+                                        <div class="dropdown-content">
+                                            <div><input type="checkbox" id="mp-type-all" value="all" onclick="updateGameSettings()"><label for="mp-type-all">All types</label></div>
+                                            <div><input type="checkbox" id="mp-type-forecast" value="Forecast district" onclick="updateGameSettings()"><label for="mp-type-forecast">Forecast districts</label></div>
+                                            <div><input type="checkbox" id="mp-type-geo" value="Geographical feature" onclick="updateGameSettings()"><label for="mp-type-geo">Geographical features</label></div>
+                                            <div><input type="checkbox" id="mp-type-taf" value="TAF" onclick="updateGameSettings()"><label for="mp-type-taf">TAF points</label></div>
+                                            <div><input type="checkbox" id="mp-type-nontaf" value="Non TAF" onclick="updateGameSettings()"><label for="mp-type-nontaf">Non-TAF points</label></div>
+                                        </div>
+                                    </div>
+                                </div> <title>Geotrainer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="multiplayer-centering.css">
+    <link rel="stylesheet" href="checkbox-dropdown.css">
+</head>
+<body>
+    <div class="home-container">
+        <div class="content">
+            <div id="mainMenu" class="options">
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="singlePlayerButton" onclick="showSinglePlayer()">Single Player</button>
+                    <button id="multiplayerButton" onclick="showMultiplayer()">Multiplayer</button>
+                    <button id="howToPlayButton" onclick="window.location.href='howToPlay.html'">How to Play</button>
+                </div>
+            </div>
+            <div id="singlePlayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="mode-selection">
+                    <button id="mainMenuButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
+                <div class="option-column" style="display: flex; flex-direction: column; align-items: center; max-width: 350px; margin: 0 auto; gap: 16px;">
+                    <div class="option">
+                        <label>Area</label>
+                        <div class="checkbox-dropdown" id="sp-area">
+                            <div class="selected-options">All regions</div>
+                            <div class="checkbox-dropdown-list">
+                                <label><input type="checkbox" value="All regions" checked>All regions</label>
+                                <label><input type="checkbox" value="MAFC">MAFC</label>
+                                <label><input type="checkbox" value="BAFC">BAFC</label>
+                                <label><input type="checkbox" value="WA-S">WA-S</label>
+                                <label><input type="checkbox" value="SA">SA</label>
+                                <label><input type="checkbox" value="VIC">VIC</label>
+                                <label><input type="checkbox" value="TAS">TAS</label>
+                                <label><input type="checkbox" value="NSW-W">NSW-W</label>
+                                <label><input type="checkbox" value="NSW-E">NSW-E</label>
+                                <label><input type="checkbox" value="WA-N">WA-N</label>
+                                <label><input type="checkbox" value="QLD-N">QLD-N</label>
+                                <label><input type="checkbox" value="QLD-S">QLD-S</label>
+                                <label><input type="checkbox" value="NT">NT</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <label>Location type</label>
+                        <div class="checkbox-dropdown" id="sp-locationType">
+                            <div class="selected-options">All types</div>
+                            <div class="checkbox-dropdown-list">
+                                <label><input type="checkbox" value="all" data-display="All types" checked>All types</label>
+                                <label><input type="checkbox" value="Forecast district">Fcst districts</label>
+                                <label><input type="checkbox" value="Geographical feature">Geo. areas</label>
+                                <label><input type="checkbox" value="TAF">TAF pts</label>
+                                <label><input type="checkbox" value="Non TAF">Non TAF pts</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <label for="sp-roundLength">Round length</label>
+                        <select id="sp-roundLength">
+                            <option value="5">5 seconds</option>
+                            <option value="10">10 seconds</option>
+                            <option value="15" selected>15 seconds</option>
+                        </select>
+                    </div>
+                    <div class="option">
+                        <label for="sp-rounds">Number of Rounds</label>
+                        <select id="sp-rounds">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </div>
+                    <button id="startSinglePlayer" onclick="startSinglePlayer()">Start Game</button>
+                </div>
+            </div>
+            <div id="multiplayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="mainMenuMultiplayerButton" onclick="showMainMenu()">Main Menu</button>
+                    <button id="hostGameButton" onclick="showHostForm()">Host Game</button>
+                    <button id="joinGameButton" onclick="showJoinForm()">Join Game</button>
+                </div>
+                <div id="hostForm" class="hidden">
+                    <input type="text" id="hostName" placeholder="Enter Your Name">
+                    <button onclick="hostMultiplayer()">Create Game</button>
+                </div>
+                <div id="joinForm" class="hidden">
+                    <input type="text" id="gameCode" placeholder="Enter Game Code" maxlength="6">
+                    <input type="text" id="playerName" placeholder="Enter Your Name">
+                    <p id="joinError" class="hidden"></p>
+                    <button onclick="joinMultiplayer()">Join</button>
+                </div>
+            </div>
+            <div id="lobby" class="hidden">
+                <h1>Geotrainer</h1>
+                <div class="space">
+                    <br>
+                <div class="mode-selection">
+                    <button id="mainMenuLobbyButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
+                <div class="lobby-left-right">
+                    <div class="lobby-left">
+                        <h2>Lobby</h2>
+                        <ul id="playerList"></ul>
+                        <!-- Game settings for non-hosts only -->
+                        <div id="nonHostSettings" class="non-host-lobby hidden" style="margin-top: 20px;">
+                            <h2>Game Settings</h2>
+                            <p id="nh-areaRow">Area: <span id="nh-areaDisplay"></span></p>
+                            <p id="nh-locationTypeRow">Location type: <span id="nh-locationTypeDisplay"></span></p>
+                            <p id="nh-roundLengthRow">Round Length: <span id="nh-roundLengthDisplay"></span></p>
+                            <p id="nh-roundsRow">Number of Rounds: <span id="nh-roundsDisplay"></span></p>
+                        </div>
+                    </div>
+                    <div class="lobby-right">
+                        <div id="hostSettings" class="options hidden">
+                            <div class="option">
+                                <label for="mp-area">Area</label>
+                                <select id="mp-area" onchange="updateGameSettings()">
+                                    <option value="All regions">All areas</option>
+                                    <option value="MAFC">MAFC</option>
+                                    <option value="BAFC">BAFC</option>
+                                    <option value="NSW-W">NSW-W</option>
+                                    <option value="NSW-E">NSW-E</option>
+                                    <option value="NT">NT</option>
+                                    <option value="QLD-N">QLD-N</option>
+                                    <option value="QLD-S">QLD-S</option>
+                                    <option value="SA">SA</option>
+                                    <option value="TAS">TAS</option>
+                                    <option value="VIC">VIC</option>
+                                    <option value="WA-S">WA-S</option>
+                                    <option value="WA-N">WA-N</option>
+                                </select>
+                                </div>
+                                <div class="option">
+                                    <label for="mp-locationType">Location type</label>
+                                    <div class="checkbox-dropdown" id="mp-locationType">
+                                        <div class="selected-options">All types</div>
+                                        <div class="checkbox-dropdown-list">
+                                            <label><input type="checkbox" value="all" data-display="All types" checked>All types</label>
+                                            <label><input type="checkbox" value="Forecast district">Fcst districts</label>
+                                            <label><input type="checkbox" value="Geographical feature">Geo. areas</label>
+                                            <label><input type="checkbox" value="TAF">TAF pts</label>
+                                            <label><input type="checkbox" value="Non TAF">Non TAF pts</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="option">
+                                    <label for="mp-roundLength">Round length</label>
+                                    <select id="mp-roundLength" onchange="updateGameSettings()">
+                                        <option value="5">5 seconds</option>
+                                        <option value="10">10 seconds</option>
+                                        <option value="15" selected>15 seconds</option>
+                                    </select>
+                                </div>
+                            <div class="option">
+                                <label for="mp-rounds">Number of Rounds</label>
+                                <select id="mp-rounds" onchange="updateGameSettings()">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lobby-bottom">
+                    <div class="game-code-container">
+                        <p id="lobbyCode"></p>
+                        <button id="copyCodeBtn" class="copy-btn hidden">Copy</button>
+                    </div>
+                    <button id="startMultiplayer" onclick="startMultiplayerGame()" class="hidden">Start Game</button>
+                    <p id="errorMsg" class="hidden"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function startSinglePlayer() {
+        const area = document.getElementById('sp-area').value;
+        const rounds = document.getElementById('sp-rounds').value;
+        const locationType = document.getElementById('sp-locationType').value;
+        const roundLength = parseInt(document.getElementById('sp-roundLength').value, 10);
+        console.log('Single Player Start: roundLength', roundLength);
+        window.location.href = `game.html?area=${encodeURIComponent(area)}&rounds=${encodeURIComponent(rounds)}&locationType=${encodeURIComponent(locationType)}&roundLength=${roundLength}`;
+    }
+    </script>
+                </div>
+            </div>
+            <div id="multiplayerOptions" class="options hidden">
+                <h1>Geotrainer</h1>
+                <div class="button-group">
+                    <button id="mainMenuMultiplayerButton" onclick="showMainMenu()">Main Menu</button>
+                    <button id="hostGameButton" onclick="showHostForm()">Host Game</button>
+                    <button id="joinGameButton" onclick="showJoinForm()">Join Game</button>
+                </div>
+                <div id="hostForm" class="hidden">
+                    <input type="text" id="hostName" placeholder="Enter Your Name">
+                    <button onclick="hostMultiplayer()">Create Game</button>
+                </div>
+                <div id="joinForm" class="hidden">
+                    <input type="text" id="gameCode" placeholder="Enter Game Code" maxlength="6">
+                    <input type="text" id="playerName" placeholder="Enter Your Name">
+                    <p id="joinError" class="hidden"></p>
+                    <button onclick="joinMultiplayer()">Join</button>
+                </div>
+            </div>
+            <div id="lobby" class="hidden">
+                <h1>Geotrainer</h1>
+                <div class="space">
+                    <br>
+                <div class="mode-selection">
+                    <button id="mainMenuLobbyButton" onclick="showMainMenu()">Main Menu</button>
+                </div>
+                <div class="lobby-left-right">
+                    <div class="lobby-left">
+                        <h2>Lobby</h2>
+                        <ul id="playerList"></ul>
+                    </div>
+                    <div class="lobby-right">
+                        <div id="hostSettings" class="options hidden">
+                            <div class="option">
+                                <label for="mp-area">Area</label>
+                                <select id="mp-area" onchange="updateGameSettings()">
+                                    <option value="All regions">All areas</option>
+                                    <option value="MAFC">MAFC</option>
+                                    <option value="BAFC">BAFC</option>
+                                    <option value="NSW-W">NSW-W</option>
+                                    <option value="NSW-E">NSW-E</option>
+                                    <option value="NT">NT</option>
+                                    <option value="QLD-N">QLD-N</option>
+                                    <option value="QLD-S">QLD-S</option>
+                                    <option value="SA">SA</option>
+                                    <option value="TAS">TAS</option>
+                                    <option value="VIC">VIC</option>
+                                    <option value="WA-S">WA-S</option>
+                                    <option value="WA-N">WA-N</option>
+                                </select>
+                                </div>
+                                <div class="option">
+                                    <label for="mp-locationType">Location type:</label>
+                                    <div id="mp-locationType" class="custom-dropdown">
+                                        <button class="dropdown-btn" type="button" onclick="event.stopPropagation()">
+                                            <span class="dropdown-label">Select Location Types</span>
+                                            <span class="arrow">▼</span>
+                                        </button>
+                                        <div class="dropdown-content">
+                                            <div><input type="checkbox" id="mp-type-all" value="all" onclick="updateGameSettings()"><label for="mp-type-all">All types</label></div>
+                                            <div><input type="checkbox" id="mp-type-forecast" value="Forecast district" onclick="updateGameSettings()"><label for="mp-type-forecast">Forecast districts</label></div>
+                                            <div><input type="checkbox" id="mp-type-geo" value="Geographical feature" onclick="updateGameSettings()"><label for="mp-type-geo">Geographical features</label></div>
+                                            <div><input type="checkbox" id="mp-type-taf" value="TAF" onclick="updateGameSettings()"><label for="mp-type-taf">TAF points</label></div>
+                                            <div><input type="checkbox" id="mp-type-nontaf" value="Non TAF" onclick="updateGameSettings()"><label for="mp-type-nontaf">Non-TAF points</label></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="option">
+                                <label for="mp-rounds">Number of Rounds</label>
+                                <select id="mp-rounds" onchange="updateGameSettings()">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lobby-bottom">
+                    <div class="game-code-container">
+                        <p id="lobbyCode"></p>
+                        <button id="copyCodeBtn" class="copy-btn hidden">Copy</button>
+                    </div>
+                    <p id="areaDisplay"></p>
+                    <p id="roundsDisplay"></p>
+                    <p id="locationTypeDisplay"></p>
+                    <button id="startMultiplayer" onclick="startMultiplayerGame()" class="hidden">Start Game</button>
+                    <p id="errorMsg" class="hidden"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="checkbox-dropdown.js"></script>
+    <script src="multiplayer.js"></script>
+</body>
+    <script>
+    function getSelectedAreas() {
+        const areaDropdown = document.getElementById('sp-area');
+        const checkedBoxes = areaDropdown.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(checkedBoxes).map(cb => cb.value);
+    }
+
+    function getSelectedLocationTypes() {
+        const typeDropdown = document.getElementById('sp-locationType');
+        const checkedBoxes = typeDropdown.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(checkedBoxes).map(cb => {
+            switch(cb.value) {
+                case 'all': return 'all';
+                case 'Forecast district': return 'Forecast district';
+                case 'Geographical feature': return 'Geographical feature';
+                case 'TAF': return 'TAF';
+                case 'Non TAF': return 'Non TAF';
+                default: return cb.value;
+            }
+        });
+    }
+
+    function startSinglePlayer() {
+        const areas = getSelectedAreas();
+        const rounds = document.getElementById('sp-rounds').value;
+        const locationTypes = getSelectedLocationTypes();
+        const roundLength = parseInt(document.getElementById('sp-roundLength').value, 10);
+        console.log('Single Player Start: areas:', areas, 'locationTypes:', locationTypes, 'roundLength:', roundLength);
+        window.location.href = `game.html?areas=${encodeURIComponent(areas.join(','))}&rounds=${encodeURIComponent(rounds)}&locationTypes=${encodeURIComponent(locationTypes.join(','))}&roundLength=${roundLength}`;
+    }
+    </script>
+</html>

@@ -11,7 +11,36 @@ let localPlayerName = '';
 let roundActive = false;
 let lastProcessedRound = 0;
 let markers = [];
-let isHost = false;
+window.isHost = false;
+
+socket.on('gameStarted', ({ rounds, areas, locationTypes, roundLength, players }) => {
+    console.log('Game started with settings:', { rounds, areas, locationTypes, roundLength });
+    maxRounds = rounds;
+    selectedAreas = areas;
+    selectedLocationTypes = locationTypes;
+    selectedRoundLength = roundLength;
+    if (!hostName && players.length > 0) {
+        hostName = players[0].name;
+        console.log('Set hostName from gameStarted:', hostName);
+    }
+    
+    // Build URL with all settings
+    const params = new URLSearchParams({
+        gameCode: gameCode,
+        rounds: rounds,
+        areas: areas.join(','),
+        locationTypes: locationTypes.join(','),
+        roundLength: roundLength,
+        playerName: localPlayerName,
+        hostName: hostName
+    });
+    
+    if (!window.location.pathname.includes('multiplayer.html')) {
+        window.location.href = `multiplayer.html?${params.toString()}`;
+    }
+    console.log('Redirecting to game page with params:', params.toString());
+});
+
 let gameTerminated = false;
 let hostName = '';
 let latestPin = null; // Tracks the latest pin location
@@ -86,15 +115,26 @@ function showJoinForm() {
 
 function hostMultiplayer() {
     const rounds = document.getElementById('mp-rounds').value;
-    const area = document.getElementById('mp-area').value;
-    const locationType = document.getElementById('mp-locationType').value;
+    const areaDropdown = document.getElementById('mp-area');
+    const typeDropdown = document.getElementById('mp-locationType');
     const roundLength = document.getElementById('mp-roundLength').value;
     const hostNameInput = document.getElementById('hostName').value.trim();
+
+    // Get selected areas and types
+    const areas = Array.from(areaDropdown.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+    const locationTypes = Array.from(typeDropdown.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+
     if (hostNameInput) {
         localPlayerName = hostNameInput;
         hostName = hostNameInput;
-        isHost = true;
-        socket.emit('hostGame', { rounds: parseInt(rounds), area, locationType, roundLength: parseInt(roundLength), hostName: hostNameInput });
+        window.isHost = true;
+        socket.emit('hostGame', { 
+            rounds: parseInt(rounds), 
+            areas: areas.length > 0 ? areas : ['All regions'],
+            locationTypes: locationTypes.length > 0 ? locationTypes : ['all'],
+            roundLength: parseInt(roundLength), 
+            hostName: hostNameInput 
+        });
         showLobby();
         const playerList = document.getElementById('playerList');
         playerList.innerHTML = '';
@@ -132,29 +172,69 @@ function showLobby() {
         document.getElementById('startMultiplayer').classList.add('hidden');
         document.getElementById('nonHostSettings').classList.remove('hidden');
         lobbyLeft.classList.add('non-host-lobby');
+        
+        // Initialize non-host settings display
+        if (selectedAreas && document.getElementById('nh-areaDisplay')) {
+            const areaDisplay = selectedAreas.includes('All regions') ? 'All areas' : selectedAreas.join(', ');
+            document.getElementById('nh-areaDisplay').textContent = areaDisplay;
+            
+            const typeDisplay = selectedLocationTypes.includes('all') ? 'All types' : selectedLocationTypes.join(', ');
+            document.getElementById('nh-locationTypeDisplay').textContent = typeDisplay;
+            
+            if (document.getElementById('nh-roundsDisplay')) {
+                document.getElementById('nh-roundsDisplay').textContent = maxRounds;
+            }
+            if (document.getElementById('nh-roundLengthDisplay')) {
+                document.getElementById('nh-roundLengthDisplay').textContent = selectedRoundLength + ' seconds';
+            }
+        }
     }
 }
 
 function updateGameSettings() {
     if (!isHost) return;
+    
     const rounds = document.getElementById('mp-rounds').value;
-    const area = document.getElementById('mp-area').value;
-    const locationType = document.getElementById('mp-locationType').value;
     const roundLength = document.getElementById('mp-roundLength').value;
-    socket.emit('updateSettings', { gameCode, rounds: parseInt(rounds), area, locationType, roundLength: parseInt(roundLength) });
+
+    // Get selected areas
+    const areaDropdown = document.getElementById('mp-area');
+    const selectedAreas = Array.from(areaDropdown.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+    
+    // If no areas are selected, default to 'All regions'
+    if (selectedAreas.length === 0) {
+        selectedAreas.push('All regions');
+    }
+
+    // Get selected location types
+    const typeDropdown = document.getElementById('mp-locationType');
+    const selectedTypes = Array.from(typeDropdown.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+    
+    // If no types are selected, default to 'all'
+    if (selectedTypes.length === 0) {
+        selectedTypes.push('all');
+    }
+
+    console.log('Updating settings:', {
+        gameCode,
+        rounds: parseInt(rounds),
+        areas: selectedAreas,
+        locationTypes: selectedTypes,
+        roundLength: parseInt(roundLength)
+    });
+
+    socket.emit('updateSettings', {
+        gameCode,
+        rounds: parseInt(rounds),
+        areas: selectedAreas,
+        locationTypes: selectedTypes,
+        roundLength: parseInt(roundLength)
+    });
 }
 
 socket.on('gameHosted', (code) => {
     gameCode = code;
     updateGameCodeDisplay(code);
-});
-
-socket.on('settingsUpdated', (settings) => {
-    if (!isHost) {
-        document.getElementById('nh-areaDisplay').textContent = settings.area;
-        document.getElementById('nh-locationTypeDisplay').textContent = settings.locationType;
-        document.getElementById('nh-roundsDisplay').textContent = settings.rounds;
-    }
 });
 
 socket.on('playerList', (players) => {
@@ -176,20 +256,33 @@ socket.on('playerList', (players) => {
     }
 });
 
-socket.on('settingsUpdated', ({ rounds, area, locationType, roundLength }) => {
-    maxRounds = rounds;
-    selectedArea = area;
-    selectedLocationType = locationType || 'all';
-    selectedRoundLength = roundLength || 15;
-    const displayArea = area === 'All regions' ? 'All areas' : area;
+socket.on('settingsUpdated', (settings) => {
+    // Store the settings
+    maxRounds = settings.rounds;
+    selectedAreas = settings.areas || ['All regions'];
+    selectedLocationTypes = settings.locationTypes || ['all'];
+    selectedRoundLength = settings.roundLength || 15;
     
     // Update displays if they exist (handles both game and lobby views)
     if (document.getElementById('nh-areaDisplay')) {
-        document.getElementById('nh-areaDisplay').textContent = displayArea;
-        document.getElementById('nh-roundsDisplay').textContent = rounds;
-        document.getElementById('nh-locationTypeDisplay').textContent = selectedLocationType === 'all' ? 'All types' : selectedLocationType;
-        document.getElementById('nh-roundLengthDisplay').textContent = roundLength + ' seconds';
+        // Format area display text
+        const areaDisplay = selectedAreas.includes('All regions') ? 'All areas' : selectedAreas.join(', ');
+        document.getElementById('nh-areaDisplay').textContent = areaDisplay;
+        
+        // Format location type display text
+        const typeDisplay = selectedLocationTypes.includes('all') ? 'All types' : selectedLocationTypes.join(', ');
+        document.getElementById('nh-locationTypeDisplay').textContent = typeDisplay;
+        
+        document.getElementById('nh-roundsDisplay').textContent = maxRounds;
+        document.getElementById('nh-roundLengthDisplay').textContent = selectedRoundLength + ' seconds';
     }
+    
+    console.log('Settings updated:', {
+        rounds: maxRounds,
+        areas: selectedAreas,
+        types: selectedLocationTypes,
+        roundLength: selectedRoundLength
+    });
 });
 
 socket.on('updateGameCode', (code) => {
@@ -208,19 +301,13 @@ socket.on('error', (message) => {
 
 function startMultiplayerGame() {
     if (!isHost) return;
+    console.log('Host starting game with code:', gameCode);
+    document.getElementById('startMultiplayer').disabled = true;
+    document.getElementById('startMultiplayer').textContent = 'Starting...';
     socket.emit('startGame', gameCode);
 }
 
-socket.on('gameStarted', ({ rounds, area, locationType, players }) => {
-    maxRounds = rounds;
-    selectedArea = area;
-    selectedLocationType = locationType;
-    if (!hostName && players.length > 0) {
-        hostName = players[0].name;
-        console.log('Set hostName from gameStarted:', hostName);
-    }
-    window.location.href = `multiplayer.html?gameCode=${gameCode}&rounds=${rounds}&area=${area}&locationType=${locationType || 'all'}&playerName=${encodeURIComponent(localPlayerName)}&hostName=${encodeURIComponent(hostName)}`;
-});
+// Removed duplicate gameStarted handler
 
 window.addEventListener('unload', () => {
     if (gameCode && !isHost && !gameTerminated) {
@@ -253,11 +340,12 @@ function updateGameCodeDisplay(code) {
 const urlParams = new URLSearchParams(window.location.search);
 gameCode = urlParams.get('gameCode');
 maxRounds = parseInt(urlParams.get('rounds')) || 15;
-selectedArea = urlParams.get('area') || 'All regions';
-selectedLocationType = urlParams.get('locationType') || 'all';
+selectedAreas = urlParams.get('areas') ? urlParams.get('areas').split(',') : ['All regions'];
+selectedLocationTypes = urlParams.get('locationTypes') ? urlParams.get('locationTypes').split(',') : ['all'];
+selectedRoundLength = parseInt(urlParams.get('roundLength')) || 15;
 localPlayerName = decodeURIComponent(urlParams.get('playerName') || '');
 hostName = decodeURIComponent(urlParams.get('hostName') || '');
-isHost = localPlayerName === hostName;
+window.isHost = localPlayerName === hostName;
 
 console.log('Emitting rejoinGame', gameCode, localPlayerName);
 console.log('Initial state: isHost =', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
@@ -267,23 +355,108 @@ socket.on('playerRejoined', ({ gameCode, playerName }) => {
     console.log(`Rejoined game ${gameCode} as ${playerName}, isHost: ${isHost}`);
 });
 
-function getInitialMapSettings(area) {
-    switch (area) {
-        case 'WA-S': return { center: [-30.0, 120.5], zoom: 5 };
-        case 'SA': return { center: [-31.0, 135.5], zoom: 5 };
-        case 'VIC': return { center: [-37.0, 144.0], zoom: 6 };
-        case 'TAS': return { center: [-42.0, 146.0], zoom: 7 };
-        case 'NSW-W': return { center: [-32.2, 144.86], zoom: 6 };
-        case 'NSW-E': return { center: [-33.07, 150.37], zoom: 6 };
-        case 'WA-N': return { center: [-20.31, 122.56], zoom: 5 };
-        case 'QLD-N': return { center: [-18.59, 143.38], zoom: 5 };
-        case 'QLD-S': return { center: [-26.05, 146.39], zoom: 6 };
-        case 'NT': return { center: [-19.35, 133.70], zoom: 5 };
-        case 'MAFC': return { center: [-32.2, 137.1], zoom: 4 };
-        case 'BAFC': return { center: [-24.2, 137.1], zoom: 4 };
-        case 'All regions':
-        default: return { center: [-25.2744, 133.7751], zoom: 4 };
+function getAreaBounds(area) {
+    // Define the bounds for each area
+    const areaBounds = {
+        'WA-S': { minLat: -35.0, maxLat: -25.0, minLng: 115.0, maxLng: 126.0 },
+        'SA': { minLat: -38.0, maxLat: -26.0, minLng: 129.0, maxLng: 141.0 },
+        'VIC': { minLat: -39.0, maxLat: -34.0, minLng: 141.0, maxLng: 150.0 },
+        'TAS': { minLat: -43.5, maxLat: -40.5, minLng: 144.0, maxLng: 148.5 },
+        'NSW-W': { minLat: -35.0, maxLat: -29.0, minLng: 141.0, maxLng: 147.0 },
+        'NSW-E': { minLat: -37.0, maxLat: -28.0, minLng: 147.0, maxLng: 153.0 },
+        'WA-N': { minLat: -23.0, maxLat: -14.0, minLng: 120.0, maxLng: 129.0 },
+        'QLD-N': { minLat: -21.0, maxLat: -12.0, minLng: 138.0, maxLng: 147.0 },
+        'QLD-S': { minLat: -29.0, maxLat: -23.0, minLng: 141.0, maxLng: 153.0 },
+        'NT': { minLat: -26.0, maxLat: -11.0, minLng: 129.0, maxLng: 138.0 },
+        'VAAC': { minLat: -17.727759, maxLat: 14.349548, minLng: 91.494141, maxLng: 166.816406 }
+    };
+
+    // Handle MAFC and BAFC
+    if (area === 'MAFC') {
+        return getCombinedBounds(['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS']);
+    } else if (area === 'BAFC') {
+        return getCombinedBounds(['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E']);
+    } else if (area === 'All regions') {
+        return {
+            minLat: -44.0,
+            maxLat: -10.0,
+            minLng: 110.0,
+            maxLng: 154.0
+        };
     }
+
+    return areaBounds[area];
+}
+
+function getCombinedBounds(areas) {
+    let minLat = Infinity;
+    let maxLat = -Infinity;
+    let minLng = Infinity;
+    let maxLng = -Infinity;
+
+    areas.forEach(area => {
+        const bounds = getAreaBounds(area);
+        if (bounds) {
+            minLat = Math.min(minLat, bounds.minLat);
+            maxLat = Math.max(maxLat, bounds.maxLat);
+            minLng = Math.min(minLng, bounds.minLng);
+            maxLng = Math.max(maxLng, bounds.maxLng);
+        }
+    });
+
+    return { minLat, maxLat, minLng, maxLng };
+}
+
+function calculateZoomLevel(bounds) {
+    const latSpan = bounds.maxLat - bounds.minLat;
+    const lngSpan = bounds.maxLng - bounds.minLng;
+    
+    if (latSpan > 20 || lngSpan > 30) return 4;  // Very large area (e.g., multiple states)
+    if (latSpan > 8 || lngSpan > 12) return 5;   // Large area (e.g., VIC+TAS)
+    if (latSpan > 4 || lngSpan > 6) return 6;    // Medium area (e.g., single state)
+    return 7;  // Small area
+}
+
+function getInitialMapSettings(areas) {
+    // If it's a string, convert it to an array
+    if (typeof areas === 'string') {
+        areas = areas.split(',');
+    }
+
+    // Default Australia-wide view settings
+    const defaultView = { center: [-25.2744, 133.7751], zoom: 4 };
+
+    // If no areas or All regions selected, return default view
+    if (!areas || 
+        areas.length === 0 || 
+        areas.includes('All regions')) {
+        return defaultView;
+    }
+
+    // If both MAFC and BAFC are selected, return default Australia-wide view
+    if (areas.includes('MAFC') && areas.includes('BAFC')) {
+        return defaultView;
+    }
+
+    // Special handling for VAAC combinations
+    if (areas.includes('VAAC') && areas.length > 1) {
+        // Use a wider view when VAAC is combined with other areas
+        return { center: [-1.689, 129.155], zoom: 3 };
+    }
+
+    // Get combined bounds for all selected areas
+    const bounds = getCombinedBounds(areas);
+    
+    // Calculate center point
+    const center = [
+        (bounds.minLat + bounds.maxLat) / 2,
+        (bounds.minLng + bounds.maxLng) / 2
+    ];
+
+    // Calculate appropriate zoom level
+    const zoom = calculateZoomLevel(bounds);
+
+    return { center, zoom };
 }
 
 function calculatePolygonCentroid(vertices) {
@@ -367,15 +540,30 @@ function pointInPolygon(point, vertices) {
 }
 
 function initMap() {
-    const mapSettings = getInitialMapSettings(selectedArea);
+    const bounds = selectedAreas.includes('VAAC') 
+        ? { minLat: -17.727759, maxLat: 14.349548, minLng: 91.494141, maxLng: 166.816406 }
+        : getAreaBounds(selectedAreas[0]);
+    
+    const center = [
+        (bounds.minLat + bounds.maxLat) / 2,
+        (bounds.minLng + bounds.maxLng) / 2
+    ];
+    const zoom = calculateZoomLevel(bounds);
     
     // Initialize Leaflet map with constrained zoom matching local tiles
-    map = L.map('map', { minZoom: 4, maxZoom: 9 }).setView(mapSettings.center, mapSettings.zoom);
+    map = L.map('map', { 
+        minZoom: 3, 
+        maxZoom: 9,
+        maxBounds: [[-45, 90], [15, 170]], // Constrain view to our tile coverage area
+        maxBoundsViscosity: 1.0 // Prevent dragging outside bounds
+    }).setView(center, zoom);
 
     // Add custom topographic tiles (EPSG:3857)
-    L.tileLayer('/topo/tiles/{z}/{x}/{y}.png', {
-        minZoom: 4,
+    L.tileLayer('/topo/tiles/{z}/{x}/{y}', {
+        minZoom: 3,
         maxZoom: 9,
+        bounds: [[-45, 90], [15, 170]], // Match maxBounds from map
+        noWrap: true, // Prevent tile wrapping around the globe,
         noWrap: true,
         attribution: 'Custom topo tiles'
     }).addTo(map);
@@ -442,15 +630,33 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
     maxRounds = newMaxRounds;
     timeLeft = serverTime;
     roundActive = true;
+    hasSubmittedGuess = false;
     clearMarkers();
-    document.getElementById("location").textContent = `Guess: ${location}`;
-    document.getElementById("round").textContent = `Round: ${round}/${maxRounds}`;
-    document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
-    document.getElementById("guess").disabled = true;
-    document.getElementById("guess").style.display = "";
-    document.getElementById("newRound").style.display = "none";
-    document.getElementById("result").textContent = "";
-    map.setView(getInitialMapSettings(selectedArea).center, getInitialMapSettings(selectedArea).zoom);
+    
+    const locationElem = document.getElementById("location");
+    const roundElem = document.getElementById("round");
+    const timerElem = document.getElementById("timer");
+    const guessBtn = document.getElementById("guess");
+    const newRoundBtn = document.getElementById("newRound");
+    const resultElem = document.getElementById("result");
+    const gameOverElem = document.getElementById("gameOver");
+    
+    if (locationElem) locationElem.textContent = `Guess: ${location}`;
+    if (roundElem) roundElem.textContent = `Round: ${round}/${maxRounds}`;
+    if (timerElem) timerElem.textContent = `Time left: ${timeLeft}s`;
+    if (guessBtn) {
+        guessBtn.disabled = true;
+        guessBtn.style.display = "";
+    }
+    if (newRoundBtn) newRoundBtn.style.display = "none";
+    if (resultElem) resultElem.textContent = "";
+    if (gameOverElem) gameOverElem.classList.add("hidden");
+    
+    if (map) {
+        // Reset the map view to show all selected areas at the start of each round
+        const settings = getInitialMapSettings(selectedAreas);
+        map.setView(settings.center, settings.zoom);
+    }
     console.log('Guess button after newRound: display =', document.getElementById("guess").style.display || 'default', 'disabled =', document.getElementById("guess").disabled);
 });
 
@@ -477,7 +683,7 @@ socket.on('roundResults', ({ round, location, results }) => {
     console.log('isHost in roundResults:', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
     roundActive = false;
 
-    // Clear existing markers
+    // Always clear existing markers before showing results
     clearMarkers();
 
     if (location.type === 'point') {
@@ -544,7 +750,7 @@ socket.on('roundResults', ({ round, location, results }) => {
             map.setView([centerLat, centerLng], zoomLevel);
         } else {
             console.error('Multiplayer: Invalid bounds:', bounds);
-            map.setView(getInitialMapSettings(selectedArea).center, getInitialMapSettings(selectedArea).zoom);
+            map.setView(getInitialMapSettings(selectedAreas).center, getInitialMapSettings(selectedAreas).zoom);
         }
     }
 
@@ -590,11 +796,36 @@ socket.on('roundResults', ({ round, location, results }) => {
 socket.on('gameOver', ({ players, roundHistory }) => {
     console.log('GameOver received:', { players, roundHistory });
     roundActive = false;
-    document.getElementById("location").textContent = "";
-    document.getElementById("timer").textContent = "";
-    document.getElementById("result").textContent = "Scoreboard showing in 5 seconds...";
+    const lastRound = roundHistory[roundHistory.length - 1];
+    if (lastRound && lastRound.location) {
+        // Keep existing markers and show final location
+        document.getElementById("location").textContent = `Guess: ${lastRound.location}`;
+        document.getElementById("timer").textContent = "";
+        document.getElementById("result").textContent = "Scoreboard showing in 5 seconds...";
+    }
     document.getElementById("guess").style.display = "none";
     document.getElementById("newRound").style.display = "none";
+
+    // Do not clear markers, keep them visible for the final location
+    // Only adjust the map view if needed to show all markers
+    if (map && lastRound && lastRound.results && lastRound.results.length > 0) {
+        const bounds = L.latLngBounds([]);
+        lastRound.results.forEach(r => {
+            if (r.guess) {
+                bounds.extend([r.guess.lat, r.guess.lng]);
+            }
+        });
+        if (lastRound.location) {
+            bounds.extend([lastRound.location.lat, lastRound.location.lng]);
+        }
+        if (!bounds.isValid()) {
+            map.setView(getInitialMapSettings(selectedArea || 'All regions').center, 
+                       getInitialMapSettings(selectedArea || 'All regions').zoom);
+        } else {
+            map.fitBounds(bounds.pad(0.5));
+        }
+    }
+    
     // Delay showing the scoreboard by 5 seconds
     setTimeout(() => {
         document.getElementById("result").textContent = "";
@@ -630,12 +861,14 @@ socket.on('gameOver', ({ players, roundHistory }) => {
             return;
         }
 
-        // Build table HTML to match the desired layout
+        // Build game over table
         let gameOverText = `<h3>Game over, ${winner.name} wins!</h3>`;
         gameOverText += '<table>';
-        // First row: "Score" header spanning player columns
+        
+        // Score header spanning player columns
         gameOverText += `<tr><th class="no-border"></th><th class="no-border"></th><th colspan="${players.length}" class="distance-header">Score</th></tr>`;
-        // Second row: "Round", "Location", and player names
+        
+        // Column headers
         gameOverText += '<tr><th>Round</th><th>Location</th>';
         players.forEach(p => {
             gameOverText += `<th>${p.name || 'Unknown'}</th>`;
@@ -662,106 +895,16 @@ socket.on('gameOver', ({ players, roundHistory }) => {
         scores.forEach(p => {
             gameOverText += `<td>${p.total}</td>`;
         });
-        gameOverText += '</tr>';
+        gameOverText += '</tr></table>';
 
-        gameOverText += '</table>';
-
-        console.log('GameOver HTML:', gameOverText);
-        try {
-            document.getElementById("roundSummary").innerHTML = gameOverText;
-
-            // Attach event listeners to buttons
-            const playAgainButton = document.getElementById("playAgain");
-            const backToHomeButton = document.getElementById("backToHome");
-            playAgainButton.style.display = isHost ? "" : "none"; // Only host can restart
-            playAgainButton.onclick = restartGame;
-            backToHomeButton.onclick = returnToMenu;
-        } catch (error) {
-            console.error('Error setting roundSummary:', error);
-            document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to display results.</p>';
-        }
-    }, 5000);
-
-    // Validate data and handle edge cases
-    if (!players || !Array.isArray(players) || players.length === 0 || !roundHistory || !Array.isArray(roundHistory)) {
-        console.error('Invalid gameOver data:', { players, roundHistory });
-        document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: No valid game data available.</p>';
-        return;
-    }
-
-    // Calculate total scores and find winner
-    let scores;
-    let winner;
-    try {
-        scores = players.map(p => {
-            if (!p || !p.name) throw new Error('Invalid player data');
-            const playerScores = roundHistory
-                .map(r => r.scores?.find(s => s?.name === p.name)?.score || 0);
-            const total = playerScores.reduce((sum, s) => sum + s, 0);
-            return {
-                name: p.name,
-                total
-            };
-        });
-
-        if (scores.length === 0) throw new Error('No valid scores calculated');
-        winner = scores.reduce((max, p) => (p.total > max.total ? p : max), scores[0]);
-    } catch (error) {
-        console.error('Error calculating scores:', error);
-        document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to calculate scores.</p>';
-        return;
-    }
-
-    // Build table HTML to match the desired layout
-    let gameOverText = `<h3>Game over, ${winner.name} wins!</h3>`;
-    gameOverText += '<table>';
-    // First row: "Score" header spanning player columns
-    gameOverText += `<tr><th class="no-border"></th><th class="no-border"></th><th colspan="${players.length}" class="distance-header">Score</th></tr>`;
-    // Second row: "Round", "Location", and player names
-    gameOverText += '<tr><th>Round</th><th>Location</th>';
-    players.forEach(p => {
-        gameOverText += `<th>${p.name || 'Unknown'}</th>`;
-    });
-    gameOverText += '</tr>';
-
-    // Round rows
-    roundHistory.forEach((round, index) => {
-        if (!round || !round.location || !round.scores) {
-            console.warn(`Invalid round data at index ${index}:`, round);
-            return;
-        }
-        gameOverText += `<tr><td>${index + 1}</td><td>${round.location}</td>`;
-        players.forEach(p => {
-            const scoreData = round.scores.find(s => s?.name === p.name);
-            const scoreText = scoreData ? scoreData.score : '0';
-            gameOverText += `<td>${scoreText}</td>`;
-        });
-        gameOverText += '</tr>';
-    });
-
-    // Total row
-    gameOverText += '<tr class="average-row"><td colspan="2" style="text-align: center;">Total</td>';
-    scores.forEach(p => {
-        gameOverText += `<td>${p.total}</td>`;
-    });
-    gameOverText += '</tr>';
-
-    gameOverText += '</table>';
-
-    console.log('GameOver HTML:', gameOverText);
-    try {
+        // Update display and set up buttons
         document.getElementById("roundSummary").innerHTML = gameOverText;
-
-        // Attach event listeners to buttons
         const playAgainButton = document.getElementById("playAgain");
         const backToHomeButton = document.getElementById("backToHome");
-        playAgainButton.style.display = isHost ? "" : "none"; // Only host can restart
+        playAgainButton.style.display = isHost ? "" : "none";
         playAgainButton.onclick = restartGame;
         backToHomeButton.onclick = returnToMenu;
-    } catch (error) {
-        console.error('Error setting roundSummary:', error);
-        document.getElementById("roundSummary").innerHTML = '<h3>Game Over!</h3><p>Error: Unable to display results.</p>';
-    }
+    }, 5000);
 });
 
 socket.on('gameEnded', (message) => {
@@ -819,10 +962,14 @@ function returnToMenu() {
     window.location.href = 'index.html';
 }
 
-// Initialize map when the multiplayer page loads
-if (window.location.pathname.includes('multiplayer.html')) {
-    document.addEventListener('DOMContentLoaded', async () => {
-        await initMap();
+document.addEventListener('DOMContentLoaded', async () => {
+    // Only initialize game elements if we're on the multiplayer game page
+    if (window.location.pathname.includes('multiplayer.html')) {
+        console.log('Initializing multiplayer game page');
+        if (!map) {
+            await initMap();
+            console.log('Map initialized');
+        }
         // Fetch point and area locations, merge
         const pointsRes = await fetch('points.csv');
         const pointsText = await pointsRes.text();
@@ -874,6 +1021,6 @@ if (window.location.pathname.includes('multiplayer.html')) {
             });
         }
         window.locations = [...pointLocations, ...areaLocations];
-        // ...existing code...
-    });
-}
+        console.log('Locations loaded:', window.locations.length);
+    }
+});

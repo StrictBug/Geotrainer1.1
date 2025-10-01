@@ -6,6 +6,8 @@
     <title>Geotrainer</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="multiplayer-centering.css">
+    <link rel="stylesheet" href="checkbox-dropdown.css">
+    <link rel="stylesheet" href="lobby-bottom.css">
 </head>
 <body>
     <div class="home-container">
@@ -25,32 +27,39 @@
                 </div>
                 <div class="option-column" style="display: flex; flex-direction: column; align-items: center; max-width: 350px; margin: 0 auto; gap: 16px;">
                     <div class="option">
-                        <label for="sp-area">Area</label>
-                        <select id="sp-area">
-                            <option value="All regions">All regions</option>
-                            <option value="MAFC">MAFC</option>
-                            <option value="BAFC">BAFC</option>
-                            <option value="WA-S">WA-S</option>
-                            <option value="SA">SA</option>
-                            <option value="VIC">VIC</option>
-                            <option value="TAS">TAS</option>
-                            <option value="NSW-W">NSW-W</option>
-                            <option value="NSW-E">NSW-E</option>
-                            <option value="WA-N">WA-N</option>
-                            <option value="QLD-N">QLD-N</option>
-                            <option value="QLD-S">QLD-S</option>
-                            <option value="NT">NT</option>
-                        </select>
+                        <label>Area</label>
+                        <div class="checkbox-dropdown" id="sp-area">
+                            <div class="selected-options">All regions</div>
+                            <div class="checkbox-dropdown-list">
+                                <label><input type="checkbox" value="All regions" checked>All regions</label>
+                                <label><input type="checkbox" value="VAAC">VAAC</label>
+                                <label><input type="checkbox" value="MAFC">MAFC</label>
+                                <label><input type="checkbox" value="BAFC">BAFC</label>
+                                <label><input type="checkbox" value="WA-S">WA-S</label>
+                                <label><input type="checkbox" value="SA">SA</label>
+                                <label><input type="checkbox" value="VIC">VIC</label>
+                                <label><input type="checkbox" value="TAS">TAS</label>
+                                <label><input type="checkbox" value="NSW-W">NSW-W</label>
+                                <label><input type="checkbox" value="NSW-E">NSW-E</label>
+                                <label><input type="checkbox" value="WA-N">WA-N</label>
+                                <label><input type="checkbox" value="QLD-N">QLD-N</label>
+                                <label><input type="checkbox" value="QLD-S">QLD-S</label>
+                                <label><input type="checkbox" value="NT">NT</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="option">
-                        <label for="sp-locationType">Location type</label>
-                        <select id="sp-locationType">
-                            <option value="all">All types</option>
-                            <option value="Forecast district">Forecast districts</option>
-                            <option value="Geographical feature">Geographical features</option>
-                            <option value="TAF">TAF points</option>
-                            <option value="Non TAF">Non-TAF points</option>
-                        </select>
+                        <label>Location type</label>
+                        <div class="checkbox-dropdown" id="sp-locationType">
+                            <div class="selected-options">All types</div>
+                            <div class="checkbox-dropdown-list">
+                                <label><input type="checkbox" value="all" data-display="All types" checked>All types</label>
+                                <label><input type="checkbox" value="Forecast district">Fcst districts</label>
+                                <label><input type="checkbox" value="Geographical feature">Geo. areas</label>
+                                <label><input type="checkbox" value="TAF">TAF pts</label>
+                                <label><input type="checkbox" value="Non TAF">Non TAF pts</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="option">
                         <label for="sp-roundLength">Round length</label>
@@ -114,32 +123,39 @@
                     <div class="lobby-right">
                         <div id="hostSettings" class="options hidden">
                             <div class="option">
-                                <label for="mp-area">Area</label>
-                                <select id="mp-area" onchange="updateGameSettings()">
-                                    <option value="All regions">All areas</option>
-                                    <option value="MAFC">MAFC</option>
-                                    <option value="BAFC">BAFC</option>
-                                    <option value="NSW-W">NSW-W</option>
-                                    <option value="NSW-E">NSW-E</option>
-                                    <option value="NT">NT</option>
-                                    <option value="QLD-N">QLD-N</option>
-                                    <option value="QLD-S">QLD-S</option>
-                                    <option value="SA">SA</option>
-                                    <option value="TAS">TAS</option>
-                                    <option value="VIC">VIC</option>
-                                    <option value="WA-S">WA-S</option>
-                                    <option value="WA-N">WA-N</option>
-                                </select>
+                                <label>Area</label>
+                                <div class="checkbox-dropdown" id="mp-area">
+                                    <div class="selected-options">All regions</div>
+                                    <div class="checkbox-dropdown-list">
+                                        <label><input type="checkbox" value="All regions" checked>All regions</label>
+                                        <label><input type="checkbox" value="VAAC">VAAC</label>
+                                        <label><input type="checkbox" value="MAFC">MAFC</label>
+                                        <label><input type="checkbox" value="BAFC">BAFC</label>
+                                        <label><input type="checkbox" value="WA-S">WA-S</label>
+                                        <label><input type="checkbox" value="SA">SA</label>
+                                        <label><input type="checkbox" value="VIC">VIC</label>
+                                        <label><input type="checkbox" value="TAS">TAS</label>
+                                        <label><input type="checkbox" value="NSW-W">NSW-W</label>
+                                        <label><input type="checkbox" value="NSW-E">NSW-E</label>
+                                        <label><input type="checkbox" value="WA-N">WA-N</label>
+                                        <label><input type="checkbox" value="QLD-N">QLD-N</label>
+                                        <label><input type="checkbox" value="QLD-S">QLD-S</label>
+                                        <label><input type="checkbox" value="NT">NT</label>
+                                    </div>
                                 </div>
+                            </div>
                                 <div class="option">
-                                    <label for="mp-locationType">Location type</label>
-                                    <select id="mp-locationType" onchange="updateGameSettings()">
-                                        <option value="all">All types</option>
-                                        <option value="Forecast district">Forecast districts</option>
-                                        <option value="Geographical feature">Geographical features</option>
-                                        <option value="TAF">TAF points</option>
-                                        <option value="Non TAF">Non-TAF points</option>
-                                    </select>
+                                    <label>Location type</label>
+                                    <div class="checkbox-dropdown" id="mp-locationType">
+                                        <div class="selected-options">All types</div>
+                                        <div class="checkbox-dropdown-list">
+                                            <label><input type="checkbox" value="all" data-display="All types" checked>All types</label>
+                                            <label><input type="checkbox" value="Forecast district">Fcst districts</label>
+                                            <label><input type="checkbox" value="Geographical feature">Geo. areas</label>
+                                            <label><input type="checkbox" value="TAF">TAF pts</label>
+                                            <label><input type="checkbox" value="Non TAF">Non TAF pts</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="option">
                                     <label for="mp-roundLength">Round length</label>
@@ -233,6 +249,7 @@
                                     <option value="VIC">VIC</option>
                                     <option value="WA-S">WA-S</option>
                                     <option value="WA-N">WA-N</option>
+                                    <option value="VAAC">VAAC</option>
                                 </select>
                                 </div>
                                 <div class="option">
@@ -273,16 +290,38 @@
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="checkbox-dropdown.js"></script>
     <script src="multiplayer.js"></script>
 </body>
     <script>
+    function getSelectedAreas() {
+        const areaDropdown = document.getElementById('sp-area');
+        const checkedBoxes = areaDropdown.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(checkedBoxes).map(cb => cb.value);
+    }
+
+    function getSelectedLocationTypes() {
+        const typeDropdown = document.getElementById('sp-locationType');
+        const checkedBoxes = typeDropdown.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(checkedBoxes).map(cb => {
+            switch(cb.value) {
+                case 'all': return 'all';
+                case 'Forecast district': return 'Forecast district';
+                case 'Geographical feature': return 'Geographical feature';
+                case 'TAF': return 'TAF';
+                case 'Non TAF': return 'Non TAF';
+                default: return cb.value;
+            }
+        });
+    }
+
     function startSinglePlayer() {
-        const area = document.getElementById('sp-area').value;
+        const areas = getSelectedAreas();
         const rounds = document.getElementById('sp-rounds').value;
-        const locationType = document.getElementById('sp-locationType').value;
+        const locationTypes = getSelectedLocationTypes();
         const roundLength = parseInt(document.getElementById('sp-roundLength').value, 10);
-        console.log('Single Player Start: roundLength', roundLength);
-        window.location.href = `game.html?area=${encodeURIComponent(area)}&rounds=${encodeURIComponent(rounds)}&locationType=${encodeURIComponent(locationType)}&roundLength=${roundLength}`;
+        console.log('Single Player Start: areas:', areas, 'locationTypes:', locationTypes, 'roundLength:', roundLength);
+        window.location.href = `game.html?areas=${encodeURIComponent(areas.join(','))}&rounds=${encodeURIComponent(rounds)}&locationTypes=${encodeURIComponent(locationTypes.join(','))}&roundLength=${roundLength}`;
     }
     </script>
 </html>

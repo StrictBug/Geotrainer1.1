@@ -63,7 +63,7 @@ body {
     white-space: nowrap;
 }
 
-.option select, .option input {
+.option select, .option input, .option .checkbox-dropdown {
     padding: 0 8px;
     font-size: 16px;
     width: 140px;
@@ -72,6 +72,12 @@ body {
     border: 1px solid black;
     border-radius: 0;
     text-align: left;
+}
+
+#hostSettings .option select {
+    width: 140px;  /* Force consistent width for select elements in host settings */
+    box-sizing: border-box;
+    padding: 0 8px;
 }
 
 button {

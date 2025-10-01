@@ -6,7 +6,7 @@ Ballina/Byron Gateway,NSW-E,TAF,-28.83378,153.56244
 Bankstown,NSW-E,TAF,-33.9225,150.98111
 Bathurst,NSW-E,TAF,-33.40944,149.65194
 Camden,NSW-E,TAF,-34.0425,150.6875
-Canberra Airport,NSW-E,TAF,-35.28389,149.16389
+Canberra,NSW-E,TAF,-35.28389,149.16389
 Casino,NSW-E,Non-TAF,-28.88281,153.06694
 Cessnock,NSW-E,Non-TAF,-32.7875,151.34167
 Coffs Harbour,NSW-E,TAF,-30.31694,153.11667
@@ -20,7 +20,7 @@ Glen Innes,NSW-E,TAF,-29.675,151.68944
 Goulburn,NSW-E,TAF,-34.81022,149.7265
 Grafton,NSW-E,TAF,-29.75944,153.03
 Gunnedah,NSW-E,Non-TAF,-30.96108,150.25063
-Holsworthy Airport,NSW-E,TAF,-34,150.95167
+Holsworthy,NSW-E,TAF,-34,150.95167
 Inverell,NSW-E,Non-TAF,-29.88831,151.14419
 Jervis Bay Airfield,NSW-E,Non-TAF,-35.144,150.6974
 Kempsey,NSW-E,Non-TAF,-31.07432,152.76965
@@ -41,10 +41,10 @@ Norfolk Island,NSW-E,TAF,-29.0425,167.938056
 Orange,NSW-E,TAF,-33.38177,149.13298
 Parkes,NSW-E,TAF,-33.13127,148.23905
 Port Macquaire,NSW-E,TAF,-31.43594,152.86335
-Richmond NSW,NSW-E,TAF,-33.60069,150.78072
+Richmond (NSW),NSW-E,TAF,-33.60069,150.78072
 Scone,NSW-E,TAF,-32.03725,150.83213
-Shellharbour Airport,NSW-E,TAF,-34.56116,150.78859
-Sydney Airport,NSW-E,TAF,-33.95694,151.16667
+Shellharbour,NSW-E,TAF,-34.56116,150.78859
+Sydney,NSW-E,TAF,-33.95694,151.16667
 Tamworth,NSW-E,TAF,-31.08889,150.85
 Taree,NSW-E,TAF,-31.88856,152.51384
 Wagga Wagga,NSW-E,TAF,-35.16389,147.4625
@@ -79,9 +79,9 @@ Bathurst Island (Nguiu),NT,TAF,-11.76909,130.61974
 Bayu Undun Platform ,NT,TAF,-11.07,126.613333
 Borroloola,NT,Non-TAF,-16.07527,136.30234
 Browse Island,NT,Non-TAF,-14.1,123.5
-Darwin Airport,NT,TAF,-12.41833,130.8675
+Darwin,NT,TAF,-12.41833,130.8675
 Delamere Weapons Range,NT,Non-TAF,-15.7442,131.9182
-Dili Airport ,NT,TAF,-8.546389,125.524722
+Dili ,NT,TAF,-8.546389,125.524722
 Elcho Island (Ngayawili),NT,TAF,-12.01934,135.57065
 Gove,NT,TAF,-12.26931,136.81832
 Groote Eylandt,NT,TAF,-13.975,136.46
@@ -106,7 +106,7 @@ The Granites,NT,TAF,-20.54833,130.34667
 Tindal,NT,TAF,-14.52099,132.37786
 Troughton Island,NT,Non-TAF,-13.75167,126.14833
 Victoria River Downs,NT,Non-TAF,-16.40362,131.0025
-Suai Airport,NT,TAF,-9.303889,125.286944
+Suai,NT,TAF,-9.303889,125.286944
 Wave Hill,NT,Non-TAF,-17.39364,131.1191
 Yuendumu,NT,TAF,-22.25412,131.78217
 Boulia,QLD-N,Non-TAF,-22.91333,139.89972
@@ -119,7 +119,7 @@ Clermont,QLD-N,TAF,-22.77294,147.62063
 Cloncurry,QLD-N,TAF,-20.67306,140.50278
 Coen,QLD-N,TAF,-13.76208,143.11643
 Cooktown,QLD-N,TAF,-15.44466,145.18431
-Dysart Airport,QLD-N,Non-TAF,-22.6222,148.364
+Dysart,QLD-N,Non-TAF,-22.6222,148.364
 Georgetown,QLD-N,TAF,-18.30504,143.52991
 Hamilton Island,QLD-N,TAF,-20.35816,148.95164
 Horn Island,QLD-N,TAF,-10.58644,142.29003
@@ -137,9 +137,9 @@ Mornington Island,QLD-N,TAF,-16.66263,139.17793
 Mount Isa,QLD-N,TAF,-20.66639,139.48944
 Normanton,QLD-N,TAF,-17.685,141.07025
 Osborne Mine,QLD-N,Non-TAF,-22.08167,140.55666
-Pirlangimpi Airport,QLD-N,Non-TAF,-11.4021,130.4217
+Pirlangimpi,QLD-N,Non-TAF,-11.4021,130.4217
 Proserpine/Whitsunday Coast,QLD-N,TAF,-20.495,148.55235
-Richmond,QLD-N,TAF,-20.70203,143.11481
+Richmond (QLD),QLD-N,TAF,-20.70203,143.11481
 Samuel Hill,QLD-N,Non-TAF,-22.75,150.63333
 Saumarez Reef Seaplane Base,QLD-N,Non-TAF,-21.85729,153.64654
 Scherger,QLD-N,Non-TAF,-12.62389,142.08722
@@ -156,14 +156,14 @@ Ballera,QLD-S,TAF,-27.40833,141.80833
 Barcaldine,QLD-S,Non-TAF,-23.56514,145.30671
 Birdsville,QLD-S,TAF,-25.89889,139.35194
 Blackall,QLD-S,Non-TAF,-24.42789,145.42855
-Brisbane Airport,QLD-S,TAF,-27.38889,153.11583
+Brisbane,QLD-S,TAF,-27.38889,153.11583
 Bundaberg,QLD-S,TAF,-24.89667,152.32306
 Charleville,QLD-S,TAF,-26.4125,146.25694
 Chinchilla,QLD-S,Non-TAF,-26.7694,150.6167
 Cunnamulla,QLD-S,Non-TAF,-28.03006,145.62212
 Emerald,QLD-S,TAF,-23.56763,148.1792
 Gayndah,QLD-S,Non-TAF,-25.61522,151.62077
-Gladstone Airport,QLD-S,TAF,-23.86981,151.22274
+Gladstone,QLD-S,TAF,-23.86981,151.22274
 Gold Coast (Coolangatta),QLD-S,TAF,-28.16111,153.51528
 Goondiwindi,QLD-S,Non-TAF,-28.52128,150.32019
 Heron Island,QLD-S,Non-TAF,-23.4422,151.9131
@@ -182,7 +182,7 @@ Thargomindah,QLD-S,TAF,-27.98635,143.8109
 Toowoomba,QLD-S,TAF,-27.55556,151.92083
 Wellcamp,QLD-S,TAF,-27.5586,151.7942
 Windorah,QLD-S,TAF,-25.41294,142.66731
-Adelaide Airport,SA,TAF,-34.94944,138.52556
+Adelaide,SA,TAF,-34.94944,138.52556
 Arkaroola,SA,Non-TAF,-30.41,139.35
 Blanchetown,SA,Non-TAF,-34.35,139.61
 Ceduna,SA,TAF,-32.1306,133.70975
@@ -200,8 +200,8 @@ Marree,SA,Non-TAF,-29.6587,138.0684
 Minlaton,SA,Non-TAF,-34.71167,137.525
 Moomba,SA,TAF,-28.09954,140.19705
 Mount Gambier,SA,TAF,-37.74544,140.78528
-Mt Crawford,SA,Non-TAF,-34.73,138.93
-Mt Lofty,SA,Non-TAF,-34.98,138.71
+Mt Crawford,SA,Geographical feature,-34.73,138.93
+Mt Lofty,SA,Geographical feature,-34.98,138.71
 Murray Bridge,SA,TAF,-35.06667,139.22667
 Naracoorte,SA,TAF,-36.985,140.725
 Nuriootpa,SA,Non-TAF,-34.47,138.99
@@ -228,18 +228,18 @@ Ben Lomond (Legges Tor),TAS,Non-TAF,-41.53,147.66
 Bridport,TAS,Non-TAF,-41,147.4
 Cradle Mountain Lodge,TAS,Non-TAF,-41.57,145.93
 Devonport,TAS,TAF,-41.17444,146.42528
-Federation Peak,TAS,Non-TAF,-43.27,146.45
+Federation Peak,TAS,Geographical feature,-43.27,146.45
 Flinders Island,TAS,TAF,-40.09129,147.99267
-Mt Picton,TAS,Non-TAF,-43.15,146.58
+Mt Picton,TAS,Geographical feature,-43.15,146.58
 George Town ,TAS,Non-TAF,-41.08,146.82
-Hartz Mountain,TAS,Non-TAF,-43.08,146.77
-Hobart Airport,TAS,TAF,-42.83722,147.5
-King Island Airport,TAS,TAF,-39.88583,143.88194
+Hartz Mountain,TAS,Geographical feature,-43.08,146.77
+Hobart,TAS,TAF,-42.83722,147.5
+King Island,TAS,TAF,-39.88583,143.88194
 Launceston,TAS,TAF,-41.54944,147.20694
-Mount Lloyd ,TAS,Non-TAF,-42.831,146.9465
-Mount Read,TAS,Non-TAF,-41.65,145.54
-Mount Wellington (TAS),TAS,Non-TAF,-42.9,147.23
-Mt Frederick,TAS,Non-TAF,-43.05,146.66
+Mount Lloyd ,TAS,Geographical feature,-42.831,146.9465
+Mount Read,TAS,Geographical feature,-41.65,145.54
+Mount Wellington (TAS),TAS,Geographical feature,-42.9,147.23
+Mt Frederick,TAS,Geographical feature,-43.05,146.66
 Nubeena,TAS,Non-TAF,-43.1,147.74
 Queenstown,TAS,Non-TAF,-42.08,145.57
 Scottsdale,TAS,Non-TAF,-41.17,147.52
@@ -257,7 +257,7 @@ Bacchus Marsh,VIC,Non-TAF,-37.73,144.42
 Bairnsdale,VIC,TAF,-37.88751,147.56764
 Ballarat,VIC,TAF,-37.51159,143.79123
 Barwon Heads,VIC,Non-TAF,-38.26,144.5
-Bendigo Airport,VIC,TAF,-36.73941,144.32985
+Bendigo,VIC,TAF,-36.73941,144.32985
 Castlemaine,VIC,Non-TAF,-37.13,144.22
 Charlton,VIC,Non-TAF,-36.2847,143.3342
 Coldstream,VIC,Non-TAF,-37.7258,145.4072
@@ -265,7 +265,7 @@ Corowa,VIC,Non-TAF,-35.99033,146.3513
 Deniliquin,VIC,Non-TAF,-35.55933,144.94641
 Echuca,VIC,Non-TAF,-36.13,144.76
 Edenhope,VIC,Non-TAF,-37.0222,141.2656
-Essendon Airport,VIC,TAF,-37.72722,144.89861
+Essendon,VIC,TAF,-37.72722,144.89861
 Falls Creek AWS,VIC,Non-TAF,-36.87,147.28
 Fish Creek,VIC,Non-TAF,-38.72,146.05
 Hamilton,VIC,TAF,-37.64876,142.06524
@@ -279,20 +279,19 @@ Kyneton,VIC,Non-TAF,-37.25,144.43
 Latrobe Valley,VIC,TAF,-38.20723,146.47031
 Laverton (VIC),VIC,Non-TAF,-37.8565,144.7566
 Leongatha,VIC,Non-TAF,-38.5,145.86
-Lethbridge Airport,VIC,Non-TAF,-37.92,144.1
+Lethbridge,VIC,Non-TAF,-37.92,144.1
 Mallacoota,VIC,Non-TAF,-37.59875,149.72075
 Mangalore,VIC,TAF,-36.89861,145.18472
 Maryborough (VIC),VIC,Non-TAF,-37.05,143.71
-Melbourne Airport,VIC,TAF,-37.66833,144.83194
+Melbourne,VIC,TAF,-37.66833,144.83194
 Melton,VIC,Non-TAF,-37.62,144.57
 Mildura,VIC,TAF,-34.22926,142.08556
 Moorabbin,VIC,TAF,-37.97861,145.09583
-Mount Buller,VIC,Non-TAF,-37.1467,146.4367
-Mt Buller AWS,VIC,Non-TAF,-37.15,146.44
-Mt Hotham Airport,VIC,Non-TAF,-37.03,147.33
+Mount Buller,VIC,Geographical feature,-37.1467,146.4367
+Mt Hotham,VIC,Non-TAF,-37.03,147.33
 Nathalia,VIC,Non-TAF,-36.06,145.2
 Nhill,VIC,Non-TAF,-36.30967,141.64091
-Orbost Airport,VIC,Non-TAF,-37.79,148.61
+Orbost,VIC,Non-TAF,-37.79,148.61
 Ouyen,VIC,Non-TAF,-35.12,142.32
 Phillip Island,VIC,Non-TAF,-38.52294,145.32717
 Point Cook,VIC,Non-TAF,-37.93226,144.75346
@@ -307,7 +306,7 @@ Warburton (VIC),VIC,Non-TAF,-37.78,145.72
 Warrnambool,VIC,TAF,-38.29514,142.44674
 East Sale,VIC,TAF,-38.098889,147.149444
 Wycheproof,VIC,Non-TAF,-36.06,143.24
-Yarram Airport,VIC,Non-TAF,-38.56,146.67
+Yarram,VIC,Non-TAF,-38.56,146.67
 Yarrawonga,VIC,Non-TAF,-36.0294,146.0306
 Argyle,WA-N,TAF,-16.63684,128.45134
 Balgo Hill,WA-N,Non-TAF,-20.14827,127.97398
@@ -342,7 +341,7 @@ Paraburdoo,WA-N,TAF,-23.17122,117.7454
 Port Hedland,WA-N,TAF,-20.3875,118.62444
 Roebourne,WA-N,Non-TAF,-20.7594,117.1583
 Shay Gap,WA-N,Non-TAF,-20.4254,120.1311
-Solomon Airport,WA-N,TAF,-22.2547,117.847
+Solomon,WA-N,TAF,-22.2547,117.847
 Telfer,WA-N,TAF,-21.71492,122.22874
 West Angelas,WA-N,TAF,-23.135,118.70667
 Wyndham,WA-N,Non-TAF,-15.51144,128.15315
@@ -357,7 +356,7 @@ Caiguna,WA-S,Non-TAF,-32.27,125.49
 Carnarvon,WA-S,TAF,-24.88068,113.67209
 Cunderdin,WA-S,TAF,-31.62222,117.21667
 Denmark,WA-S,Non-TAF,-34.96,117.35
-Esperance Airport,WA-S,TAF,-33.68444,121.82264
+Esperance,WA-S,TAF,-33.68444,121.82264
 Forrest,WA-S,TAF,-30.84389,128.11944
 Garden Island HSF,WA-S,Non-TAF,-32.2433,115.6839
 Geraldton,WA-S,TAF,-28.79621,114.7075
@@ -389,17 +388,262 @@ Norseman,WA-S,Non-TAF,-32.20933,121.75457
 Northam,WA-S,Non-TAF,-31.63,116.68
 Pearce,WA-S,TAF,-31.66768,116.01506
 Pemberton,WA-S,Non-TAF,-34.45,116.08
-Perth Airport,WA-S,TAF,-31.94389,115.97306
+Perth,WA-S,TAF,-31.94389,115.97306
 Rottnest Island,WA-S,Non-TAF,-32.00677,115.53975
 Shark Bay,WA-S,TAF,-25.89387,113.57723
 Southern Cross,WA-S,TAF,-31.2403,119.35979
 Tropicana,WA-S,TAF,-29.18667,124.55028
 Walpole,WA-S,Non-TAF,-34.98,116.73
 Warburton (WA),WA-S,TAF,-26.12833,126.58333
-West Musgrave Airport,WA-S,TAF,-26.0545,127.6907
+West Musgrave,WA-S,TAF,-26.0545,127.6907
 Wiluna,WA-S,TAF,-26.62925,120.22054
 Windarling,WA-S,Non-TAF,-30.0319,119.3872
 Hood Point,WA-S,Non-TAF,-34.38,119.57
 Ravensthorpe,WA-S,Non-TAF,-33.8,120.21
 Collie,WA-S,Non-TAF,-33.37,116.18
 Quairading,WA-S,Non-TAF,-32.005,117.4176
+Boomerang Seamount,VAAC,Geographical feature,-37.721,77.825
+Amsterdam Island,VAAC,Geographical feature,-37.83,77.52
+St. Paul,VAAC,Geographical feature,-38.72,77.53
+St. Andrew Strait,VAAC,Geographical feature,-2.38,147.35
+Baluan,VAAC,Geographical feature,-2.57,147.28
+Central Bismarck Sea,VAAC,Geographical feature,-3.03,147.78
+Blup Blup,VAAC,Geographical feature,-3.507,144.605
+Kadovar,VAAC,Geographical feature,-3.608,144.588
+Bam,VAAC,Geographical feature,-3.613,144.818
+Boisa,VAAC,Geographical feature,-3.994,144.963
+Manam,VAAC,Geographical feature,-4.08,145.037
+Karkar,VAAC,Geographical feature,-4.649,145.964
+Unnamed,VAAC,Geographical feature,-4.311,146.256
+Hankow Reef,VAAC,Geographical feature,-4.883,146.717
+Long Island,VAAC,Geographical feature,-5.358,147.12
+Umboi,VAAC,Geographical feature,-5.589,147.875
+Ritter Island,VAAC,Geographical feature,-5.519,148.115
+Sakar,VAAC,Geographical feature,-5.414,148.094
+Unnamed,VAAC,Geographical feature,-5.2,148.57
+Langila,VAAC,Geographical feature,-5.525,148.42
+Mundua,VAAC,Geographical feature,-4.624,149.339
+Garove,VAAC,Geographical feature,-4.687,149.511
+Dakataua,VAAC,Geographical feature,-5.094,150.094
+Bola,VAAC,Geographical feature,-5.141,150.038
+Garua Harbour,VAAC,Geographical feature,-5.3,150.07
+Krummel-Garbuna-Welcker,VAAC,Geographical feature,-5.416,150.027
+Lolo,VAAC,Geographical feature,-5.466,150.509
+Witori,VAAC,Geographical feature,-5.576,150.516
+Sulu Range,VAAC,Geographical feature,-5.5,150.942
+Hargy,VAAC,Geographical feature,-5.33,151.1
+Bamus,VAAC,Geographical feature,-5.2,151.23
+Ulawun,VAAC,Geographical feature,-5.05,151.33
+Lolobau,VAAC,Geographical feature,-4.92,151.158
+Unnamed,VAAC,Geographical feature,-4.75,150.85
+Rabaul,VAAC,Geographical feature,-4.271,152.203
+Tavui,VAAC,Geographical feature,-4.12,152.2
+Narage,VAAC,Geographical feature,-4.55,149.125
+Doma Peaks,VAAC,Geographical feature,-5.9,143.15
+Crater Mountain,VAAC,Geographical feature,-6.58,145.08
+Yelia,VAAC,Geographical feature,-7.05,145.858
+Koranga,VAAC,Geographical feature,-7.33,146.708
+Madilogo,VAAC,Geographical feature,-9.2,147.57
+Lamington,VAAC,Geographical feature,-8.95,148.15
+Hydrographers Range,VAAC,Geographical feature,-9,148.37
+Musa River,VAAC,Geographical feature,-9.308,148.13
+Managlase Plateau,VAAC,Geographical feature,-9.08,148.33
+Victory,VAAC,Geographical feature,-9.2,149.07
+Sessagara,VAAC,Geographical feature,-9.48,149.13
+Waiowa,VAAC,Geographical feature,-9.57,149.075
+Goodenough,VAAC,Geographical feature,-9.48,150.35
+Iamalele,VAAC,Geographical feature,-9.52,150.53
+Dawson Strait Group,VAAC,Geographical feature,-9.62,150.88
+Lihir,VAAC,Geographical feature,-3.125,152.642
+Ambitle,VAAC,Geographical feature,-4.08,153.65
+Tanga,VAAC,Geographical feature,-3.5,153.22
+Tore,VAAC,Geographical feature,-5.835,154.935
+Balbi,VAAC,Geographical feature,-5.92,154.98
+Billy Mitchell,VAAC,Geographical feature,-6.092,155.225
+Bagana,VAAC,Geographical feature,-6.137,155.196
+Takuan Group,VAAC,Geographical feature,-6.442,155.608
+Loloru,VAAC,Geographical feature,-6.52,155.62
+Simbo,VAAC,Geographical feature,-8.292,156.52
+Kana Keoki,VAAC,Geographical feature,-8.75,157.03
+Coleman Seamount,VAAC,Geographical feature,-8.841,157.16
+Kavachi,VAAC,Geographical feature,-8.991,157.979
+Unnamed,VAAC,Geographical feature,-8.92,158.03
+Gallego,VAAC,Geographical feature,-9.35,159.73
+Savo,VAAC,Geographical feature,-9.13,159.82
+Nonda,VAAC,Geographical feature,-7.67,156.6
+Newer Volcanics Province,VAAC,Geographical feature,-37.77,142.5
+Narcondum,VAAC,Geographical feature,13.43,94.28
+Barren Island,VAAC,Geographical feature,12.278,93.858
+Seulawah Agam,VAAC,Geographical feature,5.448,95.658
+Peuet Sague,VAAC,Geographical feature,4.903,96.289
+"Telong, Bur ni",VAAC,Geographical feature,4.769,96.821
+Singkut,VAAC,Geographical feature,3.248,98.501
+Sinabung,VAAC,Geographical feature,3.17,98.392
+Toba,VAAC,Geographical feature,2.58,98.83
+Imun,VAAC,Geographical feature,2.158,98.93
+Sibualbuali,VAAC,Geographical feature,1.556,99.255
+Lubukraya,VAAC,Geographical feature,1.478,99.209
+Sorikmarapi,VAAC,Geographical feature,0.686,99.539
+Malintang,VAAC,Geographical feature,0.47,99.67
+Talakmau,VAAC,Geographical feature,0.079,99.98
+Sarik-Gajah,VAAC,Geographical feature,0.074,100.189
+Marapi,VAAC,Geographical feature,-0.38,100.474
+Tandikat-Singgalang,VAAC,Geographical feature,-0.39,100.331
+Talang,VAAC,Geographical feature,-0.979,100.681
+Kerinci,VAAC,Geographical feature,-1.697,101.264
+Kunyit,VAAC,Geographical feature,-2.274,101.483
+Hutapanjang,VAAC,Geographical feature,-2.33,101.6
+Sumbing,VAAC,Geographical feature,-2.414,101.728
+Pendan,VAAC,Geographical feature,-2.82,102.02
+Hululais,VAAC,Geographical feature,-3.247,102.239
+"Daun, Bukit",VAAC,Geographical feature,-3.38,102.37
+Kaba,VAAC,Geographical feature,-3.522,102.615
+Dempo,VAAC,Geographical feature,-4.016,103.121
+Patah,VAAC,Geographical feature,-4.257,103.306
+"Lumut Balai, Bukit",VAAC,Geographical feature,-4.22,103.62
+Besar,VAAC,Geographical feature,-4.43,103.67
+Ranau,VAAC,Geographical feature,-4.871,103.925
+Sekincau Belirang,VAAC,Geographical feature,-5.107,104.317
+Suoh,VAAC,Geographical feature,-5.25,104.27
+Hulubelu,VAAC,Geographical feature,-5.334,104.59
+Rajabasa,VAAC,Geographical feature,-5.78,105.625
+Pulau Weh,VAAC,Geographical feature,5.82,95.28
+Geureudong,VAAC,Geographical feature,4.813,96.82
+Kembar,VAAC,Geographical feature,3.85,97.664
+Krakatau,VAAC,Geographical feature,-6.102,105.423
+Pulosari,VAAC,Geographical feature,-6.343,105.978
+Karang,VAAC,Geographical feature,-6.268,106.05
+Perbakti-Gagak,VAAC,Geographical feature,-6.75,106.7
+Salak,VAAC,Geographical feature,-6.72,106.73
+Gede-Pangrango,VAAC,Geographical feature,-6.77,106.965
+Patuha,VAAC,Geographical feature,-7.162,107.4
+Wayang-Windu,VAAC,Geographical feature,-7.208,107.63
+Malabar,VAAC,Geographical feature,-7.13,107.65
+Tangkuban Parahu,VAAC,Geographical feature,-6.77,107.6
+Papandayan,VAAC,Geographical feature,-7.32,107.73
+Kendang,VAAC,Geographical feature,-7.245,107.709
+Guntur,VAAC,Geographical feature,-7.143,107.84
+Tampomas,VAAC,Geographical feature,-6.77,107.95
+Galunggung,VAAC,Geographical feature,-7.25,108.058
+Talagabodas,VAAC,Geographical feature,-7.208,108.07
+"Karaha, Kawah",VAAC,Geographical feature,-7.12,108.08
+Cereme,VAAC,Geographical feature,-6.895,108.408
+Slamet,VAAC,Geographical feature,-7.242,109.208
+Dieng Volcanic Complex,VAAC,Geographical feature,-7.2,109.879
+Sundoro,VAAC,Geographical feature,-7.3,109.992
+Sumbing,VAAC,Geographical feature,-7.384,110.07
+Ungaran,VAAC,Geographical feature,-7.18,110.33
+Telomoyo,VAAC,Geographical feature,-7.362,110.4
+Merbabu,VAAC,Geographical feature,-7.454,110.44
+Merapi,VAAC,Geographical feature,-7.54,110.446
+Muria,VAAC,Geographical feature,-6.62,110.88
+Lawu,VAAC,Geographical feature,-7.625,111.192
+Wilis,VAAC,Geographical feature,-7.808,111.758
+Kelut,VAAC,Geographical feature,-7.93,112.308
+Kawi-Butak,VAAC,Geographical feature,-7.92,112.45
+Arjuno-Welirang,VAAC,Geographical feature,-7.733,112.575
+Penanggungan,VAAC,Geographical feature,-7.616,112.62
+Malang Plain,VAAC,Geographical feature,-8.02,112.68
+Semeru,VAAC,Geographical feature,-8.108,112.922
+Tengger Caldera,VAAC,Geographical feature,-7.942,112.95
+Lamongan,VAAC,Geographical feature,-7.981,113.341
+Lurus,VAAC,Geographical feature,-7.73,113.58
+Iyang-Argapura,VAAC,Geographical feature,-7.97,113.57
+Raung,VAAC,Geographical feature,-8.119,114.056
+Ijen,VAAC,Geographical feature,-8.058,114.242
+Baluran,VAAC,Geographical feature,-7.85,114.37
+"Kamojang, Kawah",VAAC,Geographical feature,-7.125,107.8
+Buyan-Bratan,VAAC,Geographical feature,-8.283,115.133
+Batur,VAAC,Geographical feature,-8.242,115.375
+Agung,VAAC,Geographical feature,-8.343,115.508
+Rinjani,VAAC,Geographical feature,-8.42,116.47
+Tambora,VAAC,Geographical feature,-8.25,118
+Sangeang Api,VAAC,Geographical feature,-8.2,119.07
+"Sano, Wai",VAAC,Geographical feature,-8.724,119.986
+Poco Leok,VAAC,Geographical feature,-8.68,120.48
+Ranakah,VAAC,Geographical feature,-8.62,120.52
+Inierie,VAAC,Geographical feature,-8.875,120.95
+Inielika,VAAC,Geographical feature,-8.73,120.98
+Ebulobo,VAAC,Geographical feature,-8.817,121.191
+Iya,VAAC,Geographical feature,-8.891,121.641
+Sukaria Caldera,VAAC,Geographical feature,-8.792,121.77
+Ndete Napu,VAAC,Geographical feature,-8.72,121.78
+Kelimutu,VAAC,Geographical feature,-8.77,121.82
+Paluweh,VAAC,Geographical feature,-8.32,121.708
+Egon,VAAC,Geographical feature,-8.676,122.455
+Ilimuda,VAAC,Geographical feature,-8.479,122.761
+Lewotobi,VAAC,Geographical feature,-8.542,122.775
+Leroboleng,VAAC,Geographical feature,-8.365,122.833
+Iliboleng,VAAC,Geographical feature,-8.342,123.258
+Lewotolok,VAAC,Geographical feature,-8.272,123.505
+Ililabalekan,VAAC,Geographical feature,-8.55,123.38
+Iliwerung,VAAC,Geographical feature,-8.53,123.57
+"Tara, Batu",VAAC,Geographical feature,-7.791,123.585
+Sirung,VAAC,Geographical feature,-8.508,124.13
+Yersey,VAAC,Geographical feature,-7.53,123.95
+Ilikedeka,VAAC,Geographical feature,-8.301,122.907
+Emperor of China,VAAC,Geographical feature,-6.62,124.22
+Nieuwerkerk,VAAC,Geographical feature,-6.6,124.675
+Gunungapi Wetar,VAAC,Geographical feature,-6.642,126.65
+Wurlali,VAAC,Geographical feature,-7.125,128.675
+Teon,VAAC,Geographical feature,-6.976,129.144
+Nila,VAAC,Geographical feature,-6.73,129.5
+Serua,VAAC,Geographical feature,-6.312,130.017
+Manuk,VAAC,Geographical feature,-5.543,130.303
+Banda Api,VAAC,Geographical feature,-4.523,129.881
+Colo,VAAC,Geographical feature,-0.162,121.601
+Ambang,VAAC,Geographical feature,0.75,124.42
+Soputan,VAAC,Geographical feature,1.112,124.737
+Riendengan-Sempu,VAAC,Geographical feature,1.13,124.758
+Tondano Caldera,VAAC,Geographical feature,1.23,124.83
+Lokon-Empung,VAAC,Geographical feature,1.358,124.792
+Mahawu,VAAC,Geographical feature,1.352,124.865
+Klabat,VAAC,Geographical feature,1.454,125.031
+Tangkoko-Duasudara,VAAC,Geographical feature,1.518,125.185
+Ruang,VAAC,Geographical feature,2.3,125.37
+Karangetang,VAAC,Geographical feature,2.781,125.407
+Banua Wuhu,VAAC,Geographical feature,3.138,125.491
+Awu,VAAC,Geographical feature,3.689,125.447
+Unnamed,VAAC,Geographical feature,3.97,124.17
+Tarakan,VAAC,Geographical feature,1.83,127.83
+Dukono,VAAC,Geographical feature,1.693,127.894
+Tobaru,VAAC,Geographical feature,1.63,127.67
+Ibu,VAAC,Geographical feature,1.488,127.63
+Gamkonora,VAAC,Geographical feature,1.38,127.53
+Todoko-Ranu,VAAC,Geographical feature,1.25,127.47
+Jailolo,VAAC,Geographical feature,1.08,127.439
+Hiri,VAAC,Geographical feature,0.9,127.32
+Gamalama,VAAC,Geographical feature,0.8,127.33
+Tidore,VAAC,Geographical feature,0.658,127.4
+Mare,VAAC,Geographical feature,0.57,127.4
+Moti,VAAC,Geographical feature,0.454,127.411
+Makian,VAAC,Geographical feature,0.32,127.4
+Tigalalu,VAAC,Geographical feature,0.07,127.42
+Amasing,VAAC,Geographical feature,-0.53,127.48
+Bibinoi,VAAC,Geographical feature,-0.761,127.725
+Bombalai,VAAC,Geographical feature,4.4,117.88
+Jolo,VAAC,Geographical feature,6.013,121.057
+Balut,VAAC,Geographical feature,5.4,125.375
+Parker,VAAC,Geographical feature,6.113,124.892
+Matutum,VAAC,Geographical feature,6.37,125.07
+Apo,VAAC,Geographical feature,6.989,125.269
+Leonard Range,VAAC,Geographical feature,7.382,126.047
+Makaturing,VAAC,Geographical feature,7.644,124.317
+Latukan,VAAC,Geographical feature,7.65,124.45
+Ragang,VAAC,Geographical feature,7.691,124.507
+Kalatungan,VAAC,Geographical feature,7.95,124.8
+Musuan,VAAC,Geographical feature,7.877,125.068
+Malindang,VAAC,Geographical feature,8.22,123.63
+Balatukan,VAAC,Geographical feature,8.77,124.98
+Camiguin,VAAC,Geographical feature,9.203,124.673
+Paco,VAAC,Geographical feature,9.593,125.52
+Cuernos de Negros,VAAC,Geographical feature,9.25,123.17
+Kanlaon,VAAC,Geographical feature,10.412,123.132
+Mandalagan,VAAC,Geographical feature,10.65,123.25
+Silay,VAAC,Geographical feature,10.77,123.23
+Cabalian,VAAC,Geographical feature,10.285,125.218
+Mahagnao,VAAC,Geographical feature,10.882,124.888
+Bas Dong Nai,VAAC,Geographical feature,10.8,107.2
+"Cendres, Ile des",VAAC,Geographical feature,10.158,109.014
+Veteran,VAAC,Geographical feature,9.83,109.05
+Popa,VAAC,Geographical feature,20.92,95.25

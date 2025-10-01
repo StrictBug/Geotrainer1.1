@@ -1,0 +1,82 @@
+.checkbox-dropdown {
+    position: relative;
+    width: 140px;
+    border: 1px solid black;
+    padding: 8px;
+    height: 40px;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-dropdown .selected-options {
+    line-height: 24px;
+}
+
+.checkbox-dropdown-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    width: 140px;
+    background: white;
+    border: 1px solid black;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.checkbox-dropdown.active .checkbox-dropdown-list {
+    display: block;
+}
+
+.checkbox-dropdown-list label {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+.checkbox-dropdown-list label:hover {
+    background-color: #f0f0f0;
+}
+
+.checkbox-dropdown-list input[type="checkbox"] {
+    margin-right: 8px;
+    width: 14px;
+    height: 14px;
+}
+
+.selected-options {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 24px;
+    padding-right: 20px;
+}
+
+.checkbox-dropdown::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 45%;
+    border: 6px solid transparent;
+    border-top-color: black;
+}
+
+.checkbox-dropdown.active::after {
+    border-top-color: transparent;
+    border-bottom-color: black;
+    top: 35%;
+}

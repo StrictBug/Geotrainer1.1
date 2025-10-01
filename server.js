@@ -8,7 +8,22 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Serve static files from the root directory
 app.use(express.static(path.join(__dirname, '.')));
+
+// Serve map tiles
+app.get('/topo/tiles/:z/:x/:y', (req, res) => {
+    const { z, x, y } = req.params;
+    // The tiles are stored with .jpg extension
+    const tilePath = path.join(__dirname, 'topo', 'tiles', z, x, y + '.jpg');
+    // Tile debugging removed for cleaner console output
+    
+    if (fs.existsSync(tilePath)) {
+        res.sendFile(tilePath);
+    } else {
+        res.status(404).send('Tile not found');
+    }
+});
 
 const games = {};
 let locations = [];
@@ -63,11 +78,19 @@ function loadLocations() {
                     allCoords.forEach(c => { latSum += c.lat; lngSum += c.lng; });
                     const centroid = allCoords.length > 0 ? { lat: latSum / allCoords.length, lng: lngSum / allCoords.length } : { lat: 0, lng: 0 };
                     
+                    // Debug logging for TYPE2 and GAF_AREA2
+                    if (feature.properties?.TYPE2 || feature.properties?.GAF_AREA2) {
+                        console.log(`Area ${feature.properties?.NAME} has:
+                        TYPE2: ${feature.properties?.TYPE2}
+                        GAF_AREA2: ${feature.properties?.GAF_AREA2}`);
+                    }
                     locations.push({
                         type: 'area',
                         name: feature.properties?.NAME || 'Unknown Area',
                         area: feature.properties?.AREA || feature.properties?.GAF_AREA || 'Unknown',
+                        area2: feature.properties?.GAF_AREA2 || null,
                         areaType: feature.properties?.TYPE || 'Unknown',
+                        areaType2: feature.properties?.TYPE2 || null,
                         polygon: parts[0], // Keep original polygon for compatibility
                         polygonParts: parts, // Store all parts for multi-polygon rendering
                         isMultiPolygon: feature.geometry.type === 'MultiPolygon',
@@ -93,79 +116,152 @@ function generateGameCode() {
 
 function startRound(gameCode) {
     const game = games[gameCode];
-    if (!game || game.state !== 'playing') {
+    if (!game) {
+        console.log(`Cannot start round for ${gameCode}: Game not found`);
+        return;
+    }
+    if (game.state !== 'playing') {
         console.log(`Cannot start round for ${gameCode}: Invalid state (${game?.state})`);
         return;
     }
 
-    game.round = (game.round || 0) + 1;
-    const area = game.settings.area;
-    const locationType = game.settings.locationType || 'all';
-    let availableLocations = locations.filter(loc => !game.usedLocations?.includes(loc));
-
-    // Filter by location type first
-    if (locationType !== 'all') {
-        availableLocations = availableLocations.filter(loc => {
-            if (loc.type === 'point') {
-                // Handle point location types
-                if (locationType === 'TAF') return loc.pointType === 'TAF';
-                if (locationType === 'Non TAF') return loc.pointType === 'Non TAF';
-                if (locationType === 'Forecast district') return loc.pointType === 'Forecast district';
-                if (locationType === 'Geographical feature') return loc.pointType === 'Geographical feature';
-            } else if (loc.type === 'area') {
-                // Handle area location types
-                if (locationType === 'Forecast district') return loc.areaType === 'Forecast district';
-            }
-            return false;
-        });
+    // Clear any existing timer
+    if (game.timer) {
+        clearInterval(game.timer);
+        game.timer = null;
     }
 
-    // Then filter by area
-    if (area !== 'All regions') {
-        if (area === 'MAFC') {
-            availableLocations = availableLocations.filter(loc => 
-                ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'].includes(loc.area)
-            );
-        } else if (area === 'BAFC') {
-            availableLocations = availableLocations.filter(loc => 
-                ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'].includes(loc.area)
-            );
-        } else {
-            availableLocations = availableLocations.filter(loc => loc.area === area);
+    // Verify we have locations loaded
+    if (!locations || locations.length === 0) {
+        console.error('No locations loaded, reloading locations');
+        loadLocations();
+        if (!locations || locations.length === 0) {
+            console.error('Failed to load locations');
+            io.to(gameCode).emit('error', 'Failed to load game locations');
+            return;
         }
     }
-    // Filter by location type
-    if (locationType && locationType !== 'all') {
-        availableLocations = availableLocations.filter(loc => {
-            if (locationType === 'Forecast district') {
-                return loc.type === 'area' && loc.areaType === 'Forecast district';
-            } else if (locationType === 'Geographical feature') {
-                return loc.type === 'area' && loc.areaType === 'Geographical feature';
-            } else if (locationType === 'TAF') {
-                return loc.type === 'point' && loc.pointType === 'TAF';
-            } else if (locationType === 'Non TAF') {
-                return loc.type === 'point' && loc.pointType === 'Non TAF';
+
+    game.round = (game.round || 0) + 1;
+    const areas = game.settings.areas;
+    const locationTypes = game.settings.locationTypes || ['all'];
+    
+    console.log(`Starting round ${game.round} with:
+        areas: ${areas.join(', ')}
+        locationTypes: ${locationTypes.join(', ')}`);
+
+    // Helper functions for filtering
+    function filterByLocationTypes(locs, types) {
+        console.log(`\nFiltering ${locs.length} locations by types: ${types.join(', ')}`);
+        
+        // Allow all types if 'all' is specified
+        if (types.includes('all')) {
+            console.log('Allowing all location types - skipping type filtering');
+            return locs;
+        }
+        
+        const filtered = locs.filter(loc => {
+            if (loc.type === 'point') {
+                return (
+                    (types.includes('TAF') && loc.pointType === 'TAF') ||
+                    (types.includes('Non TAF') && (loc.pointType === null || loc.pointType === '' || (loc.pointType !== 'TAF' && loc.pointType !== 'Forecast district' && loc.pointType !== 'Geographical feature'))) ||
+                    (types.includes('Forecast district') && loc.pointType === 'Forecast district') ||
+                    (types.includes('Geographical feature') && loc.pointType === 'Geographical feature')
+                );
+            } else if (loc.type === 'area') {
+                // Check both primary and secondary area types against requested types
+                const matches = types.some(type => {
+                    switch(type) {
+                        case 'all':
+                            return true;
+                        case 'Forecast district':
+                            return loc.areaType === 'Forecast district' || loc.areaType2 === 'Forecast district';
+                        case 'Geographical feature':
+                            return loc.areaType === 'Geographical feature' || loc.areaType2 === 'Geographical feature';
+                        default:
+                            return false;
+                    }
+                });
+                // Debug logging for area matching
+                console.log(`Checking area ${loc.name}:
+                    areaType: ${loc.areaType}
+                    areaType2: ${loc.areaType2}
+                    area: ${loc.area}
+                    area2: ${loc.area2}
+                    matches: ${matches}`);
+                return matches;
             }
             return false;
         });
+        console.log(`After type filtering: ${filtered.length} locations remain`);
+        return filtered;
     }
+
+    function filterByAreas(locs, selectedAreas) {
+        console.log(`\nFiltering ${locs.length} locations by areas: ${selectedAreas.join(', ')}`);
+        
+        if (selectedAreas.includes('All regions')) {
+            console.log('All regions selected - skipping area filtering');
+            return locs;
+        }
+        
+        const filtered = locs.filter(loc => {
+            const matches = selectedAreas.some(area => {
+                if (area === 'MAFC') {
+                    const mafcAreas = ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'];
+                    return mafcAreas.includes(loc.area) || (loc.area2 && mafcAreas.includes(loc.area2));
+                } else if (area === 'BAFC') {
+                    const bafcAreas = ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'];
+                    const matches = bafcAreas.includes(loc.area) || (loc.area2 && bafcAreas.includes(loc.area2));
+                    console.log(`Checking BAFC area ${loc.name}:
+                        area: ${loc.area}
+                        area2: ${loc.area2}
+                        matches: ${matches}`);
+                    return matches;
+                } else {
+                    const matches = loc.area === area || loc.area2 === area;
+                    console.log(`Checking specific area ${loc.name} for ${area}:
+                        area: ${loc.area}
+                        area2: ${loc.area2}
+                        matches: ${matches}`);
+                    console.log(`  Area ${loc.name}:\n    area: ${loc.area}\n    area2: ${loc.area2}\n    matches: ${matches}`);
+                    return matches;
+                }
+            });
+            return matches;
+        });
+        console.log(`After area filtering: ${filtered.length} locations remain`);
+        return filtered;
+    }
+
+    // Debug log initial locations count
+    console.log(`\nStarting location filtering with ${locations.length} total locations`);
+    console.log('Game settings:', {
+        locationTypes,
+        areas,
+        roundLength: game.settings.roundLength,
+        rounds: game.settings.rounds
+    });
+
+    // Apply filters to available locations
+    let availableLocations = filterByLocationTypes(locations, locationTypes);
+    console.log(`\nAfter location type filtering: ${availableLocations.length} locations remain`);
+    
+    availableLocations = filterByAreas(availableLocations, areas);
+    console.log(`\nAfter area filtering: ${availableLocations.length} locations remain`);
+    
+    availableLocations = availableLocations.filter(loc => !game.usedLocations?.includes(loc));
+    console.log(`\nAfter removing used locations: ${availableLocations.length} locations remain`);
+
+    // If no locations available after filtering, reset and try again
     if (availableLocations.length === 0) {
         game.usedLocations = [];
         availableLocations = locations;
-        if (area !== 'All regions') {
-            if (area === 'MAFC') {
-                availableLocations = availableLocations.filter(loc => 
-                    ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'].includes(loc.area)
-                );
-            } else if (area === 'BAFC') {
-                availableLocations = availableLocations.filter(loc => 
-                    ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'].includes(loc.area)
-                );
-            } else {
-                availableLocations = availableLocations.filter(loc => loc.area === area);
-            }
-        }
+        availableLocations = filterByLocationTypes(availableLocations, locationTypes);
+        availableLocations = filterByAreas(availableLocations, areas);
     }
+
+    // If still no locations available, game cannot proceed
     if (availableLocations.length === 0) {
         console.error(`No locations available for ${gameCode}`);
         io.to(gameCode).emit('gameEnded', 'No locations available');
@@ -392,14 +488,22 @@ function endRound(gameCode) {
 io.on('connection', (socket) => {
     console.log(`Player connected: ${socket.id}`);
 
-    socket.on('hostGame', ({ rounds, area, locationType, roundLength, hostName }) => {
+    socket.on('hostGame', ({ rounds, areas, locationTypes, roundLength, hostName }) => {
         const gameCode = generateGameCode();
         games[gameCode] = {
             host: socket.id,
             players: [{ id: socket.id, name: hostName, ready: false, disconnected: false }],
-            settings: { rounds, area, locationType, roundLength: roundLength || 15 },
+            settings: { 
+                rounds: parseInt(rounds) || 5, 
+                areas: areas || ['All regions'],
+                locationTypes: locationTypes || ['all'],
+                roundLength: parseInt(roundLength) || 15 
+            },
             state: 'lobby',
-            round: 0
+            round: 0,
+            usedLocations: [],
+            guesses: {},
+            roundHistory: []
         };
         socket.join(gameCode);
         socket.emit('gameHosted', gameCode);
@@ -426,14 +530,19 @@ io.on('connection', (socket) => {
         console.log(`${playerName} joined ${gameCode}`);
     });
 
-    socket.on('updateSettings', ({ gameCode, rounds, area, locationType, roundLength }) => {
+    socket.on('updateSettings', ({ gameCode, rounds, areas, locationTypes, roundLength }) => {
         if (!games[gameCode] || games[gameCode].host !== socket.id) {
             console.log(`Invalid settings update request for ${gameCode} by ${socket.id}`);
             return;
         }
-        games[gameCode].settings = { rounds, area, locationType, roundLength: roundLength || 15 };
-        io.to(gameCode).emit('settingsUpdated', { rounds, area, locationType, roundLength: roundLength || 15 });
-        console.log(`Settings updated for ${gameCode}: ${area}, ${locationType}, ${rounds} rounds, ${roundLength} seconds`);
+        games[gameCode].settings = { 
+            rounds, 
+            areas: areas || ['All regions'],
+            locationTypes: locationTypes || ['all'],
+            roundLength: roundLength || 15 
+        };
+        io.to(gameCode).emit('settingsUpdated', games[gameCode].settings);
+        console.log(`Settings updated for ${gameCode}: ${areas}, ${locationTypes}, ${rounds} rounds, ${roundLength} seconds`);
     });
 
     socket.on('startGame', (gameCode) => {
@@ -443,13 +552,19 @@ io.on('connection', (socket) => {
         }
         games[gameCode].state = 'playing';
         games[gameCode].rejoinedPlayers = new Set();
+        games[gameCode].round = 0;
+        games[gameCode].usedLocations = [];
+        games[gameCode].roundHistory = [];
+        
+        // Send all game settings to clients
         io.to(gameCode).emit('gameStarted', {
             rounds: games[gameCode].settings.rounds,
-            area: games[gameCode].settings.area,
-            locationType: games[gameCode].settings.locationType,
+            areas: games[gameCode].settings.areas,
+            locationTypes: games[gameCode].settings.locationTypes,
+            roundLength: games[gameCode].settings.roundLength,
             players: games[gameCode].players
         });
-        console.log(`Game ${gameCode} started, waiting for players to rejoin`);
+        console.log(`Game ${gameCode} started with settings:`, games[gameCode].settings);
     });
 
     socket.on('rejoinGame', ({ gameCode, playerName }) => {
@@ -467,10 +582,18 @@ io.on('connection', (socket) => {
                 socket.join(gameCode);
                 game.rejoinedPlayers.add(playerName);
                 console.log(`${playerName} rejoined ${gameCode} with new ID ${socket.id}`);
-                socket.emit('playerRejoined', { gameCode, playerName });
+                socket.emit('playerRejoined', { 
+                    gameCode, 
+                    playerName,
+                    settings: game.settings,  // Send current game settings
+                    currentRound: game.round
+                });
+                
+                // Start first round when all players have rejoined
                 if (game.state === 'playing' && game.round === 0 && game.rejoinedPlayers.size === game.players.length) {
                     console.log(`All players rejoined ${gameCode}, starting first round`);
-                    startRound(gameCode);
+                    // Small delay to ensure all clients are ready
+                    setTimeout(() => startRound(gameCode), 1000);
                 }
             } else {
                 console.log(`Player ${playerName} not found in ${gameCode}`);
@@ -493,26 +616,24 @@ io.on('connection', (socket) => {
             return;
         }
 
-        const player = game.players.find(p => p.name === playerName);
-        if (!player) {
-            console.log(`Guess rejected for ${socket.id} in ${gameCode}: Player ${playerName} not found`);
-            return;
-        }
+    const player = game.players.find(p => p.name === playerName);
+    if (!player) {
+        console.log(`Guess rejected for ${socket.id} in ${gameCode}: Player ${playerName} not found`);
+        return;
+    }
 
-        const guessesBefore = JSON.stringify(game.guesses[player.id]);
-        game.guesses[player.id] = guess;
-        console.log(`Guess ${guessesBefore ? 'updated' : 'submitted'} by ${playerName} (ID: ${player.id}) in ${gameCode} at ${game.timeLeft}s:`, guess, `Previous guess: ${guessesBefore || 'none'}`);
+    const guessesBefore = JSON.stringify(game.guesses[player.id]);
+    game.guesses[player.id] = guess;
+    console.log(`Guess ${guessesBefore ? 'updated' : 'submitted'} by ${playerName} (ID: ${player.id}) in ${gameCode} at ${game.timeLeft}s:`, guess, `Previous guess: ${guessesBefore || 'none'}`);
 
-        // Check if all active players have submitted guesses
-        const activePlayers = game.players.filter(p => !p.disconnected);
-        const allGuessesSubmitted = activePlayers.every(p => game.guesses[p.id]);
-        if (allGuessesSubmitted && game.timeLeft >= 0) {
-            clearInterval(game.timer);
-            endRound(gameCode);
-        }
-    });
-
-    socket.on('rescindGuess', ({ gameCode, playerName, round }) => {
+    // Check if all active players have submitted guesses and time is not expired
+    const activePlayers = game.players.filter(p => !p.disconnected);
+    const allGuessesSubmitted = activePlayers.every(p => game.guesses[p.id]);
+    if (allGuessesSubmitted && game.timeLeft > 0) {
+        clearInterval(game.timer);
+        endRound(gameCode);
+    }
+});    socket.on('rescindGuess', ({ gameCode, playerName, round }) => {
         const game = games[gameCode];
         if (!game || game.state !== 'playing') {
             console.log(`Rescind request rejected for ${playerName} in ${gameCode}: Invalid game state`);
@@ -682,7 +803,9 @@ io.on('connection', (socket) => {
     });
 });
 
+// Load locations when server starts
 loadLocations();
+console.log('Server initialized with', locations.length, 'locations');
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, '0.0.0.0', () => {
     const isLocal = !process.env.PORT;

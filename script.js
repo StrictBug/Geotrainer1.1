@@ -12,8 +12,8 @@ let roundActive = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 let maxRounds = parseInt(urlParams.get('rounds')) || 15;
-const selectedArea = urlParams.get('area') || 'All regions';
-let selectedLocationType = urlParams.get('locationType') || 'all';
+const selectedAreas = urlParams.get('areas') ? urlParams.get('areas').split(',') : ['All regions'];
+const selectedLocationTypes = urlParams.get('locationTypes') ? urlParams.get('locationTypes').split(',') : ['all'];
 let selectedRoundLength = 15;
 if (urlParams.has('roundLength')) {
     const rl = parseInt(urlParams.get('roundLength'), 10);
@@ -24,23 +24,111 @@ if (urlParams.has('roundLength')) {
 console.log('window.location.search:', window.location.search);
 console.log('URL roundLength param:', urlParams.get('roundLength'), 'parsed:', selectedRoundLength, 'type:', typeof selectedRoundLength);
 
-function getInitialMapSettings(area) {
-    switch (area) {
-        case 'WA-S': return { center: [-30.0, 120.5], zoom: 5 };
-        case 'SA': return { center: [-31.0, 135.5], zoom: 5 };
-        case 'VIC': return { center: [-37.0, 144.0], zoom: 6 };
-        case 'TAS': return { center: [-42.0, 146.0], zoom: 7 };
-        case 'NSW-W': return { center: [-32.2, 144.86], zoom: 6 };
-        case 'NSW-E': return { center: [-33.07, 150.37], zoom: 6 };
-        case 'WA-N': return { center: [-20.31, 122.56], zoom: 5 };
-        case 'QLD-N': return { center: [-18.59, 143.38], zoom: 5 };
-        case 'QLD-S': return { center: [-26.05, 146.39], zoom: 6 };
-        case 'NT': return { center: [-19.35, 133.70], zoom: 5 };
-        case 'MAFC': return { center: [-32.2, 137.1], zoom: 4 };
-        case 'BAFC': return { center: [-24.2, 137.1], zoom: 4 };
-        case 'All regions':
-        default: return { center: [-25.2744, 133.7751], zoom: 4 };
+function getAreaBounds(area) {
+    // Define the bounds for each area
+    const areaBounds = {
+        'WA-S': { minLat: -35.0, maxLat: -25.0, minLng: 115.0, maxLng: 126.0 },
+        'SA': { minLat: -38.0, maxLat: -26.0, minLng: 129.0, maxLng: 141.0 },
+        'VIC': { minLat: -39.0, maxLat: -34.0, minLng: 141.0, maxLng: 150.0 },
+        'TAS': { minLat: -43.5, maxLat: -40.5, minLng: 144.0, maxLng: 148.5 },
+        'NSW-W': { minLat: -35.0, maxLat: -29.0, minLng: 141.0, maxLng: 147.0 },
+        'NSW-E': { minLat: -37.0, maxLat: -28.0, minLng: 147.0, maxLng: 153.0 },
+        'WA-N': { minLat: -23.0, maxLat: -14.0, minLng: 120.0, maxLng: 129.0 },
+        'QLD-N': { minLat: -21.0, maxLat: -12.0, minLng: 138.0, maxLng: 147.0 },
+        'QLD-S': { minLat: -29.0, maxLat: -23.0, minLng: 141.0, maxLng: 153.0 },
+        'NT': { minLat: -26.0, maxLat: -11.0, minLng: 129.0, maxLng: 138.0 },
+        'VAAC': { minLat: -17.727759, maxLat: 14.349548, minLng: 91.494141, maxLng: 166.816406 }
+    };
+
+    // Handle MAFC, BAFC and VAAC
+    if (area === 'MAFC') {
+        return getCombinedBounds(['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS']);
+    } else if (area === 'BAFC') {
+        return getCombinedBounds(['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E']);
+    } else if (area === 'VAAC') {
+        return areaBounds['VAAC'];
+    } else if (area === 'All regions') {
+        return {
+            minLat: -44.0,
+            maxLat: -10.0,
+            minLng: 110.0,
+            maxLng: 154.0
+        };
     }
+
+    return areaBounds[area];
+}
+
+function getCombinedBounds(areas) {
+    let minLat = Infinity;
+    let maxLat = -Infinity;
+    let minLng = Infinity;
+    let maxLng = -Infinity;
+
+    areas.forEach(area => {
+        const bounds = getAreaBounds(area);
+        if (bounds) {
+            minLat = Math.min(minLat, bounds.minLat);
+            maxLat = Math.max(maxLat, bounds.maxLat);
+            minLng = Math.min(minLng, bounds.minLng);
+            maxLng = Math.max(maxLng, bounds.maxLng);
+        }
+    });
+
+    return { minLat, maxLat, minLng, maxLng };
+}
+
+function calculateZoomLevel(bounds) {
+    const latSpan = bounds.maxLat - bounds.minLat;
+    const lngSpan = bounds.maxLng - bounds.minLng;
+    
+    if (latSpan > 20 || lngSpan > 30) return 4;  // Very large area (e.g., multiple states)
+    if (latSpan > 8 || lngSpan > 12) return 5;   // Large area (e.g., VIC+TAS)
+    if (latSpan > 4 || lngSpan > 6) return 6;    // Medium area (e.g., single state)
+    if (latSpan > 2 || lngSpan > 3) return 7;    // Small area
+    return 8;  // Very small area
+}
+
+function getInitialMapSettings(areas) {
+    // If it's a string, convert it to an array
+    if (typeof areas === 'string') {
+        areas = [areas];
+    }
+
+    // Default Australia-wide view settings
+    const defaultView = { center: [-25.2744, 133.7751], zoom: 4 };
+
+    // If no areas or All regions selected, return default view
+    if (!areas || 
+        areas.length === 0 || 
+        areas.includes('All regions')) {
+        return defaultView;
+    }
+
+    // If both MAFC and BAFC are selected, return default Australia-wide view
+    if (areas.includes('MAFC') && areas.includes('BAFC')) {
+        return defaultView;
+    }
+
+    // Special handling for VAAC combinations
+    if (areas.includes('VAAC') && areas.length > 1) {
+        // Use a wider view when VAAC is combined with other areas
+        return { center: [-1.689, 129.155], zoom: 3 };
+    }
+
+    // Get combined bounds for all selected areas
+    const bounds = getCombinedBounds(areas);
+    
+    // Calculate center point
+    const center = [
+        (bounds.minLat + bounds.maxLat) / 2,
+        (bounds.minLng + bounds.maxLng) / 2
+    ];
+
+    // Calculate appropriate zoom level
+    const zoom = calculateZoomLevel(bounds);
+
+    return { center, zoom };
 }
 
 function calculateAreaBounds(polygons) {
@@ -72,10 +160,14 @@ function calculateAppropriateZoom(bounds) {
     const LAT_THRESHOLD = 2; // Degrees of latitude span
     const LNG_THRESHOLD = 2; // Degrees of longitude span
     
-    if (bounds.latSpan > LAT_THRESHOLD || bounds.lngSpan > LNG_THRESHOLD) {
-        return 6; // Larger areas get zoom level 6
+    if (bounds.latSpan > LAT_THRESHOLD * 2 || bounds.lngSpan > LNG_THRESHOLD * 2) {
+        return 6; // Large areas get zoom level 6
+    } else if (bounds.latSpan > LAT_THRESHOLD || bounds.lngSpan > LNG_THRESHOLD) {
+        return 7; // Medium areas get zoom level 7
+    } else if (bounds.latSpan > LAT_THRESHOLD/2 || bounds.lngSpan > LNG_THRESHOLD/2) {
+        return 8; // Small areas get zoom level 8
     }
-    return 7; // Smaller areas get zoom level 7
+    return 9; // Very small areas get zoom level 9
 }
 
 function calculatePolygonCentroid(vertices) {
@@ -100,8 +192,8 @@ function calculatePolygonCentroid(vertices) {
 }
 
 function loadLocations() {
-    // Fetch point locations from points.csv
-    Promise.all([
+    // Return the promise chain
+    return Promise.all([
         fetch('points.csv').then(res => res.text()),
         fetch('areas.geojson').then(res => res.json())
     ]).then(([pointsText, areaGeojson]) => {
@@ -148,7 +240,9 @@ function loadLocations() {
                         type: 'area',
                         name: feature.properties?.NAME || 'Unknown Area',
                         area: feature.properties?.AREA || feature.properties?.GAF_AREA || 'Unknown',
+                        area2: feature.properties?.GAF_AREA2 || null,
                         areaType: feature.properties?.TYPE || 'Unknown',
+                        areaType2: feature.properties?.TYPE2 || null,
                         polygon: parts[0], // Keep original polygon for compatibility
                         polygonParts: parts, // Store all parts for multi-polygon rendering
                         isMultiPolygon: feature.geometry.type === 'MultiPolygon',
@@ -159,34 +253,42 @@ function loadLocations() {
         }
         locations = [...pointLocations, ...areaLocations];
 
-        // Filter by selected area
-        if (selectedArea !== 'All regions') {
-            if (selectedArea === 'MAFC') {
-                locations = locations.filter(loc => 
-                    ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'].includes(loc.area)
-                );
-            } else if (selectedArea === 'BAFC') {
-                locations = locations.filter(loc => 
-                    ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'].includes(loc.area)
-                );
-            } else {
-                locations = locations.filter(loc => loc.area === selectedArea);
-            }
+        // Filter by selected areas
+        if (!selectedAreas.includes('All regions')) {
+            const mafcAreas = ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'];
+            const bafcAreas = ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'];
+            
+            locations = locations.filter(loc => {
+                return selectedAreas.some(area => {
+                    if (area === 'MAFC') {
+                        return mafcAreas.includes(loc.area) || (loc.area2 && mafcAreas.includes(loc.area2));
+                    } else if (area === 'BAFC') {
+                        return bafcAreas.includes(loc.area) || (loc.area2 && bafcAreas.includes(loc.area2));
+                    } else {
+                        return loc.area === area || loc.area2 === area;
+                    }
+                });
+            });
         }
 
-        // Filter by location type from URL
-        if (selectedLocationType && selectedLocationType !== 'all') {
+        // Filter by location types
+        if (!selectedLocationTypes.includes('all')) {
             locations = locations.filter(loc => {
-                if (selectedLocationType === 'Forecast district') { 
-                    return loc.type === 'area' && loc.areaType === 'Forecast district';
-                } else if (selectedLocationType === 'Geographical feature') {
-                    return loc.type === 'area' && loc.areaType === 'Geographical feature';
-                } else if (selectedLocationType === 'TAF') {
-                    return loc.type === 'point' && loc.pointType === 'TAF';
-                } else if (selectedLocationType === 'Non TAF') {
-                    return loc.type === 'point' && loc.pointType !== 'TAF';
-                }
-                return false;
+                return selectedLocationTypes.some(type => {
+                    switch (type) {
+                        case 'Forecast district':
+                            return loc.type === 'area' && (loc.areaType === 'Forecast district' || loc.areaType2 === 'Forecast district');
+                        case 'Geographical feature':
+                            return (loc.type === 'area' && (loc.areaType === 'Geographical feature' || loc.areaType2 === 'Geographical feature')) ||
+                                   (loc.type === 'point' && loc.pointType === 'Geographical feature');
+                        case 'TAF':
+                            return loc.type === 'point' && loc.pointType === 'TAF';
+                        case 'Non TAF':
+                            return loc.type === 'point' && (loc.pointType === null || loc.pointType === '' || loc.pointType !== 'TAF');
+                        default:
+                            return false;
+                    }
+                });
             });
         }
 
@@ -201,36 +303,7 @@ function loadLocations() {
     });
 }
 
-function initMap() {
-    console.log('initMap called');
-    const mapSettings = getInitialMapSettings(selectedArea);
-    
-    // Initialize Leaflet map
-    map = L.map('map', { minZoom: 4, maxZoom: 9 }).setView(mapSettings.center, mapSettings.zoom);
-    
-    // Add custom topographic tiles (EPSG:3857)
-    L.tileLayer('/topo/tiles/{z}/{x}/{y}.png', {
-        minZoom: 4,
-        maxZoom: 9,
-        noWrap: true,
-        attribution: 'Custom topo tiles'
-    }).addTo(map);
-    
-    console.log('Leaflet map initialized');
-
-    // Add click listener
-    map.on('click', (event) => {
-        if (timeLeft > 0 && roundActive) {
-            if (marker) {
-                map.removeLayer(marker);
-            }
-            marker = L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
-            document.getElementById("guess").disabled = false;
-        }
-    });
-
-    loadLocations();
-}
+// Haversine distance calculation
 
 // Haversine distance calculation
 function calculateDistance(lat1, lng1, lat2, lng2) {
@@ -349,7 +422,8 @@ function startNewRound() {
     });
     actualMarkers = [];
 
-    const mapSettings = getInitialMapSettings(selectedArea);
+    // Get map settings based on all selected areas
+    const mapSettings = getInitialMapSettings(selectedAreas);
     map.setView(mapSettings.center, mapSettings.zoom);
 
     // Use a unique key for each location to track used ones
@@ -562,7 +636,58 @@ document.getElementById("guess").addEventListener("click", () => {
     }
 });
 
-// Initialize map when page loads
-document.addEventListener('DOMContentLoaded', initMap);
-// Listen for location type changes and reload locations
-// Removed broken event listener for non-existent locationTypeSelect
+// Initialize map and game when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Only initialize the map if it hasn't been initialized yet
+    if (!map) {
+        // Initialize the map first with settings based on all selected areas
+        const initialSettings = getInitialMapSettings(selectedAreas);
+        map = L.map('map', { 
+            minZoom: 3, 
+            maxZoom: 9,
+            tms: false,  // Set to false as these are not TMS tiles
+            maxBounds: [[-45, 90], [15, 170]], // Constrain view to our tile coverage area
+            maxBoundsViscosity: 1.0 // Prevent dragging outside bounds
+        }).setView(initialSettings.center, initialSettings.zoom);
+        
+        L.tileLayer('/topo/tiles/{z}/{x}/{y}', {
+            tms: false,  // Set to false as these are not TMS tiles
+            minZoom: 3,
+            maxZoom: 9,
+            attribution: 'Custom topo tiles',
+            bounds: [[-45, 90], [15, 170]], // Match maxBounds from map
+            noWrap: true, // Prevent tile wrapping around the globe
+            // Add error handling to debug tile loading issues
+            onError: function(e) {
+                console.error('Tile load error:', e);
+                console.log('Failed tile URL:', e.target._url);
+                console.log('Tile coords:', e.target.coords);
+            },
+            onTileLoad: function(e) {
+                console.log('Tile loaded:', e.coords);
+            },
+            attribution: 'Map data &copy; Bureau of Meteorology'
+        }).addTo(map);
+
+        // Add click handler for map
+        map.on('click', function(e) {
+            if (!roundActive) return;
+            
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker(e.latlng).addTo(map);
+            document.getElementById('guess').disabled = false;
+        });
+    }
+
+    // Load locations and start first round
+    loadLocations().then(() => {
+        if (locations.length > 0) {
+            startNewRound();
+        }
+    }).catch(error => {
+        console.error('Error loading locations:', error);
+        alert('Failed to load locations. Please try again.');
+    });
+});
