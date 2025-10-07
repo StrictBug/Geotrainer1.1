@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function() {
             minZoom: 3, 
             maxZoom: 9,
             tms: false,  // Set to false as these are not TMS tiles
-            maxBounds: [[-45, 90], [15, 170]], // Constrain view to our tile coverage area
+            maxBounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
             maxBoundsViscosity: 1.0 // Prevent dragging outside bounds
         }).setView(initialSettings.center, initialSettings.zoom);
         
@@ -655,7 +655,7 @@ document.addEventListener('DOMContentLoaded', function() {
             minZoom: 3,
             maxZoom: 9,
             attribution: 'Custom topo tiles',
-            bounds: [[-45, 90], [15, 170]], // Match maxBounds from map
+            bounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
             noWrap: true, // Prevent tile wrapping around the globe
             // Add error handling to debug tile loading issues
             onError: function(e) {

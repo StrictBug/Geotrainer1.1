@@ -554,7 +554,7 @@ function initMap() {
     map = L.map('map', { 
         minZoom: 3, 
         maxZoom: 9,
-        maxBounds: [[-45, 90], [15, 170]], // Constrain view to our tile coverage area
+        maxBounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
         maxBoundsViscosity: 1.0 // Prevent dragging outside bounds
     }).setView(center, zoom);
 
@@ -562,7 +562,7 @@ function initMap() {
     L.tileLayer('/topo/tiles/{z}/{x}/{y}', {
         minZoom: 3,
         maxZoom: 9,
-        bounds: [[-45, 90], [15, 170]], // Match maxBounds from map
+        bounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
         noWrap: true, // Prevent tile wrapping around the globe,
         noWrap: true,
         attribution: 'Custom topo tiles'
