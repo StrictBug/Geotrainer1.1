@@ -96,7 +96,7 @@ function getInitialMapSettings(areas) {
     }
 
     // Default Australia-wide view settings
-    const defaultView = { center: [-25.2744, 133.7751], zoom: 4 };
+    const defaultView = { center: [-25.2744, 133.7751], zoom: 3 };
 
     // If no areas or All regions selected, return default view
     if (!areas || 
@@ -105,9 +105,14 @@ function getInitialMapSettings(areas) {
         return defaultView;
     }
 
-    // If both MAFC and BAFC are selected, return default Australia-wide view
+    // If both MAFC and BAFC are selected, calculate bounds from all their sub-areas
     if (areas.includes('MAFC') && areas.includes('BAFC')) {
-        return defaultView;
+        const allAreas = ['WA-N', 'WA-S', 'SA', 'VIC', 'TAS', 'NSW-W', 'NSW-E', 'QLD-S', 'QLD-N', 'NT'];
+        const bounds = getCombinedBounds(allAreas);
+        return {
+            center: [(bounds.minLat + bounds.maxLat) / 2, (bounds.minLng + bounds.maxLng) / 2],
+            zoom: calculateZoomLevel(bounds)
+        };
     }
 
     // Special handling for VAAC combinations
