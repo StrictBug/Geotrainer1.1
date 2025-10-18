@@ -260,6 +260,7 @@ Barwon Heads,VIC,Non-TAF,-38.26,144.5
 Bendigo,VIC,TAF,-36.73941,144.32985
 Castlemaine,VIC,Non-TAF,-37.13,144.22
 Charlton,VIC,Non-TAF,-36.2847,143.3342
+Cobden,VIC,Non-TAF,-38.333333,143.066667
 Coldstream,VIC,Non-TAF,-37.7258,145.4072
 Corowa,VIC,Non-TAF,-35.99033,146.3513
 Deniliquin,VIC,Non-TAF,-35.55933,144.94641
@@ -295,6 +296,8 @@ Orbost,VIC,Non-TAF,-37.79,148.61
 Ouyen,VIC,Non-TAF,-35.12,142.32
 Phillip Island,VIC,Non-TAF,-38.52294,145.32717
 Point Cook,VIC,Non-TAF,-37.93226,144.75346
+Port Albert,VIC,Non-TAF,-38.665278,146.688333
+Port Franklin,VIC,Non-TAF,-38.683333,146.283333
 Portland,VIC,TAF,-38.31809,141.47104
 Shepparton,VIC,TAF,-36.42881,145.39256
 Stawell,VIC,Non-TAF,-37.0678,142.7411
@@ -402,6 +405,7 @@ Hood Point,WA-S,Non-TAF,-34.38,119.57
 Ravensthorpe,WA-S,Non-TAF,-33.8,120.21
 Collie,WA-S,Non-TAF,-33.37,116.18
 Quairading,WA-S,Non-TAF,-32.005,117.4176
+Wagin,WA-S,Non-TAF,-33.316667,117.35
 Boomerang Seamount,VAAC,Geographical feature,-37.721,77.825
 Amsterdam Island,VAAC,Geographical feature,-37.83,77.52
 St. Paul,VAAC,Geographical feature,-38.72,77.53
@@ -472,7 +476,7 @@ Narcondum,VAAC,Geographical feature,13.43,94.28
 Barren Island,VAAC,Geographical feature,12.278,93.858
 Seulawah Agam,VAAC,Geographical feature,5.448,95.658
 Peuet Sague,VAAC,Geographical feature,4.903,96.289
-"Telong, Bur ni",VAAC,Geographical feature,4.769,96.821
+Telong,VAAC,Geographical feature,4.769,96.821
 Singkut,VAAC,Geographical feature,3.248,98.501
 Sinabung,VAAC,Geographical feature,3.17,98.392
 Toba,VAAC,Geographical feature,2.58,98.83
@@ -492,11 +496,11 @@ Hutapanjang,VAAC,Geographical feature,-2.33,101.6
 Sumbing,VAAC,Geographical feature,-2.414,101.728
 Pendan,VAAC,Geographical feature,-2.82,102.02
 Hululais,VAAC,Geographical feature,-3.247,102.239
-"Daun, Bukit",VAAC,Geographical feature,-3.38,102.37
+Daun,VAAC,Geographical feature,-3.38,102.37
 Kaba,VAAC,Geographical feature,-3.522,102.615
 Dempo,VAAC,Geographical feature,-4.016,103.121
 Patah,VAAC,Geographical feature,-4.257,103.306
-"Lumut Balai, Bukit",VAAC,Geographical feature,-4.22,103.62
+Lumut Balai,VAAC,Geographical feature,-4.22,103.62
 Besar,VAAC,Geographical feature,-4.43,103.67
 Ranau,VAAC,Geographical feature,-4.871,103.925
 Sekincau Belirang,VAAC,Geographical feature,-5.107,104.317
@@ -522,7 +526,7 @@ Guntur,VAAC,Geographical feature,-7.143,107.84
 Tampomas,VAAC,Geographical feature,-6.77,107.95
 Galunggung,VAAC,Geographical feature,-7.25,108.058
 Talagabodas,VAAC,Geographical feature,-7.208,108.07
-"Karaha, Kawah",VAAC,Geographical feature,-7.12,108.08
+Karaha,VAAC,Geographical feature,-7.12,108.08
 Cereme,VAAC,Geographical feature,-6.895,108.408
 Slamet,VAAC,Geographical feature,-7.242,109.208
 Dieng Volcanic Complex,VAAC,Geographical feature,-7.2,109.879
@@ -548,14 +552,14 @@ Iyang-Argapura,VAAC,Geographical feature,-7.97,113.57
 Raung,VAAC,Geographical feature,-8.119,114.056
 Ijen,VAAC,Geographical feature,-8.058,114.242
 Baluran,VAAC,Geographical feature,-7.85,114.37
-"Kamojang, Kawah",VAAC,Geographical feature,-7.125,107.8
+Kamojang,VAAC,Geographical feature,-7.125,107.8
 Buyan-Bratan,VAAC,Geographical feature,-8.283,115.133
 Batur,VAAC,Geographical feature,-8.242,115.375
 Agung,VAAC,Geographical feature,-8.343,115.508
 Rinjani,VAAC,Geographical feature,-8.42,116.47
 Tambora,VAAC,Geographical feature,-8.25,118
 Sangeang Api,VAAC,Geographical feature,-8.2,119.07
-"Sano, Wai",VAAC,Geographical feature,-8.724,119.986
+Sano,VAAC,Geographical feature,-8.724,119.986
 Poco Leok,VAAC,Geographical feature,-8.68,120.48
 Ranakah,VAAC,Geographical feature,-8.62,120.52
 Inierie,VAAC,Geographical feature,-8.875,120.95
@@ -574,7 +578,7 @@ Iliboleng,VAAC,Geographical feature,-8.342,123.258
 Lewotolok,VAAC,Geographical feature,-8.272,123.505
 Ililabalekan,VAAC,Geographical feature,-8.55,123.38
 Iliwerung,VAAC,Geographical feature,-8.53,123.57
-"Tara, Batu",VAAC,Geographical feature,-7.791,123.585
+Tara,VAAC,Geographical feature,-7.791,123.585
 Sirung,VAAC,Geographical feature,-8.508,124.13
 Yersey,VAAC,Geographical feature,-7.53,123.95
 Ilikedeka,VAAC,Geographical feature,-8.301,122.907
@@ -639,6 +643,6 @@ Silay,VAAC,Geographical feature,10.77,123.23
 Cabalian,VAAC,Geographical feature,10.285,125.218
 Mahagnao,VAAC,Geographical feature,10.882,124.888
 Bas Dong Nai,VAAC,Geographical feature,10.8,107.2
-"Cendres, Ile des",VAAC,Geographical feature,10.158,109.014
+Ile des Cendres,VAAC,Geographical feature,10.158,109.014
 Veteran,VAAC,Geographical feature,9.83,109.05
 Popa,VAAC,Geographical feature,20.92,95.25

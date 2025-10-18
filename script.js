@@ -84,8 +84,8 @@ function calculateZoomLevel(bounds) {
     
     if (latSpan > 20 || lngSpan > 30) return 4;  // Very large area (e.g., multiple states)
     if (latSpan > 8 || lngSpan > 12) return 5;   // Large area (e.g., VIC+TAS)
-    if (latSpan > 4 || lngSpan > 6) return 6;    // Medium area (e.g., single state)
-    if (latSpan > 2 || lngSpan > 3) return 7;    // Small area
+    if (latSpan > 2 || lngSpan > 3) return 6;    // Medium area (including TAS)
+    if (latSpan > 1 || lngSpan > 1.5) return 7;  // Small area
     return 8;  // Very small area
 }
 
@@ -449,21 +449,30 @@ function startNewRound() {
     console.log('Selected round length (startNewRound):', selectedRoundLength, 'type:', typeof selectedRoundLength);
     timeLeft = Number.isFinite(selectedRoundLength) && selectedRoundLength > 0 ? selectedRoundLength : 15;
     document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
+    
+    // Start the round
     roundActive = true;
-
+    
+    // Start the timer
+    clearInterval(timer); // Clear any existing timer
     timer = setInterval(() => {
         timeLeft--;
         document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
         if (timeLeft <= 0) {
             clearInterval(timer);
-            endRound();
+            if (roundActive) { // Only end round if it's still active
+                endRound();
+            }
         }
     }, 1000);
 }
 
 function endRound() {
+    if (!roundActive) return; // Prevent multiple calls to endRound
+    
     let distance = null;
     roundActive = false;
+    clearInterval(timer);
 
     // Clear existing markers
     actualMarkers.forEach(m => {
@@ -576,6 +585,11 @@ function endRound() {
 }
 
 function showGameOver() {
+    // Clear any ongoing round
+    roundActive = false;
+    clearInterval(timer);
+    
+    // Clear the UI
     document.getElementById("location").textContent = "";
     document.getElementById("timer").textContent = "";
     document.getElementById("result").textContent = "";
@@ -646,26 +660,25 @@ document.addEventListener('DOMContentLoaded', function() {
             minZoom: 3, 
             maxZoom: 9,
             tms: false,  // Set to false as these are not TMS tiles
-            maxBounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
-            maxBoundsViscosity: 1.0 // Prevent dragging outside bounds
-        }).setView(initialSettings.center, initialSettings.zoom);
+            worldCopyJump: true, // Enable proper dateline handling
+            maxBounds: [[-55, 33.3], [25, 236.7]], // Exact domain bounds from map tiles
+            maxBoundsViscosity: 1.0 // Make the bounds completely rigid
+        }).setView([initialSettings.center[0], initialSettings.center[1]], initialSettings.zoom);
+
+        // Disable dragging at zoom level 3
+        map.on('zoomend', function() {
+            if (map.getZoom() === 3) {
+                map.dragging.disable();
+            } else {
+                map.dragging.enable();
+            }
+        });
         
         L.tileLayer('/topo/tiles/{z}/{x}/{y}', {
             tms: false,  // Set to false as these are not TMS tiles
             minZoom: 3,
             maxZoom: 9,
-            attribution: 'Custom topo tiles',
-            bounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
-            noWrap: true, // Prevent tile wrapping around the globe
-            // Add error handling to debug tile loading issues
-            onError: function(e) {
-                console.error('Tile load error:', e);
-                console.log('Failed tile URL:', e.target._url);
-                console.log('Tile coords:', e.target.coords);
-            },
-            onTileLoad: function(e) {
-                console.log('Tile loaded:', e.coords);
-            },
+            noWrap: false, // Allow continuous display across dateline
             attribution: 'Map data &copy; Bureau of Meteorology'
         }).addTo(map);
 

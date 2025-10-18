@@ -413,7 +413,7 @@ function calculateZoomLevel(bounds) {
     
     if (latSpan > 20 || lngSpan > 30) return 4;  // Very large area (e.g., multiple states)
     if (latSpan > 8 || lngSpan > 12) return 5;   // Large area (e.g., VIC+TAS)
-    if (latSpan > 4 || lngSpan > 6) return 6;    // Medium area (e.g., single state)
+    if (latSpan > 2 || lngSpan > 3) return 6;    // Medium area (including TAS)
     return 7;  // Small area
 }
 
@@ -554,18 +554,28 @@ function initMap() {
     map = L.map('map', { 
         minZoom: 3, 
         maxZoom: 9,
-        maxBounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
-        maxBoundsViscosity: 1.0 // Prevent dragging outside bounds
-    }).setView(center, zoom);
+        tms: false,
+        worldCopyJump: true, // Enable proper dateline handling
+        maxBounds: [[-55, 33.3], [25, 236.7]], // Exact domain bounds from map tiles
+        maxBoundsViscosity: 1.0 // Make the bounds completely rigid
+    }).setView([center[0], 135], zoom);
+
+    // Disable dragging at zoom level 3
+    map.on('zoomend', function() {
+        if (map.getZoom() === 3) {
+            map.dragging.disable();
+        } else {
+            map.dragging.enable();
+        }
+    });
 
     // Add custom topographic tiles (EPSG:3857)
     L.tileLayer('/topo/tiles/{z}/{x}/{y}', {
         minZoom: 3,
         maxZoom: 9,
-        bounds: [[-52.354166667, 69.945833333], [23.700000000, 179.645833333]], // Exact tile coverage area
-        noWrap: true, // Prevent tile wrapping around the globe,
-        noWrap: true,
-        attribution: 'Custom topo tiles'
+        tms: false,
+        noWrap: false, // Allow continuous display across dateline
+        attribution: 'Map data &copy; Bureau of Meteorology'
     }).addTo(map);
 
     console.log('GameOver visibility at start:', document.getElementById('gameOver').classList.contains('hidden'));
