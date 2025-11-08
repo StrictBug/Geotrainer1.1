@@ -284,12 +284,13 @@ function loadLocations() {
                         case 'Forecast district':
                             return loc.type === 'area' && (loc.areaType === 'Forecast district' || loc.areaType2 === 'Forecast district');
                         case 'Geographical feature':
-                            return (loc.type === 'area' && (loc.areaType === 'Geographical feature' || loc.areaType2 === 'Geographical feature')) ||
-                                   (loc.type === 'point' && loc.pointType === 'Geographical feature');
+                            return (loc.type === 'area' && (loc.areaType === 'Geographical feature' || loc.areaType2 === 'Geographical feature'));
+                        case 'Geographical feature points':
+                            return loc.type === 'point' && loc.pointType === 'Geographical feature';
                         case 'TAF':
                             return loc.type === 'point' && loc.pointType === 'TAF';
                         case 'Non TAF':
-                            return loc.type === 'point' && (loc.pointType === null || loc.pointType === '' || loc.pointType !== 'TAF');
+                            return loc.type === 'point' && (loc.pointType === null || loc.pointType === '' || (loc.pointType !== 'TAF' && loc.pointType !== 'Geographical feature'));
                         default:
                             return false;
                     }

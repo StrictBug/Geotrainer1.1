@@ -166,7 +166,7 @@ function startRound(gameCode) {
                     (types.includes('TAF') && loc.pointType === 'TAF') ||
                     (types.includes('Non TAF') && (loc.pointType === null || loc.pointType === '' || (loc.pointType !== 'TAF' && loc.pointType !== 'Forecast district' && loc.pointType !== 'Geographical feature'))) ||
                     (types.includes('Forecast district') && loc.pointType === 'Forecast district') ||
-                    (types.includes('Geographical feature') && loc.pointType === 'Geographical feature')
+                    (types.includes('Geographical feature points') && loc.pointType === 'Geographical feature')
                 );
             } else if (loc.type === 'area') {
                 // Check both primary and secondary area types against requested types
@@ -178,6 +178,8 @@ function startRound(gameCode) {
                             return loc.areaType === 'Forecast district' || loc.areaType2 === 'Forecast district';
                         case 'Geographical feature':
                             return loc.areaType === 'Geographical feature' || loc.areaType2 === 'Geographical feature';
+                        case 'Geographical feature points':
+                            return false; // This is for points only, not areas
                         default:
                             return false;
                     }
