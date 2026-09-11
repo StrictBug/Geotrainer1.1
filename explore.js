@@ -3,10 +3,14 @@
  */
 let map;
 let featureLayer;
+let contextLayer;
 let allLocations = [];
 let locations = [];
-let currentIndex = 0;
+/** -1 means overview only (no individual location selected). */
+let currentIndex = -1;
 let dataLoaded = false;
+/** True when the user zoomed into a location via the list or map. */
+let locationFocused = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 let selectedAreas = urlParams.get('areas') ? urlParams.get('areas').split(',') : ['All regions'];
@@ -29,6 +33,70 @@ const areaStyle = {
     opacity: 1,
     fillColor: '#3b6ed8',
     fillOpacity: 0.28,
+};
+
+/** Overview styles — light outline + mostly transparent fill. */
+const contextForecastStyle = {
+    color: '#6b8fd4',
+    weight: 1.75,
+    opacity: 0.78,
+    fillColor: '#6b8fd4',
+    fillOpacity: 0.12,
+    className: 'explore-context-path',
+    pane: 'exploreContextForecast',
+};
+
+const contextDesertStyle = {
+    color: '#6b8fd4',
+    weight: 1.75,
+    opacity: 0.78,
+    fillColor: '#6b8fd4',
+    fillOpacity: 0.12,
+    className: 'explore-context-path',
+    pane: 'exploreContextDeserts',
+};
+
+const contextAreaStyle = {
+    color: '#6b8fd4',
+    weight: 1.75,
+    opacity: 0.78,
+    fillColor: '#6b8fd4',
+    fillOpacity: 0.12,
+    className: 'explore-context-path',
+    pane: 'exploreContextAreas',
+};
+
+const contextAreaHoverStyle = {
+    color: '#3b6ed8',
+    weight: 3,
+    opacity: 1,
+    fillColor: '#3b6ed8',
+    fillOpacity: 0.22,
+};
+
+const contextPointStyle = {
+    radius: 5.5,
+    color: '#4a72c9',
+    weight: 1.5,
+    opacity: 0.88,
+    fillColor: '#6b8fd4',
+    fillOpacity: 0.55,
+    className: 'explore-context-path',
+    pane: 'exploreContextPoints',
+};
+
+const contextPointHoverStyle = {
+    radius: 8,
+    color: '#2159d1',
+    weight: 2.25,
+    opacity: 1,
+    fillColor: '#4d7ae0',
+    fillOpacity: 0.88,
+};
+
+const focusAreaStyle = {
+    ...areaStyle,
+    pane: 'exploreFocus',
 };
 
 function getAreaBounds(area) {
@@ -256,13 +324,24 @@ function loadLocations() {
     });
 }
 
+function fitToSelectedRegions() {
+    if (!map) return;
+    const settings = getInitialMapSettings(selectedAreas);
+    map.setView([settings.center[0], settings.center[1]], settings.zoom);
+}
+
 function applyFilters() {
     locations = allLocations
         .filter((loc) => matchesAreaFilter(loc) && matchesTypeFilter(loc))
         .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
+    locationFocused = false;
+    fitToSelectedRegions();
+
     if (locations.length === 0) {
         clearFeature();
+        clearContext();
+        currentIndex = -1;
         document.getElementById('locationName').textContent = 'No locations found';
         document.getElementById('locationCounter').textContent = '0 / 0';
         document.getElementById('locationMeta').textContent = 'Try different filters';
@@ -272,7 +351,8 @@ function applyFilters() {
 
     const search = document.getElementById('exploreSearch');
     buildList(search ? search.value : '');
-    showIndex(0);
+    clearIndividualSelection();
+    rebuildContextLayer();
     return locations;
 }
 
@@ -298,26 +378,6 @@ function syncFiltersToUi() {
         cb.disabled = false;
     });
 
-    // Mirror MAFC/BAFC disable behaviour from checkbox-dropdown.js
-    const mafcAreas = ['WA-S', 'SA', 'NSW-W', 'VIC', 'TAS'];
-    const bafcAreas = ['WA-N', 'NT', 'QLD-N', 'QLD-S', 'NSW-E'];
-    if (selectedAreas.includes('MAFC')) {
-        areaBoxes.forEach((cb) => {
-            if (mafcAreas.includes(cb.value)) {
-                cb.checked = false;
-                cb.disabled = true;
-            }
-        });
-    }
-    if (selectedAreas.includes('BAFC')) {
-        areaBoxes.forEach((cb) => {
-            if (bafcAreas.includes(cb.value)) {
-                cb.checked = false;
-                cb.disabled = true;
-            }
-        });
-    }
-
     document.querySelectorAll('.checkbox-dropdown').forEach((dropdown) => {
         if (typeof updateSelectedOptions === 'function') {
             updateSelectedOptions(dropdown);
@@ -341,27 +401,202 @@ function clearFeature() {
     }
 }
 
-function drawLocation(loc) {
-    clearFeature();
-    const group = L.featureGroup();
+function clearContext() {
+    if (contextLayer) {
+        map.removeLayer(contextLayer);
+        contextLayer = null;
+    }
+}
 
-    if (loc.type === 'point') {
-        L.marker([loc.lat, loc.lng], { icon: greenIcon }).addTo(group);
-        group.addTo(map);
-        featureLayer = group;
-        map.setView([loc.lat, loc.lng], Math.min(7, Math.max(map.getZoom(), 6)));
+function clearIndividualSelection() {
+    locationFocused = false;
+    currentIndex = -1;
+    clearFeature();
+    resetContextHoverStyles();
+    const listedCount = getListedEntries().length;
+    document.getElementById('locationName').textContent = 'All locations';
+    document.getElementById('locationCounter').textContent =
+        `${listedCount} shown`;
+    document.getElementById('locationMeta').textContent =
+        'Click a location on the map or list';
+    highlightListItem(-1);
+}
+
+function resetContextHoverStyles() {
+    if (!contextLayer) return;
+    contextLayer.eachLayer((layer) => {
+        const isPoint = typeof layer.getLatLng === 'function';
+        let style = contextPointStyle;
+        if (!isPoint) {
+            let pane = layer.options && layer.options.pane;
+            if (!pane && layer.eachLayer) {
+                layer.eachLayer((child) => {
+                    if (!pane && child.options) pane = child.options.pane;
+                });
+            }
+            if (pane === 'exploreContextForecast') style = contextForecastStyle;
+            else if (pane === 'exploreContextDeserts') style = contextDesertStyle;
+            else style = contextAreaStyle;
+        }
+        setContextLayerStyle(layer, style);
+        toggleContextHoverClass(layer, false);
+    });
+}
+
+function setContextLayerStyle(layer, style) {
+    if (layer.setStyle) {
+        layer.setStyle(style);
+    }
+    if (layer.eachLayer) {
+        layer.eachLayer((child) => {
+            if (child.setStyle) child.setStyle(style);
+        });
+    }
+}
+
+function toggleContextHoverClass(layer, on) {
+    const toggle = (pathLayer) => {
+        const el = pathLayer.getElement && pathLayer.getElement();
+        if (el) el.classList.toggle('explore-context-hover', on);
+    };
+    if (layer.eachLayer) {
+        layer.eachLayer(toggle);
+    } else {
+        toggle(layer);
+    }
+}
+
+function bringContextLayerForward(layer) {
+    if (layer.bringToFront) {
+        layer.bringToFront();
+    } else if (layer.eachLayer) {
+        layer.eachLayer((child) => {
+            if (child.bringToFront) child.bringToFront();
+        });
+    }
+    if (featureLayer) {
+        featureLayer.bringToFront();
+    }
+}
+
+function bindContextHover(layer, baseStyle, hoverStyle) {
+    layer.on('mouseover', () => {
+        setContextLayerStyle(layer, hoverStyle);
+        toggleContextHoverClass(layer, true);
+        bringContextLayerForward(layer);
+    });
+    layer.on('mouseout', () => {
+        setContextLayerStyle(layer, baseStyle);
+        toggleContextHoverClass(layer, false);
+    });
+}
+
+function getSearchQuery() {
+    const search = document.getElementById('exploreSearch');
+    return search ? search.value.trim().toLowerCase() : '';
+}
+
+function locationMatchesSearch(loc, query = getSearchQuery()) {
+    if (!query) return true;
+    return loc.name.toLowerCase().includes(query);
+}
+
+function isForecastDistrict(loc) {
+    return (
+        loc.type !== 'point' &&
+        (loc.areaType === 'Forecast district' || loc.areaType2 === 'Forecast district')
+    );
+}
+
+function isDesert(loc) {
+    return (
+        loc.type !== 'point' &&
+        !isForecastDistrict(loc) &&
+        /desert/i.test(loc.name || '')
+    );
+}
+
+function contextStyleForArea(loc) {
+    if (isForecastDistrict(loc)) return contextForecastStyle;
+    if (isDesert(loc)) return contextDesertStyle;
+    return contextAreaStyle;
+}
+
+/** Locations currently shown in the left-hand list (area/type + search). */
+function getListedEntries() {
+    const query = getSearchQuery();
+    const entries = [];
+    locations.forEach((loc, index) => {
+        if (locationMatchesSearch(loc, query)) {
+            entries.push({ loc, index });
+        }
+    });
+    return entries;
+}
+
+function rebuildContextLayer() {
+    clearContext();
+    const listed = getListedEntries();
+    if (!map || !listed.length) {
         return;
     }
 
-    const parts = loc.isMultiPolygon ? loc.polygonParts : [loc.polygon];
-    parts.forEach((polygonCoords) => {
-        L.polygon(
-            polygonCoords.map((v) => [v.lat, v.lng]),
-            areaStyle
-        ).addTo(group);
-    });
+    const group = L.featureGroup();
+    const forecastDistricts = listed.filter((entry) => isForecastDistrict(entry.loc));
+    const deserts = listed.filter((entry) => isDesert(entry.loc));
+    const otherAreas = listed.filter(
+        (entry) =>
+            entry.loc.type !== 'point' &&
+            !isForecastDistrict(entry.loc) &&
+            !isDesert(entry.loc)
+    );
+    const points = listed.filter((entry) => entry.loc.type === 'point');
+
+    const addContextEntry = ({ loc, index }) => {
+        let layer;
+        if (loc.type === 'point') {
+            layer = L.circleMarker([loc.lat, loc.lng], contextPointStyle);
+            bindContextHover(layer, contextPointStyle, contextPointHoverStyle);
+        } else {
+            const baseStyle = contextStyleForArea(loc);
+            const parts = loc.isMultiPolygon ? loc.polygonParts : [loc.polygon];
+            const polygons = parts.map((polygonCoords) =>
+                L.polygon(
+                    polygonCoords.map((v) => [v.lat, v.lng]),
+                    baseStyle
+                )
+            );
+            layer = polygons.length === 1 ? polygons[0] : L.featureGroup(polygons);
+            bindContextHover(layer, baseStyle, contextAreaHoverStyle);
+        }
+        layer.bindTooltip(loc.name, {
+            sticky: true,
+            direction: 'top',
+            opacity: 0.92,
+            className: 'explore-context-tooltip',
+        });
+        layer.on('click', () => toggleListFocus(index));
+        layer.addTo(group);
+    };
+
+    // Bottom → top: forecast districts, deserts, other areas, points
+    forecastDistricts.forEach(addContextEntry);
+    deserts.forEach(addContextEntry);
+    otherAreas.forEach(addContextEntry);
+    points.forEach(addContextEntry);
+
     group.addTo(map);
-    featureLayer = group;
+    contextLayer = group;
+    if (featureLayer) {
+        featureLayer.bringToFront();
+    }
+}
+
+function zoomToLocation(loc, group) {
+    if (loc.type === 'point') {
+        map.setView([loc.lat, loc.lng], Math.min(7, Math.max(map.getZoom(), 6)));
+        return;
+    }
 
     try {
         const bounds = group.getBounds();
@@ -376,11 +611,52 @@ function drawLocation(loc) {
     } catch (_) {
         /* fall through */
     }
+    const parts = loc.isMultiPolygon ? loc.polygonParts : [loc.polygon];
     const box = calculateAreaBounds(parts);
     map.setView(
         [loc.centroid.lat, loc.centroid.lng],
         Math.min(6, calculateAppropriateZoom(box))
     );
+}
+
+function drawLocation(loc, { zoomToFeature = false } = {}) {
+    clearFeature();
+    const group = L.featureGroup();
+    const selectedIndex = currentIndex;
+
+    if (loc.type === 'point') {
+        L.marker([loc.lat, loc.lng], { icon: greenIcon, pane: 'exploreFocus' }).addTo(group);
+    } else {
+        const parts = loc.isMultiPolygon ? loc.polygonParts : [loc.polygon];
+        parts.forEach((polygonCoords) => {
+            L.polygon(
+                polygonCoords.map((v) => [v.lat, v.lng]),
+                focusAreaStyle
+            ).addTo(group);
+        });
+    }
+
+    const deselect = (e) => {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        if (currentIndex === selectedIndex && selectedIndex >= 0) {
+            clearIndividualSelection();
+            fitToSelectedRegions();
+        }
+    };
+    group.eachLayer((layer) => {
+        layer.on('click', deselect);
+    });
+
+    group.addTo(map);
+    featureLayer = group;
+    if (contextLayer) {
+        featureLayer.bringToFront();
+    }
+
+    if (zoomToFeature) {
+        zoomToLocation(loc, group);
+    }
 }
 
 function formatGafAreas(loc) {
@@ -400,7 +676,7 @@ function typeLabel(loc) {
     return loc.areaType || 'Area';
 }
 
-function showIndex(index) {
+function showIndex(index, { zoomToFeature = false } = {}) {
     if (!locations.length) return;
     currentIndex = ((index % locations.length) + locations.length) % locations.length;
     const loc = locations[currentIndex];
@@ -410,8 +686,35 @@ function showIndex(index) {
     const gaf = formatGafAreas(loc);
     document.getElementById('locationMeta').textContent =
         `${typeLabel(loc)}${gaf ? ` · ${gaf}` : ''}`;
-    drawLocation(loc);
+    drawLocation(loc, { zoomToFeature });
     highlightListItem(currentIndex);
+}
+
+/** Step through locations while preserving the current zoom mode. */
+function stepIndex(delta) {
+    if (!locations.length) return;
+    const stayZoomedIn = locationFocused && currentIndex >= 0;
+
+    if (currentIndex < 0) {
+        // Overview: select next/prev at region zoom (do not zoom into the feature)
+        showIndex(delta >= 0 ? 0 : locations.length - 1, { zoomToFeature: false });
+        locationFocused = false;
+        return;
+    }
+
+    showIndex(currentIndex + delta, { zoomToFeature: stayZoomedIn });
+    locationFocused = stayZoomedIn;
+}
+
+function toggleListFocus(index) {
+    if (!locations.length) return;
+    if (currentIndex === index) {
+        clearIndividualSelection();
+        fitToSelectedRegions();
+        return;
+    }
+    locationFocused = true;
+    showIndex(index, { zoomToFeature: true });
 }
 
 function highlightListItem(index) {
@@ -430,14 +733,14 @@ function buildList(filterText = '') {
     const q = filterText.trim().toLowerCase();
     list.innerHTML = '';
     locations.forEach((loc, index) => {
-        if (q && !loc.name.toLowerCase().includes(q)) return;
+        if (!locationMatchesSearch(loc, q)) return;
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'explore-list-item' + (index === currentIndex ? ' active' : '');
         btn.dataset.index = String(index);
         btn.innerHTML = `<span class="explore-list-name">${escapeHtml(loc.name)}</span>` +
             `<span class="explore-list-type">${escapeHtml(typeLabel(loc))}</span>`;
-        btn.addEventListener('click', () => showIndex(index));
+        btn.addEventListener('click', () => toggleListFocus(index));
         list.appendChild(btn);
     });
 }
@@ -464,6 +767,18 @@ function initMap() {
         maxBoundsViscosity: 1.0,
     }).setView([initialSettings.center[0], initialSettings.center[1]], initialSettings.zoom);
 
+    // Forecast districts under deserts under other areas; points above; focus on top
+    map.createPane('exploreContextForecast');
+    map.getPane('exploreContextForecast').style.zIndex = 405;
+    map.createPane('exploreContextDeserts');
+    map.getPane('exploreContextDeserts').style.zIndex = 407;
+    map.createPane('exploreContextAreas');
+    map.getPane('exploreContextAreas').style.zIndex = 410;
+    map.createPane('exploreContextPoints');
+    map.getPane('exploreContextPoints').style.zIndex = 420;
+    map.createPane('exploreFocus');
+    map.getPane('exploreFocus').style.zIndex = 430;
+
     map.on('zoomend', function () {
         if (map.getZoom() === 3) {
             map.dragging.disable();
@@ -486,13 +801,19 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'index.html';
     });
     document.getElementById('prevLocation').addEventListener('click', () => {
-        showIndex(currentIndex - 1);
+        stepIndex(-1);
     });
     document.getElementById('nextLocation').addEventListener('click', () => {
-        showIndex(currentIndex + 1);
+        stepIndex(1);
     });
     document.getElementById('exploreSearch').addEventListener('input', (e) => {
         buildList(e.target.value);
+        if (currentIndex < 0) {
+            clearIndividualSelection();
+        } else if (!locationMatchesSearch(locations[currentIndex])) {
+            clearIndividualSelection();
+        }
+        rebuildContextLayer();
     });
 
     // Apply filters when area / type checkboxes change
@@ -514,10 +835,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
         if (e.key === 'ArrowLeft') {
             e.preventDefault();
-            showIndex(currentIndex - 1);
+            stepIndex(-1);
         } else if (e.key === 'ArrowRight') {
             e.preventDefault();
-            showIndex(currentIndex + 1);
+            stepIndex(1);
         }
     });
 

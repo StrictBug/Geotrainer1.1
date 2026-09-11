@@ -53,7 +53,7 @@ function initCheckboxDropdowns() {
                     checkboxes.forEach(cb => {
                         if (cb !== checkbox) {
                             cb.checked = false; // Uncheck all other options
-                            cb.disabled = false; // Always keep options enabled for both "All types" and "All regions"
+                            cb.disabled = false;
                         }
                     });
                 } else if (checkbox.checked) {
@@ -64,42 +64,41 @@ function initCheckboxDropdowns() {
                     }
 
                     if (isMafc) {
-                        // When selecting MAFC, only affect MAFC areas
+                        // Parent MAFC replaces its subregions (subregions stay selectable)
                         checkboxes.forEach(cb => {
                             if (mafcAreas.includes(cb.value)) {
                                 cb.checked = false;
-                                cb.disabled = true;
+                                cb.disabled = false;
                             }
                         });
                     } else if (isBafc) {
-                        // When selecting BAFC, only affect BAFC areas
+                        // Parent BAFC replaces its subregions (subregions stay selectable)
                         checkboxes.forEach(cb => {
                             if (bafcAreas.includes(cb.value)) {
                                 cb.checked = false;
-                                cb.disabled = true;
+                                cb.disabled = false;
                             }
+                        });
+                    } else if (mafcAreas.includes(checkbox.value)) {
+                        // Choosing a MAFC subregion clears the parent
+                        checkboxes.forEach(cb => {
+                            if (cb.value === 'MAFC') cb.checked = false;
+                            cb.disabled = false;
+                        });
+                    } else if (bafcAreas.includes(checkbox.value)) {
+                        // Choosing a BAFC subregion clears the parent
+                        checkboxes.forEach(cb => {
+                            if (cb.value === 'BAFC') cb.checked = false;
+                            cb.disabled = false;
                         });
                     }
                 } else {
-                    // When unchecking an option
-                    if (isMafc) {
-                        // When unchecking MAFC, only enable MAFC areas
+                    // When unchecking an option, keep everything enabled
+                    checkboxes.forEach(cb => {
+                        cb.disabled = false;
+                    });
+                    if (isAll) {
                         checkboxes.forEach(cb => {
-                            if (mafcAreas.includes(cb.value)) {
-                                cb.disabled = false;
-                            }
-                        });
-                    } else if (isBafc) {
-                        // When unchecking BAFC, only enable BAFC areas
-                        checkboxes.forEach(cb => {
-                            if (bafcAreas.includes(cb.value)) {
-                                cb.disabled = false;
-                            }
-                        });
-                    } else if (isAll) {
-                        // When unchecking "All", enable everything
-                        checkboxes.forEach(cb => {
-                            cb.disabled = false;
                             cb.checked = false;
                         });
                     }
