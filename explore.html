@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotrainer explorer</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="checkbox-dropdown.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body class="game-page explore-page">
+    <div class="game-shell explore-shell">
+        <header class="app-header">
+            <div class="title-row">
+                <h1>Geotrainer explorer</h1>
+            </div>
+        </header>
+
+        <div class="game-hud explore-hud">
+            <div class="game-hud-main">
+                <p id="locationName">Loading…</p>
+                <div class="game-meta">
+                    <span id="locationCounter">0 / 0</span>
+                    <span id="locationMeta"></span>
+                </div>
+            </div>
+            <div class="game-actions explore-actions">
+                <div class="explore-hud-filters">
+                    <div class="checkbox-dropdown explore-hud-dropdown" id="ex-area">
+                        <div class="selected-options">All regions</div>
+                        <div class="checkbox-dropdown-list">
+                            <label><input type="checkbox" value="All regions" checked>All regions</label>
+                            <label><input type="checkbox" value="VAAC">VAAC</label>
+                            <label><input type="checkbox" value="MAFC">MAFC</label>
+                            <label><input type="checkbox" value="BAFC">BAFC</label>
+                            <label><input type="checkbox" value="WA-S">WA-S</label>
+                            <label><input type="checkbox" value="SA">SA</label>
+                            <label><input type="checkbox" value="VIC">VIC</label>
+                            <label><input type="checkbox" value="TAS">TAS</label>
+                            <label><input type="checkbox" value="NSW-W">NSW-W</label>
+                            <label><input type="checkbox" value="NSW-E">NSW-E</label>
+                            <label><input type="checkbox" value="WA-N">WA-N</label>
+                            <label><input type="checkbox" value="QLD-N">QLD-N</label>
+                            <label><input type="checkbox" value="QLD-S">QLD-S</label>
+                            <label><input type="checkbox" value="NT">NT</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-dropdown explore-hud-dropdown" id="ex-locationType">
+                        <div class="selected-options">All types</div>
+                        <div class="checkbox-dropdown-list">
+                            <label><input type="checkbox" value="all" data-display="All types" checked>All types</label>
+                            <label><input type="checkbox" value="Forecast district">Fcst districts</label>
+                            <label><input type="checkbox" value="Geographical feature">Geo. areas</label>
+                            <label><input type="checkbox" value="Geographical feature points">Geo. pts</label>
+                            <label><input type="checkbox" value="TAF">TAF pts</label>
+                            <label><input type="checkbox" value="Non TAF">Non TAF pts</label>
+                        </div>
+                    </div>
+                </div>
+                <button id="prevLocation" class="btn-secondary" type="button">Previous</button>
+                <button id="nextLocation" class="btn-primary" type="button">Next</button>
+                <button id="backToMenu" class="btn-secondary" type="button">Main Menu</button>
+            </div>
+        </div>
+
+        <div class="explore-body">
+            <aside class="explore-list-panel" aria-label="Location list">
+                <input type="search" id="exploreSearch" placeholder="Search locations…" autocomplete="off">
+                <div id="exploreList" class="explore-list"></div>
+            </aside>
+            <div class="map-stage explore-map-stage">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="checkbox-dropdown.js"></script>
+    <script src="explore.js"></script>
+</body>
+</html>

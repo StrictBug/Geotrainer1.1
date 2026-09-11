@@ -55,12 +55,13 @@ function showMainMenu() {
         }
         gameCode = null;
     }
-    document.getElementById('singlePlayerOptions').classList.add('hidden');
-    document.getElementById('multiplayerOptions').classList.add('hidden');
-    document.getElementById('lobby').classList.add('hidden');
-    document.getElementById('hostForm').classList.add('hidden');
-    document.getElementById('joinForm').classList.add('hidden');
-    document.getElementById('mainMenu').classList.remove('hidden');
+    document.getElementById('singlePlayerOptions')?.classList.add('hidden');
+    document.getElementById('multiplayerOptions')?.classList.add('hidden');
+    document.getElementById('exploreOptions')?.classList.add('hidden');
+    document.getElementById('lobby')?.classList.add('hidden');
+    document.getElementById('hostForm')?.classList.add('hidden');
+    document.getElementById('joinForm')?.classList.add('hidden');
+    document.getElementById('mainMenu')?.classList.remove('hidden');
 }
 
 function showSinglePlayer() {
@@ -72,10 +73,27 @@ function showSinglePlayer() {
         }
         gameCode = null;
     }
-    document.getElementById('mainMenu').classList.add('hidden');
-    document.getElementById('singlePlayerOptions').classList.remove('hidden');
-    document.getElementById('multiplayerOptions').classList.add('hidden');
-    document.getElementById('lobby').classList.add('hidden');
+    document.getElementById('mainMenu')?.classList.add('hidden');
+    document.getElementById('singlePlayerOptions')?.classList.remove('hidden');
+    document.getElementById('multiplayerOptions')?.classList.add('hidden');
+    document.getElementById('exploreOptions')?.classList.add('hidden');
+    document.getElementById('lobby')?.classList.add('hidden');
+}
+
+function showExplore() {
+    if (gameCode) {
+        if (isHost) {
+            socket.emit('hostLeaveLobby', { gameCode });
+        } else {
+            socket.emit('leaveLobby', { gameCode });
+        }
+        gameCode = null;
+    }
+    document.getElementById('mainMenu')?.classList.add('hidden');
+    document.getElementById('exploreOptions')?.classList.remove('hidden');
+    document.getElementById('singlePlayerOptions')?.classList.add('hidden');
+    document.getElementById('multiplayerOptions')?.classList.add('hidden');
+    document.getElementById('lobby')?.classList.add('hidden');
 }
 
 function showMultiplayer() {
@@ -87,12 +105,13 @@ function showMultiplayer() {
         }
         gameCode = null;
     }
-    document.getElementById('mainMenu').classList.add('hidden');
-    document.getElementById('singlePlayerOptions').classList.add('hidden');
-    document.getElementById('multiplayerOptions').classList.remove('hidden');
-    document.getElementById('lobby').classList.add('hidden');
-    document.getElementById('hostForm').classList.add('hidden');
-    document.getElementById('joinForm').classList.add('hidden');
+    document.getElementById('mainMenu')?.classList.add('hidden');
+    document.getElementById('singlePlayerOptions')?.classList.add('hidden');
+    document.getElementById('multiplayerOptions')?.classList.remove('hidden');
+    document.getElementById('exploreOptions')?.classList.add('hidden');
+    document.getElementById('lobby')?.classList.add('hidden');
+    document.getElementById('hostForm')?.classList.add('hidden');
+    document.getElementById('joinForm')?.classList.add('hidden');
 }
 
 function startSinglePlayer() {

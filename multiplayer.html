@@ -4,29 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geotrainer Multiplayer</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="multiplayer-centering.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
-<body>
-    <div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh;">
-        <h1>Geotrainer Multiplayer</h1>
-        <p id="location">Guess the location!</p>
-        <div id="round-timer">
-            <span id="round">Round: 1/15</span>
-            <span id="timer">Time left: 15s</span>
+<body class="game-page">
+    <div class="game-shell">
+        <header class="app-header">
+            <div class="title-row">
+                <h1>Geotrainer Multiplayer</h1>
+            </div>
+        </header>
+
+        <div class="game-hud">
+            <div class="game-hud-main">
+                <p id="location">Guess the location!</p>
+                <div class="game-meta" id="round-timer">
+                    <span id="round">Round: 1/15</span>
+                    <span id="timer">Time left: 15s</span>
+                </div>
+            </div>
+            <div class="game-actions">
+                <button id="newRound" disabled>New Round</button>
+                <button id="guess" disabled>Guess</button>
+            </div>
         </div>
-        <div id="map"></div>
+
         <div id="players"><span id="playerList"></span></div>
         <div id="result"></div>
-        <button id="newRound" disabled>New Round</button>
-        <button id="guess" disabled>Guess</button>
+
+        <div class="map-stage">
+            <div id="map"></div>
+        </div>
+
         <div id="gameOver" class="game-over hidden">
             <div class="dialog-content">
                 <div id="roundSummary"></div>
                 <div class="button-container">
                     <button id="playAgain">Play Again</button>
-                    <button id="backToHome">Back to Home</button>
+                    <button id="backToHome" class="btn-secondary">Back to Home</button>
                 </div>
             </div>
         </div>

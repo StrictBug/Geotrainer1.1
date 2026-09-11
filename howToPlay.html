@@ -4,33 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Play - Geotrainer</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="menu-page">
+    <header class="app-header">
+        <div class="title-row" aria-hidden="true"></div>
+    </header>
+
     <div class="home-container">
         <div id="howToPlay">
-            <h1>How to Play</h1>
-            <div id="howToPlayContent">
-                <p><strong>Single Player Mode:</strong></p>
-                <ul>
-                    <li>Select an area and the number of rounds from the menu.</li>
-                    <li>For each round, a location name is displayed, and you have 15 seconds to place a marker on the map by clicking.</li>
-                    <li>Try to place your marker as close as possible to the actual location.</li>
-                    <li>After each guess, the actual location is revealed, and your distance is calculated in kilometers.</li>
-                    <li>Aim for the lowest average distance across all rounds.</li>
-                </ul>
-                <p><strong>Multiplayer Mode:</strong></p>
-                <ul>
-                    <li><strong>Host a Game:</strong> Enter your name, choose an area and number of rounds, and create a game to get a unique code.</li>
-                    <li><strong>Join a Game:</strong> Enter the game code and your name to join other players.</li>
-                    <li>Compete with others to guess locations as accurately as possible.</li>
-                    <li>Tip: Always submit a guess rather than letting the timer expire — no guess scores zero, but a guess can still earn points.</li>
-                    <li>See everyone's scores after each round, with distances within 1000km getting points.</li>
-                    <li>The player with the most points at the end wins!</li>
-                </ul>
-                <p>Have fun and sharpen your geography skills!</p>
+            <div class="info-card">
+                <h2 class="info-title">How to Play</h2>
+                <div id="howToPlayContent">
+                    <div class="info-section">
+                        <h3>Single Player Mode</h3>
+                        <ul>
+                            <li>Select an area and the number of rounds from the menu.</li>
+                            <li>For each round, a location name is displayed, and you have a limited time to place a marker on the map by clicking.</li>
+                            <li>Try to place your marker as close as possible to the actual location.</li>
+                            <li>After each guess, the actual location is revealed, and your distance is calculated in kilometres.</li>
+                            <li>Aim for the lowest average distance across all rounds.</li>
+                        </ul>
+                    </div>
+                    <div class="info-section">
+                        <h3>Multiplayer Mode</h3>
+                        <ul>
+                            <li><strong>Host a Game:</strong> Enter your name, choose an area and number of rounds, and create a game to get a unique code.</li>
+                            <li><strong>Join a Game:</strong> Enter the game code and your name to join other players.</li>
+                            <li>Compete with others to guess locations as accurately as possible.</li>
+                            <li>Tip: Always submit a guess rather than letting the timer expire — no guess scores zero, but a guess can still earn points.</li>
+                            <li>See everyone's scores after each round, with distances within 1000 km getting points.</li>
+                            <li>The player with the most points at the end wins!</li>
+                        </ul>
+                    </div>
+                    <div class="info-section">
+                        <h3>Explore Mode</h3>
+                        <ul>
+                            <li>Choose regions and location types, then open the map.</li>
+                            <li>Browse matching locations from the list or with Previous / Next (arrow keys also work).</li>
+                            <li>There is no timer or scoring — use Explore to learn the map at your own pace.</li>
+                        </ul>
+                    </div>
+                    <p class="info-footer">Have fun and sharpen your geography skills!</p>
+                </div>
+                <div class="howto-actions">
+                    <button id="mainMenuHowToPlayButton" class="btn-secondary">Main Menu</button>
+                </div>
             </div>
-            <button id="mainMenuHowToPlayButton">Main Menu</button>
         </div>
     </div>
     <script>
@@ -38,5 +59,8 @@
             window.location.href = 'index.html';
         });
     </script>
+    <footer class="app-footer" aria-hidden="true">
+        <div class="title-row"></div>
+    </footer>
 </body>
 </html>

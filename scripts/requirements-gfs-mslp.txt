@@ -1,0 +1,6 @@
+# Optional deps for scripts/build-gfs-mslp-bg.py (live GFS menu background)
+numpy>=1.24
+scikit-image>=0.22
+xarray>=2023.1
+cfgrib>=0.9.10
+eccodes>=1.6.0

@@ -1,1 +1,4 @@
 node_modules
+assets/gfs-cache/
+*.grib2
+*.svg.tmp

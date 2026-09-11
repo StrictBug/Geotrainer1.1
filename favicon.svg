@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f86ff"/>
+      <stop offset="100%" stop-color="#2159D1"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Soft target rings: guessing a location on a map -->
+  <g fill="none" stroke="#dff3ff" stroke-width="2.5" opacity="0.9">
+    <circle cx="32" cy="40" r="14"/>
+    <circle cx="32" cy="40" r="8"/>
+  </g>
+  <!-- Map pin -->
+  <path fill="#ffffff" d="M32 10c-7.2 0-13 5.7-13 12.8 0 9.6 11.4 22.4 12.4 23.4a.9.9 0 0 0 1.2 0C33.6 45.2 45 32.4 45 22.8 45 15.7 39.2 10 32 10Zm0 18.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2Z"/>
+</svg>
