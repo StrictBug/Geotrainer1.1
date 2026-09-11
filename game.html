@@ -27,6 +27,7 @@
             <div class="game-actions">
                 <button id="newGame">New Round</button>
                 <button id="guess" disabled>Guess</button>
+                <button id="mainMenuGame" class="btn-secondary" type="button">Main Menu</button>
             </div>
         </div>
 
@@ -34,6 +35,17 @@
 
         <div class="map-stage">
             <div id="map"></div>
+        </div>
+
+        <div id="quitConfirm" class="quit-confirm hidden" role="dialog" aria-modal="true" aria-labelledby="quitConfirmTitle">
+            <div class="dialog-content quit-confirm-dialog">
+                <h2 id="quitConfirmTitle">Leave game?</h2>
+                <p>Are you sure you want to quit and return to the main menu?</p>
+                <div class="button-container">
+                    <button id="quitConfirmYes" type="button">Yes, quit</button>
+                    <button id="quitConfirmNo" class="btn-secondary" type="button">Cancel</button>
+                </div>
+            </div>
         </div>
 
         <div id="gameOver" class="game-over hidden">

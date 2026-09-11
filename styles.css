@@ -585,55 +585,49 @@ body.menu-page {
     border: 1px solid rgba(33, 89, 209, 0.15);
     border-radius: var(--av-radius-card);
     box-shadow: var(--av-shadow-card);
-    padding: 28px 32px;
+    padding: 22px 28px 24px;
     text-align: left;
     backdrop-filter: blur(6px);
 }
 
 #howToPlay .info-title {
-    margin: 0 0 18px;
-    font-size: 1.25em;
+    margin: 0 0 12px;
+    font-size: 1.2em;
     font-weight: 600;
     color: var(--av-blue-dark);
     text-align: center;
 }
 
 #howToPlayContent {
-    font-size: 14px;
-    line-height: 1.55;
+    font-size: 13.5px;
+    line-height: 1.45;
     color: var(--av-text);
 }
 
 #howToPlayContent .info-section {
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 #howToPlayContent .info-section h3 {
-    margin: 0 0 8px;
-    font-size: 15px;
+    margin: 0 0 4px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--av-blue);
 }
 
 #howToPlayContent ul {
     margin: 0;
-    padding-left: 1.2em;
+    padding-left: 1.15em;
 }
 
 #howToPlayContent li {
-    margin-bottom: 6px;
-}
-
-#howToPlayContent .info-footer {
-    margin: 16px 0 0;
-    color: var(--av-text-muted);
-    font-weight: 500;
+    margin-bottom: 4px;
 }
 
 #howToPlay .howto-actions {
     display: flex;
     justify-content: center;
-    margin-top: 22px;
+    margin-top: 14px;
 }
 
 /* Game pages */
@@ -711,7 +705,8 @@ body.game-page {
 .game-actions button,
 .game-actions #guess,
 .game-actions #newGame,
-.game-actions #newRound {
+.game-actions #newRound,
+.game-actions #mainMenuGame {
     min-width: 96px;
     padding: 7px 14px;
     font-size: 13px;
@@ -951,7 +946,8 @@ body.game-page {
 }
 
 /* Game over modal */
-#gameOver {
+#gameOver,
+.quit-confirm {
     position: fixed;
     inset: 0;
     width: 100%;
@@ -967,7 +963,8 @@ body.game-page {
 
 #gameOver .dialog-content,
 #gameOver[class*="single-player"] .dialog-content,
-#gameOver [class*="dialog-content"] {
+#gameOver [class*="dialog-content"],
+.quit-confirm-dialog {
     background-color: rgba(255, 255, 255, 0.98) !important;
     padding: 24px;
     border-radius: var(--av-radius-card);
@@ -982,6 +979,22 @@ body.game-page {
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+}
+
+.quit-confirm-dialog {
+    max-width: 420px;
+}
+
+.quit-confirm-dialog h2 {
+    margin: 0 0 8px;
+    font-size: 1.2em;
+    color: var(--av-blue-dark);
+}
+
+.quit-confirm-dialog p {
+    margin: 0 0 8px;
+    color: var(--av-text-muted);
+    font-size: 14px;
 }
 
 #gameOver #roundSummary,

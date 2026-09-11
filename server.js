@@ -3,78 +3,12 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
-const { spawn } = require('child_process');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const MENU_BG_PATH = path.join(__dirname, 'menu-bg.svg');
-const MENU_BG_TTL_MS = 3 * 60 * 60 * 1000; // refresh aligned with GFS cadence
-let menuBgLastBuild = 0;
-let menuBgBuilding = null;
-
-function menuBgAgeMs() {
-    try {
-        const st = fs.statSync(MENU_BG_PATH);
-        return Date.now() - st.mtimeMs;
-    } catch {
-        return Number.POSITIVE_INFINITY;
-    }
-}
-
-function refreshMenuBg(force = false) {
-    if (menuBgBuilding) return menuBgBuilding;
-    const age = menuBgAgeMs();
-    if (!force && Number.isFinite(age) && age < MENU_BG_TTL_MS) {
-        return Promise.resolve({ ok: true, skipped: true, age });
-    }
-
-    menuBgBuilding = new Promise((resolve) => {
-        const script = path.join(__dirname, 'scripts', 'build-gfs-mslp-bg.py');
-        const child = spawn('python3', [script], {
-            cwd: __dirname,
-            env: process.env,
-            stdio: ['ignore', 'pipe', 'pipe'],
-        });
-        let stderr = '';
-        child.stderr.on('data', (chunk) => { stderr += chunk.toString(); });
-        child.stdout.on('data', (chunk) => {
-            const line = chunk.toString().trim();
-            if (line) console.log(`[menu-bg] ${line}`);
-        });
-        const timer = setTimeout(() => {
-            child.kill('SIGKILL');
-        }, 120000);
-        child.on('close', (code) => {
-            clearTimeout(timer);
-            menuBgBuilding = null;
-            if (code === 0 && fs.existsSync(MENU_BG_PATH)) {
-                menuBgLastBuild = Date.now();
-                console.log('[menu-bg] Regenerated from live GFS MSLP');
-                resolve({ ok: true, skipped: false });
-            } else {
-                console.error('[menu-bg] Build failed; serving last good SVG if present.', stderr.trim() || `exit ${code}`);
-                resolve({ ok: fs.existsSync(MENU_BG_PATH), skipped: false, error: stderr || `exit ${code}` });
-            }
-        });
-    });
-    return menuBgBuilding;
-}
-
-// Live GFS menu background (before static so we control caching / refresh)
-app.get('/menu-bg.svg', async (req, res) => {
-    await refreshMenuBg(false);
-    if (!fs.existsSync(MENU_BG_PATH)) {
-        res.status(503).type('text/plain').send('Menu background unavailable');
-        return;
-    }
-    res.setHeader('Cache-Control', 'public, max-age=1800');
-    res.type('image/svg+xml');
-    res.sendFile(MENU_BG_PATH);
-});
-
-// Serve static files from the root directory
+// Serve static files from the root directory (including static menu-bg.svg)
 app.use(express.static(path.join(__dirname, '.')));
 
 // Serve map tiles
@@ -874,16 +808,6 @@ io.on('connection', (socket) => {
 // Load locations when server starts
 loadLocations();
 console.log('Server initialized with', locations.length, 'locations');
-
-// Kick off GFS menu-bg refresh in the background (keeps last-good on failure)
-refreshMenuBg(false).catch((err) => {
-    console.error('[menu-bg] Startup refresh error:', err);
-});
-setInterval(() => {
-    refreshMenuBg(false).catch((err) => {
-        console.error('[menu-bg] Scheduled refresh error:', err);
-    });
-}, MENU_BG_TTL_MS);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, '0.0.0.0', () => {

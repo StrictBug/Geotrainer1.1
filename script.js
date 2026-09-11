@@ -656,6 +656,25 @@ document.getElementById("guess").addEventListener("click", () => {
     }
 });
 
+function showQuitConfirm() {
+    document.getElementById('quitConfirm').classList.remove('hidden');
+}
+
+function hideQuitConfirm() {
+    document.getElementById('quitConfirm').classList.add('hidden');
+}
+
+document.getElementById('mainMenuGame').addEventListener('click', showQuitConfirm);
+document.getElementById('quitConfirmNo').addEventListener('click', hideQuitConfirm);
+document.getElementById('quitConfirmYes').addEventListener('click', () => {
+    clearInterval(timer);
+    roundActive = false;
+    window.location.href = 'index.html';
+});
+document.getElementById('quitConfirm').addEventListener('click', (e) => {
+    if (e.target.id === 'quitConfirm') hideQuitConfirm();
+});
+
 // Initialize map and game when page loads
 document.addEventListener('DOMContentLoaded', function() {
     // Only initialize the map if it hasn't been initialized yet

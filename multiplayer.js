@@ -996,9 +996,32 @@ function returnToMenu() {
     window.location.href = 'index.html';
 }
 
+function showQuitConfirm() {
+    const el = document.getElementById('quitConfirm');
+    if (el) el.classList.remove('hidden');
+}
+
+function hideQuitConfirm() {
+    const el = document.getElementById('quitConfirm');
+    if (el) el.classList.add('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     // Only initialize game elements if we're on the multiplayer game page
     if (window.location.pathname.includes('multiplayer.html')) {
+        const mainMenuBtn = document.getElementById('mainMenuGame');
+        const quitYes = document.getElementById('quitConfirmYes');
+        const quitNo = document.getElementById('quitConfirmNo');
+        const quitOverlay = document.getElementById('quitConfirm');
+        if (mainMenuBtn) mainMenuBtn.addEventListener('click', showQuitConfirm);
+        if (quitNo) quitNo.addEventListener('click', hideQuitConfirm);
+        if (quitYes) quitYes.addEventListener('click', returnToMenu);
+        if (quitOverlay) {
+            quitOverlay.addEventListener('click', (e) => {
+                if (e.target.id === 'quitConfirm') hideQuitConfirm();
+            });
+        }
+
         console.log('Initializing multiplayer game page');
         if (!map) {
             await initMap();
