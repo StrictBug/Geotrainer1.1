@@ -24,6 +24,50 @@ if (urlParams.has('roundLength')) {
 console.log('window.location.search:', window.location.search);
 console.log('URL roundLength param:', urlParams.get('roundLength'), 'parsed:', selectedRoundLength, 'type:', typeof selectedRoundLength);
 
+let locationAnnounceTimer = null;
+
+/** Show the round location large + fade-in so players don't miss it. */
+function announceRoundLocation(name) {
+    const el = document.getElementById('location');
+    if (!el) return;
+    el.textContent = `Guess: ${name}`;
+    el.classList.remove('location-announce');
+    void el.offsetWidth;
+    el.classList.add('location-announce');
+    clearTimeout(locationAnnounceTimer);
+    locationAnnounceTimer = setTimeout(() => {
+        el.classList.remove('location-announce');
+    }, 2800);
+}
+
+const ROUND_CLOCK_C = 2 * Math.PI * 15.5;
+
+/** Stylised countdown ring + seconds readout. */
+function updateRoundClock(secondsLeft, totalSeconds = selectedRoundLength) {
+    const left = Math.max(0, Number(secondsLeft) || 0);
+    const total = Math.max(1, Number(totalSeconds) || selectedRoundLength || 15);
+    const timerText = document.getElementById('timer');
+    const clock = document.getElementById('roundClock');
+    const value = document.getElementById('roundClockValue');
+    const progress = document.getElementById('roundClockProgress');
+
+    if (timerText) timerText.textContent = `Time left: ${left}s`;
+    if (value) value.textContent = String(left);
+    if (progress) {
+        const frac = Math.min(1, Math.max(0, left / total));
+        progress.style.strokeDasharray = String(ROUND_CLOCK_C);
+        progress.style.strokeDashoffset = String(ROUND_CLOCK_C * (1 - frac));
+    }
+    if (clock) {
+        const warnAt = Math.max(4, Math.ceil(total * 0.4));
+        const dangerAt = Math.min(5, Math.max(3, Math.ceil(total * 0.25)));
+        clock.classList.toggle('is-warn', left > 0 && left <= warnAt && left > dangerAt);
+        clock.classList.toggle('is-danger', left > 0 && left <= dangerAt);
+        clock.classList.toggle('is-idle', left <= 0 || !roundActive);
+        clock.setAttribute('aria-label', `Time remaining: ${left} seconds`);
+    }
+}
+
 function getAreaBounds(area) {
     // Define the bounds for each area
     const areaBounds = {
@@ -449,21 +493,20 @@ function startNewRound() {
     const randomIndex = Math.floor(Math.random() * availableLocations.length);
     actualLocation = availableLocations[randomIndex];
     usedLocations.push(getLocationKey(actualLocation));
-    document.getElementById("location").textContent = `Guess: ${actualLocation.name}`;
+    announceRoundLocation(actualLocation.name);
     document.getElementById("round").textContent = `Round: ${round}/${maxRounds}`;
 
     console.log('Selected round length (startNewRound):', selectedRoundLength, 'type:', typeof selectedRoundLength);
-    timeLeft = Number.isFinite(selectedRoundLength) && selectedRoundLength > 0 ? selectedRoundLength : 15;
-    document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
-    
-    // Start the round
+    // Start the round before updating the clock so urgency classes apply
     roundActive = true;
+    timeLeft = Number.isFinite(selectedRoundLength) && selectedRoundLength > 0 ? selectedRoundLength : 15;
+    updateRoundClock(timeLeft, selectedRoundLength);
     
     // Start the timer
     clearInterval(timer); // Clear any existing timer
     timer = setInterval(() => {
         timeLeft--;
-        document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
+        updateRoundClock(timeLeft, selectedRoundLength);
         if (timeLeft <= 0) {
             clearInterval(timer);
             if (roundActive) { // Only end round if it's still active
@@ -573,12 +616,12 @@ function endRound() {
 
     document.getElementById("result").textContent = distance === null ? "Time's up! You didn't guess." : `Distance: ${distance === 0 ? '0' : distance.toFixed(1)} km`;
     document.getElementById("guess").disabled = true;
+    updateRoundClock(0);
     if (round < maxRounds) {
         document.getElementById("newGame").disabled = false;
     } else {
         document.getElementById("newGame").disabled = true;
         document.getElementById("newGame").style.display = "none";
-        document.getElementById("timer").textContent = "";
         document.getElementById("result").textContent = "Scoreboard showing in 5 seconds...";
     }
     round++;
@@ -596,8 +639,11 @@ function showGameOver() {
     clearInterval(timer);
     
     // Clear the UI
-    document.getElementById("location").textContent = "";
-    document.getElementById("timer").textContent = "";
+    const locationEl = document.getElementById("location");
+    locationEl.classList.remove("location-announce");
+    locationEl.textContent = "";
+    clearTimeout(locationAnnounceTimer);
+    updateRoundClock(0);
     document.getElementById("result").textContent = "";
     document.getElementById("newGame").style.display = "none";
     document.getElementById("guess").style.display = "none";

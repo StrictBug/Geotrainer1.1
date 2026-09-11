@@ -418,7 +418,7 @@ function clearIndividualSelection() {
     document.getElementById('locationCounter').textContent =
         `${listedCount} shown`;
     document.getElementById('locationMeta').textContent =
-        'Click a location on the map or list';
+        'Click map or list';
     highlightListItem(-1);
 }
 

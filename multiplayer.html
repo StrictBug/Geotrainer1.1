@@ -13,22 +13,27 @@
     <div class="game-shell">
         <header class="app-header">
             <div class="title-row">
-                <h1>Geotrainer Multiplayer</h1>
+                <h1>Geotrainer</h1>
             </div>
         </header>
 
         <div class="game-hud">
-            <div class="game-hud-main">
-                <p id="location">Guess the location!</p>
-                <div class="game-meta" id="round-timer">
-                    <span id="round">Round: 1/15</span>
-                    <span id="timer">Time left: 15s</span>
+            <div class="game-meta" id="round-timer">
+                <span id="round">Round: 1/15</span>
+                <div class="round-clock" id="roundClock" role="timer" aria-live="polite" aria-label="Time remaining">
+                    <svg class="round-clock-svg" viewBox="0 0 36 36" aria-hidden="true">
+                        <circle class="round-clock-track" cx="18" cy="18" r="15.5"></circle>
+                        <circle class="round-clock-progress" id="roundClockProgress" cx="18" cy="18" r="15.5"></circle>
+                    </svg>
+                    <span class="round-clock-value" id="roundClockValue">15</span>
                 </div>
+                <span id="timer" class="round-clock-sr">Time left: 15s</span>
             </div>
+            <p id="location">Guess the location!</p>
             <div class="game-actions">
                 <button id="newRound" disabled>New Round</button>
                 <button id="guess" disabled>Guess</button>
-                <button id="mainMenuGame" class="btn-secondary" type="button">Main Menu</button>
+                <button id="mainMenuGame" class="btn-secondary" type="button">Menu</button>
             </div>
         </div>
 

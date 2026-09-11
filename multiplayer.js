@@ -12,6 +12,49 @@ let roundActive = false;
 let lastProcessedRound = 0;
 let markers = [];
 window.isHost = false;
+let locationAnnounceTimer = null;
+
+/** Show the round location large + fade-in so players don't miss it. */
+function announceRoundLocation(name) {
+    const el = document.getElementById('location');
+    if (!el) return;
+    el.textContent = `Guess: ${name}`;
+    el.classList.remove('location-announce');
+    void el.offsetWidth;
+    el.classList.add('location-announce');
+    clearTimeout(locationAnnounceTimer);
+    locationAnnounceTimer = setTimeout(() => {
+        el.classList.remove('location-announce');
+    }, 2800);
+}
+
+const ROUND_CLOCK_C = 2 * Math.PI * 15.5;
+
+/** Stylised countdown ring + seconds readout. */
+function updateRoundClock(secondsLeft, totalSeconds = selectedRoundLength) {
+    const left = Math.max(0, Number(secondsLeft) || 0);
+    const total = Math.max(1, Number(totalSeconds) || selectedRoundLength || 15);
+    const timerText = document.getElementById('timer');
+    const clock = document.getElementById('roundClock');
+    const value = document.getElementById('roundClockValue');
+    const progress = document.getElementById('roundClockProgress');
+
+    if (timerText) timerText.textContent = `Time left: ${left}s`;
+    if (value) value.textContent = String(left);
+    if (progress) {
+        const frac = Math.min(1, Math.max(0, left / total));
+        progress.style.strokeDasharray = String(ROUND_CLOCK_C);
+        progress.style.strokeDashoffset = String(ROUND_CLOCK_C * (1 - frac));
+    }
+    if (clock) {
+        const warnAt = Math.max(4, Math.ceil(total * 0.4));
+        const dangerAt = Math.min(5, Math.max(3, Math.ceil(total * 0.25)));
+        clock.classList.toggle('is-warn', left > 0 && left <= warnAt && left > dangerAt);
+        clock.classList.toggle('is-danger', left > 0 && left <= dangerAt);
+        clock.classList.toggle('is-idle', left <= 0 || !roundActive);
+        clock.setAttribute('aria-label', `Time remaining: ${left} seconds`);
+    }
+}
 
 socket.on('gameStarted', ({ rounds, areas, locationTypes, roundLength, players }) => {
     console.log('Game started with settings:', { rounds, areas, locationTypes, roundLength });
@@ -669,15 +712,14 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
     
     const locationElem = document.getElementById("location");
     const roundElem = document.getElementById("round");
-    const timerElem = document.getElementById("timer");
     const guessBtn = document.getElementById("guess");
     const newRoundBtn = document.getElementById("newRound");
     const resultElem = document.getElementById("result");
     const gameOverElem = document.getElementById("gameOver");
     
-    if (locationElem) locationElem.textContent = `Guess: ${location}`;
+    if (locationElem) announceRoundLocation(location);
     if (roundElem) roundElem.textContent = `Round: ${round}/${maxRounds}`;
-    if (timerElem) timerElem.textContent = `Time left: ${timeLeft}s`;
+    updateRoundClock(timeLeft, selectedRoundLength);
     if (guessBtn) {
         guessBtn.disabled = true;
         guessBtn.style.display = "";
@@ -696,7 +738,7 @@ socket.on('newRound', ({ round: newRound, maxRounds: newMaxRounds, location, tim
 
 socket.on('timerUpdate', (newTime) => {
     timeLeft = newTime;
-    document.getElementById("timer").textContent = `Time left: ${Math.max(0, timeLeft)}s`;
+    updateRoundClock(Math.max(0, timeLeft), selectedRoundLength);
     if (timeLeft <= 0 && latestPin) {
         const guessData = { gameCode, guess: latestPin, playerName: localPlayerName, round };
         socket.emit('submitGuess', guessData);
@@ -716,6 +758,7 @@ socket.on('roundResults', ({ round, location, results }) => {
     console.log(`Received round ${round} results for ${localPlayerName}:`, results);
     console.log('isHost in roundResults:', isHost, 'localPlayerName =', localPlayerName, 'hostName =', hostName);
     roundActive = false;
+    updateRoundClock(0);
 
     // Always clear existing markers before showing results
     clearMarkers();
@@ -834,7 +877,7 @@ socket.on('gameOver', ({ players, roundHistory }) => {
     if (lastRound && lastRound.location) {
         // Keep existing markers and show final location
         document.getElementById("location").textContent = `Guess: ${lastRound.location}`;
-        document.getElementById("timer").textContent = "";
+        updateRoundClock(0);
         document.getElementById("result").textContent = "Scoreboard showing in 5 seconds...";
     }
     document.getElementById("guess").style.display = "none";

@@ -17,8 +17,8 @@
     --av-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     --av-shadow-card: 0 16px 40px rgba(13, 26, 55, 0.16);
     --av-font: "BP Noname Pro", "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --title-bar-height: 36px;
-    --hud-height: 52px;
+    --title-bar-height: 31px;
+    --hud-height: 29px;
 }
 
 * {
@@ -640,6 +640,19 @@ body.game-page {
     background: var(--av-bg);
 }
 
+body.game-page .app-header .title-row {
+    padding: 3px 12px;
+    min-height: 31px;
+    font-size: 1.3em;
+    letter-spacing: 0.5px;
+}
+
+body.game-page .app-header .title-row h1 {
+    font-size: 1em;
+    font-weight: 550;
+    line-height: 1.1;
+}
+
 .game-shell {
     display: flex;
     flex-direction: column;
@@ -651,54 +664,212 @@ body.game-page {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    padding: 8px 14px;
+    gap: 8px;
+    flex-wrap: nowrap;
+    padding: 3px 8px;
     background: var(--av-blue-light);
     color: #ffffff;
     box-shadow: var(--av-shadow);
-    min-height: var(--hud-height);
+    min-height: 29px;
     z-index: 15;
+}
+
+/* Solo / multiplayer: round+timer | centered location | actions */
+body.game-page:not(.explore-page) .game-hud {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 8px;
+}
+
+body.game-page:not(.explore-page) .game-hud > #round-timer {
+    justify-self: start;
+    min-width: 0;
+}
+
+body.game-page:not(.explore-page) .game-hud > #location {
+    justify-self: center;
+    text-align: center;
+    max-width: min(42vw, 360px);
+    margin: 0;
+}
+
+body.game-page:not(.explore-page) .game-hud > .game-actions {
+    justify-self: end;
 }
 
 .game-hud-main {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px 12px;
     min-width: 0;
-    flex: 1;
+    flex: 1 1 auto;
 }
 
 #location {
     margin: 0;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 650;
     letter-spacing: 0.2px;
     color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: min(40vw, 320px);
+    line-height: 1.2;
+}
+
+/* Round-start location callout — large + fade in, then settles */
+body.game-page:not(.explore-page) #location {
+    transition: font-size 0.5s ease, letter-spacing 0.5s ease, max-width 0.5s ease, font-weight 0.5s ease;
+}
+
+body.game-page:not(.explore-page) #location.location-announce {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.35px;
+    max-width: min(70vw, 560px);
+    animation: locationAnnounceIn 0.65s ease-out;
+}
+
+@keyframes locationAnnounceIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.94);
+        filter: brightness(1.35);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
 }
 
 #round-timer,
 .game-meta {
     display: flex;
     align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
+    gap: 8px;
+    flex-wrap: nowrap;
+    min-width: 0;
+    position: relative;
 }
 
 #round,
 #timer,
 .game-meta span {
     margin: 0;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     opacity: 0.95;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.round-clock-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.round-clock {
+    --clock-size: 34px;
+    --clock-c: 97.389; /* 2π × 15.5 */
+    position: relative;
+    width: var(--clock-size);
+    height: var(--clock-size);
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+}
+
+.round-clock-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.round-clock-track,
+.round-clock-progress {
+    fill: none;
+    stroke-width: 3.25;
+}
+
+.round-clock-track {
+    stroke: rgba(255, 255, 255, 0.28);
+}
+
+.round-clock-progress {
+    stroke: #ffffff;
+    stroke-linecap: round;
+    stroke-dasharray: var(--clock-c);
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.2s linear, stroke 0.2s ease;
+}
+
+.round-clock-value {
+    position: relative;
+    z-index: 1;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    opacity: 1 !important;
+}
+
+.round-clock.is-warn .round-clock-progress {
+    stroke: #ffe08a;
+}
+
+.round-clock.is-warn .round-clock-value {
+    color: #ffe08a;
+}
+
+.round-clock.is-danger .round-clock-progress {
+    stroke: #ff8f8f;
+}
+
+.round-clock.is-danger .round-clock-value {
+    color: #ffb4b4;
+}
+
+.round-clock.is-danger {
+    animation: round-clock-pulse 0.7s ease-in-out infinite;
+}
+
+.round-clock.is-idle .round-clock-progress {
+    stroke: rgba(255, 255, 255, 0.45);
+}
+
+.round-clock.is-idle .round-clock-value {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+@keyframes round-clock-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(255, 120, 120, 0));
+    }
+    50% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 6px rgba(255, 120, 120, 0.65));
+    }
 }
 
 .game-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-shrink: 0;
 }
 
@@ -707,12 +878,17 @@ body.game-page {
 .game-actions #newGame,
 .game-actions #newRound,
 .game-actions #mainMenuGame {
-    min-width: 96px;
-    padding: 7px 14px;
-    font-size: 13px;
+    min-width: 0;
+    height: 22px;
+    min-height: 22px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
     background: #ffffff;
     color: var(--av-text);
     border: 1px solid #cccccc;
+    border-radius: var(--av-radius);
 }
 
 .game-actions #guess:not(:disabled),
@@ -901,39 +1077,97 @@ body.game-page {
     stroke-linejoin: round;
 }
 
-.explore-page .explore-hud {
+.explore-page .explore-hud.game-hud {
+    /* inherits compact game-hud; keep explore stacking above map */
     position: relative;
     z-index: 1100;
     overflow: visible;
 }
 
-.explore-page .explore-body {
-    position: relative;
-    z-index: 1;
+.explore-page .explore-hud .game-hud-main {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.explore-page #locationName {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.2px;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: min(34vw, 280px);
+    line-height: 1.2;
+}
+
+.explore-page .explore-hud .game-meta {
+    gap: 8px;
+    flex-wrap: nowrap;
+    min-width: 0;
+}
+
+.explore-page .explore-hud .game-meta span {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.95;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.explore-page #locationMeta {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: min(22vw, 200px);
+}
+
+.explore-page .explore-actions.game-actions {
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 .explore-hud-filters {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     position: relative;
     z-index: 3;
 }
 
-/* Match Previous / Next / Main Menu button chrome */
+/* Compact AvMaps/AvClimate-style controls (~22px) */
+.explore-page .explore-actions button,
+.explore-page .explore-actions .btn-secondary,
+.explore-page .explore-actions .btn-primary {
+    min-width: 0;
+    height: 22px;
+    min-height: 22px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    border-radius: var(--av-radius);
+}
+
 .explore-page .explore-hud-dropdown.checkbox-dropdown {
     width: auto;
-    min-width: 96px;
-    height: auto;
-    padding: 7px 28px 7px 14px;
-    font-size: 13px;
+    min-width: 0;
+    height: 22px;
+    min-height: 22px;
+    padding: 2px 20px 2px 8px;
+    font-size: 11px;
     line-height: 1.2;
     background: #ffffff;
     border: 1px solid #cccccc;
     border-radius: var(--av-radius);
     color: var(--av-text);
     box-shadow: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 .explore-page .explore-hud-dropdown.checkbox-dropdown:hover,
@@ -945,12 +1179,17 @@ body.game-page {
 
 .explore-page .explore-hud-dropdown .selected-options {
     color: var(--av-text);
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 500;
-    line-height: 1.2;
+    line-height: 16px;
     padding: 0;
-    padding-right: 0;
-    max-width: 7.5em;
+    padding-right: 12px;
+    max-width: 6.5em;
+}
+
+.explore-page .explore-hud-dropdown.checkbox-dropdown::after {
+    right: 7px;
+    border-width: 4px;
 }
 
 .explore-page .explore-hud-dropdown .checkbox-dropdown-list {
@@ -958,6 +1197,11 @@ body.game-page {
     min-width: 180px;
     width: max-content;
     max-height: 260px;
+}
+
+.explore-page .explore-body {
+    position: relative;
+    z-index: 1;
 }
 
 /* Game over modal */
@@ -1171,14 +1415,62 @@ body.game-page {
     }
 
     .game-hud {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        min-height: 29px;
+        padding: 3px 8px;
+    }
+
+    body.game-page:not(.explore-page) .game-hud {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        column-gap: 6px;
+    }
+
+    body.game-page:not(.explore-page) .game-hud > #location {
+        max-width: min(48vw, 280px);
+    }
+
+    .explore-page .explore-hud.game-hud {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        min-height: 29px;
+        padding: 3px 8px;
+    }
+
+    .explore-page .explore-hud .game-hud-main {
+        align-items: center;
+        text-align: left;
+        flex: 1 1 100%;
+    }
+
+    .explore-page #locationName,
+    .explore-page #locationMeta {
+        max-width: none;
+    }
+
+    .explore-page .explore-actions.game-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .game-hud-main {
         align-items: center;
-        text-align: center;
+        text-align: left;
+        flex: 1 1 auto;
+    }
+
+    .game-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    #location {
+        max-width: min(70vw, 420px);
     }
 
     .game-meta,
