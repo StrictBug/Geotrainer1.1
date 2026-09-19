@@ -14,9 +14,16 @@ let locationFocused = false;
 
 const urlParams = new URLSearchParams(window.location.search);
 let selectedAreas = urlParams.get('areas') ? urlParams.get('areas').split(',') : ['All regions'];
+/** Default: every layer on except forecast districts. */
+const DEFAULT_EXPLORE_LOCATION_TYPES = [
+    'Geographical feature',
+    'Geographical feature points',
+    'TAF',
+    'Non TAF',
+];
 let selectedLocationTypes = urlParams.get('locationTypes')
     ? urlParams.get('locationTypes').split(',')
-    : ['all'];
+    : DEFAULT_EXPLORE_LOCATION_TYPES.slice();
 
 const greenIcon = L.icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -44,6 +51,17 @@ const contextForecastStyle = {
     fillOpacity: 0.12,
     className: 'explore-context-path',
     pane: 'exploreContextForecast',
+};
+
+/** Large base polygons drawn behind other geo areas (e.g. Eyre Peninsula). */
+const contextBackgroundStyle = {
+    color: '#6b8fd4',
+    weight: 1.75,
+    opacity: 0.78,
+    fillColor: '#6b8fd4',
+    fillOpacity: 0.12,
+    className: 'explore-context-path',
+    pane: 'exploreContextBackground',
 };
 
 const contextDesertStyle = {
@@ -362,7 +380,9 @@ function readFiltersFromUi() {
     selectedAreas = Array.from(areaBoxes).map((cb) => cb.value);
     selectedLocationTypes = Array.from(typeBoxes).map((cb) => cb.value);
     if (!selectedAreas.length) selectedAreas = ['All regions'];
-    if (!selectedLocationTypes.length) selectedLocationTypes = ['all'];
+    if (!selectedLocationTypes.length) {
+        selectedLocationTypes = DEFAULT_EXPLORE_LOCATION_TYPES.slice();
+    }
 }
 
 function syncFiltersToUi() {
@@ -434,7 +454,8 @@ function resetContextHoverStyles() {
                     if (!pane && child.options) pane = child.options.pane;
                 });
             }
-            if (pane === 'exploreContextForecast') style = contextForecastStyle;
+            if (pane === 'exploreContextBackground') style = contextBackgroundStyle;
+            else if (pane === 'exploreContextForecast') style = contextForecastStyle;
             else if (pane === 'exploreContextDeserts') style = contextDesertStyle;
             else style = contextAreaStyle;
         }
@@ -508,15 +529,21 @@ function isForecastDistrict(loc) {
     );
 }
 
+function isBackgroundArea(loc) {
+    return loc.type !== 'point' && /^Eyre Peninsula$/i.test((loc.name || '').trim());
+}
+
 function isDesert(loc) {
     return (
         loc.type !== 'point' &&
         !isForecastDistrict(loc) &&
+        !isBackgroundArea(loc) &&
         /desert/i.test(loc.name || '')
     );
 }
 
 function contextStyleForArea(loc) {
+    if (isBackgroundArea(loc)) return contextBackgroundStyle;
     if (isForecastDistrict(loc)) return contextForecastStyle;
     if (isDesert(loc)) return contextDesertStyle;
     return contextAreaStyle;
@@ -542,11 +569,13 @@ function rebuildContextLayer() {
     }
 
     const group = L.featureGroup();
+    const backgroundAreas = listed.filter((entry) => isBackgroundArea(entry.loc));
     const forecastDistricts = listed.filter((entry) => isForecastDistrict(entry.loc));
     const deserts = listed.filter((entry) => isDesert(entry.loc));
     const otherAreas = listed.filter(
         (entry) =>
             entry.loc.type !== 'point' &&
+            !isBackgroundArea(entry.loc) &&
             !isForecastDistrict(entry.loc) &&
             !isDesert(entry.loc)
     );
@@ -579,7 +608,8 @@ function rebuildContextLayer() {
         layer.addTo(group);
     };
 
-    // Bottom → top: forecast districts, deserts, other areas, points
+    // Bottom → top: background areas, forecast districts, deserts, other areas, points
+    backgroundAreas.forEach(addContextEntry);
     forecastDistricts.forEach(addContextEntry);
     deserts.forEach(addContextEntry);
     otherAreas.forEach(addContextEntry);
@@ -767,7 +797,9 @@ function initMap() {
         maxBoundsViscosity: 1.0,
     }).setView([initialSettings.center[0], initialSettings.center[1]], initialSettings.zoom);
 
-    // Forecast districts under deserts under other areas; points above; focus on top
+    // Background areas under forecast under deserts under other areas; points above; focus on top
+    map.createPane('exploreContextBackground');
+    map.getPane('exploreContextBackground').style.zIndex = 403;
     map.createPane('exploreContextForecast');
     map.getPane('exploreContextForecast').style.zIndex = 405;
     map.createPane('exploreContextDeserts');
